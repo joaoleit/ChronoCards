@@ -1,13 +1,23 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int health = 100;
+    public int MaxHealth = 100;
+    public int health;
     public int mana = 10;
+
+    private void Start()
+    {
+        if (health == 0)
+        {
+            health = MaxHealth;
+        }
+    }
 
     public void Heal(int amount)
     {
-        health += amount;
+        health = Math.Min(MaxHealth, health + amount);
         Debug.Log("Player healed by " + amount + ". Current health: " + health);
     }
 
@@ -19,7 +29,7 @@ public class Player : MonoBehaviour
 
     public void GainMana(int amount)
     {
-        mana += amount;
+        mana += amount; 
         Debug.Log("Player gained " + amount + " mana. Current mana: " + mana);
     }
 }

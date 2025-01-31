@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Damage
   m_EditorClassIdentifier: 
   cardName: Punch
-  description: punch the enemy
+  description: Deal 10 damage
   manaCost: 2
   effects:
   - effectType: 0
     value: 10
+  color: {r: 1, g: 0.34117648, b: 0.34117648, a: 0}

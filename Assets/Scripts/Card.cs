@@ -8,20 +8,13 @@ public class Card : ScriptableObject
     public string description;
     public int manaCost;
     public List<CardEffect> effects = new List<CardEffect>();
+    public Color color;
 
     public void PlayCard(Player player, Enemy enemy)
     {
-        if (player.mana >= manaCost)
+        foreach (var effect in effects)
         {
-            player.mana -= manaCost;
-            foreach (var effect in effects)
-            {
-                effect.GetEffect().ApplyEffect(player, enemy);
-            }
-        }
-        else
-        {
-            Debug.Log("Not enough mana!");
+            effect.GetEffect().ApplyEffect(player, enemy);
         }
     }
 }
