@@ -18,6 +18,4 @@ MonoBehaviour:
   effects:
   - effectType: 2
     value: 2
-  - effectType: 0
-    value: 5
   color: {r: 0.36078432, g: 0.88235295, b: 0.9019608, a: 0}
