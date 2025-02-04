@@ -13,4 +13,9 @@ public class HealEffect : ICardEffect
     {
         player.Heal(healAmount);
     }
+
+    public bool ShouldTriggerOnEnemy()
+    {
+        return false;
+    }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour
     public void PlayCard(CardDisplay cardDisplay)
     {
         Card card = cardDisplay.card;
-        if (/*hand.Contains(card) && */player.mana >= card.manaCost)
+        if (player.mana >= card.manaCost)
         {
             player.mana -= card.manaCost;
             card.PlayCard(player, enemy);
@@ -63,27 +64,36 @@ public class GameManager : MonoBehaviour
 
     public void SaveDeck()
     {
+        string path = Application.persistentDataPath + "/deck.json";
+        List<string> deckJsonList = new List<string>();
         for (int i = 0; i < deck.Count; i++)
         {
-            PlayerPrefs.SetString("DeckCard_" + i, JsonUtility.ToJson(deck[i]));
+            deckJsonList.Add(JsonUtility.ToJson(deck[i]));
         }
-        PlayerPrefs.SetInt("DeckCount", deck.Count);
-        PlayerPrefs.Save();
-        Debug.Log("Deck saved to PlayerPrefs.");
+        File.WriteAllText(path, JsonUtility.ToJson(deckJsonList));
+        Debug.Log("Deck saved to " + path);
     }
 
     public void LoadDeck()
     {
-        deck.Clear();
-        int deckCount = PlayerPrefs.GetInt("DeckCount", 0);
-        for (int i = 0; i < deckCount; i++)
+        string path = Application.persistentDataPath + "/deck.json";
+        if (File.Exists(path))
         {
-            string cardJson = PlayerPrefs.GetString("DeckCard_" + i);
-            Card card = ScriptableObject.CreateInstance<Card>();
-            JsonUtility.FromJsonOverwrite(cardJson, card);
-            deck.Add(card);
+            string deckJson = File.ReadAllText(path);
+            List<string> deckJsonList = JsonUtility.FromJson<List<string>>(deckJson);
+            deck.Clear();
+            foreach (string cardJson in deckJsonList)
+            {
+                Card card = ScriptableObject.CreateInstance<Card>();
+                JsonUtility.FromJsonOverwrite(cardJson, card);
+                deck.Add(card);
+            }
+            Debug.Log("Deck loaded from " + path);
         }
-        Debug.Log("Deck loaded from PlayerPrefs.");
+        else
+        {
+            Debug.Log("No saved deck found at " + path);
+        }
     }
 
     void OnApplicationQuit()

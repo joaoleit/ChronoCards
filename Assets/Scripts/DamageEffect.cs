@@ -13,4 +13,9 @@ public class DamageEffect : ICardEffect
 	{
 		enemy.TakeDamage(damage);
 	}
+
+	public bool ShouldTriggerOnEnemy()
+	{
+		return true;
+	}
 }
