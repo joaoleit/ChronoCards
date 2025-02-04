@@ -10,7 +10,7 @@ public class CardDisplay : MonoBehaviour
     public GameManager manager;
     public float playableAreaThreshold = 0.5f; // Configurable threshold for playable area (0.5 means middle of the screen)
     private Vector3 offset;
-    private bool isDragging = false;
+    public bool isDragging = false;
     private Renderer cardRenderer;
     private bool shouldTriggerOnEnemy = false;
 

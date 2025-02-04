@@ -151,7 +151,7 @@ MonoBehaviour:
   player: {fileID: 841468978}
   enemy: {fileID: 506611852}
   handObject: {fileID: 1241932695}
-  cardPrefab: {fileID: 5204743728977416225, guid: 346e084e4de97014db6208b37d0109ce, type: 3}
+  cardPrefab: {fileID: 1741558291971154216, guid: 88647a968338f2a44a3fac6bbed06069, type: 3}
   deck:
   - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
   - {fileID: 11400000, guid: 143e500b050d5e64bb3a44b9fe278aec, type: 2}
