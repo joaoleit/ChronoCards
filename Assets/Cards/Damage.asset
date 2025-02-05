@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Punch
   description: Deal 10 damage
-  manaCost: 2
+  manaCost: 0
   effects:
   - effectType: 0
     value: 10

@@ -13,4 +13,9 @@ public class ManaEffect : ICardEffect
     {
         player.GainMana(manaAmount);
     }
+
+    public bool ShouldTriggerOnEnemy()
+    {
+        return false;
+    }
 }

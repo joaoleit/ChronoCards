@@ -14,6 +14,9 @@ public class CardHover : MonoBehaviour
 
     void Update()
     {
+        var cardDisplay = GetComponent<CardDisplay>();
+        if (cardDisplay.isDragging) return;
+
         if (isHovered)
         {
             transform.localPosition = Vector3.MoveTowards(transform.localPosition, originalPosition + new Vector3(0, hoverHeight, 0), Time.deltaTime * speed);
