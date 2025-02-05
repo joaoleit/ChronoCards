@@ -8,11 +8,14 @@ public class CardDisplay : MonoBehaviour
     public TMP_Text description;
     public TMP_Text manaCost;
     public GameManager manager;
-    public float playableAreaThreshold = 0.5f; // Configurable threshold for playable area (0.5 means middle of the screen)
+    public float playableAreaThreshold = 0.5f; // Now based on viewport Y (0-1)
     private Vector3 offset;
     public bool isDragging = false;
     private Renderer cardRenderer;
     private bool shouldTriggerOnEnemy = false;
+    private Plane dragPlane; // Plane for mouse position calculation
+    private Vector3 targetPosition; // Smoothed target position
+    public float dragSpeed = 10f; // Smoothing speed
 
     void Start()
     {
@@ -49,7 +52,10 @@ public class CardDisplay : MonoBehaviour
 
     private void StartDragging()
     {
-        offset = transform.position - GetMouseWorldPosition();
+        // Create a plane perpendicular to camera forward at card's position
+        dragPlane = new Plane(-Camera.main.transform.forward, transform.position);
+        UpdateMousePosition();
+        offset = transform.position - targetPosition;
         isDragging = true;
     }
 
@@ -57,11 +63,23 @@ public class CardDisplay : MonoBehaviour
     {
         if (isDragging)
         {
-            Vector3 newPosition = GetMouseWorldPosition() + offset;
-            newPosition.z = -1; // Set the z-axis position to -1
-            transform.position = newPosition;
+            UpdateMousePosition();
+            targetPosition = targetPosition + offset;
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -.1f);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * dragSpeed);
         }
     }
+
+    private void UpdateMousePosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        float distance;
+        if (dragPlane.Raycast(ray, out distance))
+        {
+            targetPosition = ray.GetPoint(distance);
+        }
+    }
+
 
     private void StopDragging()
     {
@@ -79,9 +97,7 @@ public class CardDisplay : MonoBehaviour
         }
         else if (IsInPlayableArea())
         {
-            Debug.Log("Card dropped on playable area!");
-            // manager.PlayCard(this);
-
+            manager.PlayCard(this);
             return;
         }
 
@@ -91,17 +107,21 @@ public class CardDisplay : MonoBehaviour
     private bool TryTriggerEffectOnEnemy()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit) && shouldTriggerOnEnemy)
+        RaycastHit[] hits = Physics.RaycastAll(ray);
+
+        // Iterate over all hits and see if one of them is an enemy
+        foreach (RaycastHit hit in hits)
         {
-            if (hit.collider != null && hit.collider.gameObject.CompareTag("Enemy"))
+            // Ignore the card's own collider
+            if (hit.collider.gameObject == gameObject)
+                continue;
+
+            if (hit.collider.gameObject.CompareTag("Enemy"))
             {
-                Debug.Log("Card dropped on enemy!");
                 manager.PlayCard(this);
                 return true;
             }
         }
-
         return false;
     }
 
@@ -120,17 +140,20 @@ public class CardDisplay : MonoBehaviour
 
     private Vector3 GetMouseWorldPosition()
     {
-        Vector3 mousePoint = Input.mousePosition;
-        mousePoint.z = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
-        return Camera.main.ScreenToWorldPoint(mousePoint);
+        // Cast ray to the drag plane to get accurate world position
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        float distance;
+        if (dragPlane.Raycast(ray, out distance))
+        {
+            return ray.GetPoint(distance);
+        }
+        return transform.position; // Fallback to current position
     }
 
     private bool IsInPlayableArea()
     {
-        // Implement your logic to check if the card is in the playable area
-        // For example, you can use a collider or a specific area on the screen
-        // Here is a simple example using screen coordinates
-        Vector3 screenPoint = Camera.main.WorldToScreenPoint(transform.position);
-        return screenPoint.y > Screen.height * playableAreaThreshold;
+        // Use viewport position for camera-relative area check
+        Vector3 viewportPos = Camera.main.WorldToViewportPoint(transform.position);
+        return viewportPos.y > playableAreaThreshold;
     }
 }
