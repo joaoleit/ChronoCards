@@ -97,7 +97,7 @@ public class CardDisplay : MonoBehaviour
             if (hit.collider != null && hit.collider.gameObject.CompareTag("Enemy"))
             {
                 Debug.Log("Card dropped on enemy!");
-                // manager.PlayCard(this);
+                manager.PlayCard(this);
                 return true;
             }
         }
