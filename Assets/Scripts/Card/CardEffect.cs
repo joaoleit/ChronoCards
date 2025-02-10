@@ -7,11 +7,15 @@ public class CardEffect
     {
         Damage,
         Heal,
-        Mana
+        Mana,
+        Passive
     }
 
     public EffectType effectType;
     public int value;
+
+    // Used only if effectType == Passive
+    public PassiveModifier passiveModifier;
 
     public ICardEffect GetEffect()
     {
@@ -23,8 +27,25 @@ public class CardEffect
                 return new HealEffect(value);
             case EffectType.Mana:
                 return new ManaEffect(value);
+            case EffectType.Passive:
+                return new PassiveEffect(passiveModifier);
             default:
                 return null;
         }
     }
+}
+
+[System.Serializable]
+public class PassiveModifier
+{
+    public enum ModifierType
+    {
+        DoubleDamageNextTurn,
+        BonusDamageNextCard,
+        HealPerCardThisTurn
+    }
+
+    public ModifierType modifierType;
+    public int value; // e.g., bonus damage amount
+    public int duration; // in turns
 }

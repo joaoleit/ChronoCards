@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 148073497}
   - component: {fileID: 148073496}
+  - component: {fileID: 148073498}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -154,7 +155,7 @@ MonoBehaviour:
   cardPrefab: {fileID: 1741558291971154216, guid: 88647a968338f2a44a3fac6bbed06069, type: 3}
   deck:
   - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 143e500b050d5e64bb3a44b9fe278aec, type: 2}
+  - {fileID: 11400000, guid: 89b777c38109449429280d36ac7487bc, type: 2}
   - {fileID: 11400000, guid: fc84530059b6f1c4aae41fb42c6151f4, type: 2}
   - {fileID: 11400000, guid: 143e500b050d5e64bb3a44b9fe278aec, type: 2}
   - {fileID: 11400000, guid: fc84530059b6f1c4aae41fb42c6151f4, type: 2}
@@ -189,6 +190,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &148073498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148073495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1888e4abf80ba934cb9a1577af20c3cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &153059874
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,11 +446,11 @@ PrefabInstance:
       objectReference: {fileID: 153059878}
     - target: {fileID: 8429157250432206837, guid: 60f16d45182e56d48a0b460f80624fdd, type: 3}
       propertyPath: health
-      value: 40
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8429157250432206837, guid: 60f16d45182e56d48a0b460f80624fdd, type: 3}
       propertyPath: maxHealth
-      value: 40
+      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

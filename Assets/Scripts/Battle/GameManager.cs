@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public UIManager UIManager;
     public int MaxHandSize = 10;
 
+    public static GameManager Instance { get; private set; }
     public enum TurnState
     {
         PlayerTurn,
@@ -22,6 +23,14 @@ public class GameManager : MonoBehaviour
     }
 
     public TurnState currentTurn;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+            Destroy(this);
+        else
+            Instance = this;
+    }
 
     void Start()
     {
@@ -63,6 +72,7 @@ public class GameManager : MonoBehaviour
         if (currentTurn == TurnState.PlayerTurn)
         {
             StartEnemyTurn();
+            EffectManager.Instance.OnTurnStart();
         }
     }
 
@@ -73,6 +83,7 @@ public class GameManager : MonoBehaviour
         {
             player.mana -= card.manaCost;
             card.PlayCard(player, enemy);
+            EffectManager.Instance.OnCardPlayed(cardDisplay.card);
             Debug.Log("Played card: " + card.cardName);
             UIManager.UpdateMana(player.mana);
             Destroy(cardDisplay.gameObject);

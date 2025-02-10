@@ -11,7 +11,13 @@ public class DamageEffect : ICardEffect
 
 	public void ApplyEffect(Player player, Enemy enemy)
 	{
-		enemy.TakeDamage(damage);
+		int finalDamage = damage;
+
+		// Apply damage modifiers
+		foreach (var modifier in EffectManager.Instance.GetModifiers<IDamageModifier>())
+			finalDamage = modifier.ModifyDamage(finalDamage);
+
+		enemy.TakeDamage(finalDamage);
 	}
 
 	public bool ShouldTriggerOnEnemy()
