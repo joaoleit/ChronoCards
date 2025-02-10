@@ -36,6 +36,7 @@ public class CardDisplay : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (manager.currentTurn != GameManager.TurnState.PlayerTurn) return;
         StartDragging();
     }
 

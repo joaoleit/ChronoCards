@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,13 +12,58 @@ public class GameManager : MonoBehaviour
     public GameObject cardPrefab;
     public List<Card> deck = new List<Card>();
     public List<Card> discardPile = new List<Card>();
-
+    public UIManager UIManager;
     public int MaxHandSize = 10;
+
+    public enum TurnState
+    {
+        PlayerTurn,
+        EnemyTurn
+    }
+
+    public TurnState currentTurn;
 
     void Start()
     {
+        player.mana = 0;
+        DrawCards(3);
+        StartPlayerTurn();
         // Initialize game state
         // LoadDeck();
+    }
+
+    public void StartPlayerTurn()
+    {
+        UIManager.UpdateTurn("Player's");
+        currentTurn = TurnState.PlayerTurn;
+        player.IncrementStartTurnMana();
+        player.mana = Math.Min(player.maxMana, player.startTurnMana);
+        UIManager.UpdateMana(player.mana);
+        DrawCard();
+        Debug.Log("Player's turn");
+    }
+
+    public void StartEnemyTurn()
+    {
+        UIManager.UpdateTurn("Enemy's");
+        currentTurn = TurnState.EnemyTurn;
+        StartCoroutine(EnemyAttackCoroutine());
+    }
+
+    private IEnumerator EnemyAttackCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        enemy.Attack(player);
+        yield return new WaitForSeconds(1f);
+        StartPlayerTurn();
+    }
+
+    public void EndPlayerTurn()
+    {
+        if (currentTurn == TurnState.PlayerTurn)
+        {
+            StartEnemyTurn();
+        }
     }
 
     public void PlayCard(CardDisplay cardDisplay)
@@ -28,6 +74,7 @@ public class GameManager : MonoBehaviour
             player.mana -= card.manaCost;
             card.PlayCard(player, enemy);
             Debug.Log("Played card: " + card.cardName);
+            UIManager.UpdateMana(player.mana);
             Destroy(cardDisplay.gameObject);
             discardPile.Add(card);
             StartCoroutine(AlignCardsNextFrame());
@@ -37,6 +84,20 @@ public class GameManager : MonoBehaviour
             Debug.Log("Cannot play this card!");
         }
     }
+    public void DrawCards(int count)
+    {
+        StartCoroutine(DrawCardsCoroutine(count));
+    }
+
+    public IEnumerator DrawCardsCoroutine(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            DrawCard();
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
 
     public void DrawCard()
     {

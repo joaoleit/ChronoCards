@@ -4,6 +4,7 @@ public class Enemy : MonoBehaviour
 {
     public int health;
     public int maxHealth = 100;
+    public int damage = 10;
     public HealthBar healthBar;
     public GameObject deathParticles; // Reference to the particle effect prefab
 
@@ -22,6 +23,12 @@ public class Enemy : MonoBehaviour
         {
             Die();
         }
+    }
+
+    public void Attack(Player player)
+    {
+        player.TakeDamage(damage);
+        Debug.Log("Enemy attacked player for " + damage + " damage.");
     }
 
     void Die()
