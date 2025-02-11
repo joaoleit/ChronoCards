@@ -1,6 +1,7 @@
 public class BonusDamageModifier : IModifier, ICardPlayedListener, IDamageModifier
 {
     private int bonusDamage;
+    private bool isConsumed;
     private bool isExpired;
 
     public BonusDamageModifier(int bonusDamage)
@@ -8,12 +9,23 @@ public class BonusDamageModifier : IModifier, ICardPlayedListener, IDamageModifi
         this.bonusDamage = bonusDamage;
     }
 
-    public int ModifyDamage(int damage) => damage + bonusDamage;
+    public int ModifyDamage(int damage)
+    {
+        if (!isConsumed)
+        {
+            isConsumed = true;
+            return damage + bonusDamage;
+        }
+        return damage;
+    }
 
     public void OnCardPlayed(Card card)
     {
-        // Apply only once
-        isExpired = true;
+        // Only expire after modifying damage once
+        if (isConsumed)
+        {
+            isExpired = true;
+        }
     }
 
     public bool IsExpired() => isExpired;
