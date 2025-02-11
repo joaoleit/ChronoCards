@@ -1,19 +1,28 @@
-// EffectManager.cs
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
+[DefaultExecutionOrder(-50)]
 public class EffectManager : MonoBehaviour
 {
     public static EffectManager Instance { get; private set; }
 
     private List<IModifier> modifiers = new List<IModifier>();
+
+
     private void OnEnable()
     {
-        GameEvents.Instance.OnTurnStart.AddListener(HandleTurnStart);
-        GameEvents.Instance.OnCardPlayed.AddListener(HandleCardPlayed);
-        GameEvents.Instance.OnModifierAdded.AddListener(HandleNewModifier);
-        GameEvents.Instance.OnModifierExpired.AddListener(RemoveModifier);
+        if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnTurnStart.AddListener(HandleTurnStart);
+            GameEvents.Instance.OnCardPlayed.AddListener(HandleCardPlayed);
+            GameEvents.Instance.OnModifierAdded.AddListener(HandleNewModifier);
+            GameEvents.Instance.OnModifierExpired.AddListener(RemoveModifier);
+        }
+        else
+        {
+            Debug.LogError("GameEvents.Instance is null in OnEnable");
+        }
     }
 
     private void OnDisable()
@@ -59,7 +68,6 @@ public class EffectManager : MonoBehaviour
     private void HandleNewModifier(IModifier modifier)
     {
         modifiers.Add(modifier);
-        // Automatically hook up modifier to events
         if (modifier is ITurnListener)
             GameEvents.Instance.OnTurnStart.AddListener(((ITurnListener)modifier).OnTurnStart);
 

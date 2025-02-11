@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+[DefaultExecutionOrder(-100)]
 public class GameEvents : MonoBehaviour
 {
     public static GameEvents Instance { get; private set; }

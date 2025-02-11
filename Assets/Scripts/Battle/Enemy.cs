@@ -7,6 +7,8 @@ public class Enemy : MonoBehaviour
     public int damage = 10;
     public HealthBar healthBar;
     public GameObject deathParticles; // Reference to the particle effect prefab
+    public GameObject floatingTextPrefab;
+
 
     void Start()
     {
@@ -19,6 +21,13 @@ public class Enemy : MonoBehaviour
         health -= amount;
         healthBar.SetHealth(health);
         Debug.Log("Enemy took " + amount + " damage. Current health: " + health);
+
+        if (floatingTextPrefab)
+        {
+            GameObject textObj = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, GameObject.Find("Canvas").transform);
+            textObj.GetComponent<FloatingText>().SetText(amount);
+        }
+
         if (health <= 0)
         {
             Die();

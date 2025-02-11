@@ -1,4 +1,4 @@
-public class DamagePerCardModifier : IModifier, ICardPlayedListener, IDamageModifier, ITurnListener
+public class DamagePerCardModifier : IModifier, ICardPlayedListener, ITurnListener
 {
     private int damagePerCard;
     private int duration;
@@ -8,8 +8,6 @@ public class DamagePerCardModifier : IModifier, ICardPlayedListener, IDamageModi
         this.damagePerCard = damagePerCard;
         this.duration = duration;
     }
-
-    public int ModifyDamage(int damage) => damage + damagePerCard;
 
     public void OnCardPlayed(Card card)
     {
