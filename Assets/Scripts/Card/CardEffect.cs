@@ -42,7 +42,8 @@ public class PassiveModifier
     {
         DoubleDamageNextTurn,
         BonusDamageNextCard,
-        HealPerCardThisTurn
+        HealPerCardThisTurn,
+        DamagePerCard
     }
 
     public ModifierType modifierType;

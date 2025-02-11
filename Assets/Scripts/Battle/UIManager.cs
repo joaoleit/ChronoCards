@@ -5,6 +5,14 @@ public class UIManager : MonoBehaviour
 {
     public TMP_Text ManaText;
     public TMP_Text TurnText;
+
+    private void OnEnable()
+    {
+        GameEvents.Instance.OnCardPlayed.AddListener((Card card) => UpdateMana());
+        GameEvents.Instance.OnTurnStart.AddListener(UpdateMana);
+        GameEvents.Instance.OnTurnStart.AddListener(UpdateTurn);
+        GameEvents.Instance.OnTurnEnd.AddListener(UpdateTurn);
+    }
     void Start()
     {
 
@@ -16,13 +24,15 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void UpdateMana(int mana)
+    public void UpdateMana()
     {
+        int mana = GameManager.Instance.player.mana;
         ManaText.text = "Mana: " + mana;
     }
 
-    public void UpdateTurn(string turn)
+    public void UpdateTurn()
     {
+        string turn = GameManager.Instance.currentTurn == GameManager.TurnState.PlayerTurn ? "Player's" : "Enemy's";
         TurnText.text = turn + " turn";
     }
 }

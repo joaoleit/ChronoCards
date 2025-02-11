@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     public GameObject cardPrefab;
     public List<Card> deck = new List<Card>();
     public List<Card> discardPile = new List<Card>();
-    public UIManager UIManager;
     public int MaxHandSize = 10;
 
     public static GameManager Instance { get; private set; }
@@ -43,18 +42,16 @@ public class GameManager : MonoBehaviour
 
     public void StartPlayerTurn()
     {
-        UIManager.UpdateTurn("Player's");
         currentTurn = TurnState.PlayerTurn;
         player.IncrementStartTurnMana();
         player.mana = Math.Min(player.maxMana, player.startTurnMana);
-        UIManager.UpdateMana(player.mana);
         DrawCard();
+        GameEvents.Instance.OnTurnStart.Invoke();
         Debug.Log("Player's turn");
     }
 
     public void StartEnemyTurn()
     {
-        UIManager.UpdateTurn("Enemy's");
         currentTurn = TurnState.EnemyTurn;
         StartCoroutine(EnemyAttackCoroutine());
     }
@@ -72,7 +69,7 @@ public class GameManager : MonoBehaviour
         if (currentTurn == TurnState.PlayerTurn)
         {
             StartEnemyTurn();
-            EffectManager.Instance.OnTurnStart();
+            GameEvents.Instance.OnTurnEnd.Invoke();
         }
     }
 
@@ -83,9 +80,8 @@ public class GameManager : MonoBehaviour
         {
             player.mana -= card.manaCost;
             card.PlayCard(player, enemy);
-            EffectManager.Instance.OnCardPlayed(cardDisplay.card);
             Debug.Log("Played card: " + card.cardName);
-            UIManager.UpdateMana(player.mana);
+            GameEvents.Instance.OnCardPlayed.Invoke(card);
             Destroy(cardDisplay.gameObject);
             discardPile.Add(card);
             StartCoroutine(AlignCardsNextFrame());

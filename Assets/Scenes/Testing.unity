@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 148073497}
   - component: {fileID: 148073496}
   - component: {fileID: 148073498}
+  - component: {fileID: 148073499}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -154,10 +155,10 @@ MonoBehaviour:
   handObject: {fileID: 1241932695}
   cardPrefab: {fileID: 1741558291971154216, guid: 88647a968338f2a44a3fac6bbed06069, type: 3}
   deck:
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
+  - {fileID: 11400000, guid: 18127bc94acb96049b85830c1b96ef9c, type: 2}
   - {fileID: 11400000, guid: 89b777c38109449429280d36ac7487bc, type: 2}
   - {fileID: 11400000, guid: fc84530059b6f1c4aae41fb42c6151f4, type: 2}
-  - {fileID: 11400000, guid: 143e500b050d5e64bb3a44b9fe278aec, type: 2}
+  - {fileID: 11400000, guid: fc84530059b6f1c4aae41fb42c6151f4, type: 2}
   - {fileID: 11400000, guid: fc84530059b6f1c4aae41fb42c6151f4, type: 2}
   - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
   - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
@@ -172,7 +173,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
   - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
   discardPile: []
-  UIManager: {fileID: 889925049}
   MaxHandSize: 10
   currentTurn: 0
 --- !u!4 &148073497
@@ -202,6 +202,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1888e4abf80ba934cb9a1577af20c3cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &148073499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148073495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5c84de58f044444a9cb2a0cf642002, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTurnStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTurnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCardPlayed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnModifierAdded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnModifierExpired:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &153059874
 GameObject:
   m_ObjectHideFlags: 0

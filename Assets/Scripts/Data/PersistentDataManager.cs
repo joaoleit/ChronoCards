@@ -37,6 +37,6 @@ public class PersistentDataManager : ScriptableObject
   public void ResetData()
   {
     currentSave = new SaveData();
-    SaveData();
+    SavePersistentData();
   }
 }

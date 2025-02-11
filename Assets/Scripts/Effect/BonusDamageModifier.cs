@@ -2,7 +2,6 @@ public class BonusDamageModifier : IModifier, ICardPlayedListener, IDamageModifi
 {
     private int bonusDamage;
     private bool isConsumed;
-    private bool isExpired;
 
     public BonusDamageModifier(int bonusDamage)
     {
@@ -21,12 +20,11 @@ public class BonusDamageModifier : IModifier, ICardPlayedListener, IDamageModifi
 
     public void OnCardPlayed(Card card)
     {
-        // Only expire after modifying damage once
         if (isConsumed)
         {
-            isExpired = true;
+            GameEvents.Instance.OnModifierExpired.Invoke(this);
         }
     }
 
-    public bool IsExpired() => isExpired;
+    public bool IsExpired() => isConsumed;
 }

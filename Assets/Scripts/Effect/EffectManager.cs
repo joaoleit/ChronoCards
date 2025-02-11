@@ -8,6 +8,21 @@ public class EffectManager : MonoBehaviour
     public static EffectManager Instance { get; private set; }
 
     private List<IModifier> modifiers = new List<IModifier>();
+    private void OnEnable()
+    {
+        GameEvents.Instance.OnTurnStart.AddListener(HandleTurnStart);
+        GameEvents.Instance.OnCardPlayed.AddListener(HandleCardPlayed);
+        GameEvents.Instance.OnModifierAdded.AddListener(HandleNewModifier);
+        GameEvents.Instance.OnModifierExpired.AddListener(RemoveModifier);
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.Instance.OnTurnStart.RemoveListener(HandleTurnStart);
+        GameEvents.Instance.OnCardPlayed.RemoveListener(HandleCardPlayed);
+        GameEvents.Instance.OnModifierAdded.RemoveListener(HandleNewModifier);
+        GameEvents.Instance.OnModifierExpired.RemoveListener(RemoveModifier);
+    }
 
     private void Awake()
     {
@@ -17,23 +32,7 @@ public class EffectManager : MonoBehaviour
             Instance = this;
     }
 
-    public void AddModifier(IModifier modifier)
-    {
-        modifiers.Add(modifier);
-    }
-
-    public void RemoveModifier(IModifier modifier)
-    {
-        modifiers.Remove(modifier);
-    }
-
-    public IEnumerable<T> GetModifiers<T>() where T : class
-    {
-        return modifiers.OfType<T>();
-    }
-
-    // Triggered by GameManager when a new turn starts
-    public void OnTurnStart()
+    private void HandleTurnStart()
     {
         foreach (var modifier in modifiers.ToList())
         {
@@ -41,12 +40,11 @@ public class EffectManager : MonoBehaviour
                 turnListener.OnTurnStart();
 
             if (modifier.IsExpired())
-                RemoveModifier(modifier);
+                GameEvents.Instance.OnModifierExpired.Invoke(modifier);
         }
     }
 
-    // Triggered when a card is played
-    public void OnCardPlayed(Card card)
+    private void HandleCardPlayed(Card card)
     {
         foreach (var modifier in modifiers.ToList())
         {
@@ -54,7 +52,40 @@ public class EffectManager : MonoBehaviour
                 cardListener.OnCardPlayed(card);
 
             if (modifier.IsExpired())
-                RemoveModifier(modifier);
+                GameEvents.Instance.OnModifierExpired.Invoke(modifier);
         }
+    }
+
+    private void HandleNewModifier(IModifier modifier)
+    {
+        modifiers.Add(modifier);
+        // Automatically hook up modifier to events
+        if (modifier is ITurnListener)
+            GameEvents.Instance.OnTurnStart.AddListener(((ITurnListener)modifier).OnTurnStart);
+
+        if (modifier is ICardPlayedListener)
+            GameEvents.Instance.OnCardPlayed.AddListener(((ICardPlayedListener)modifier).OnCardPlayed);
+    }
+
+    public void RemoveModifier(IModifier modifier)
+    {
+        modifiers.Remove(modifier);
+
+        // Clean up event connections
+        if (modifier is ITurnListener)
+            GameEvents.Instance.OnTurnStart.RemoveListener(((ITurnListener)modifier).OnTurnStart);
+
+        if (modifier is ICardPlayedListener)
+            GameEvents.Instance.OnCardPlayed.RemoveListener(((ICardPlayedListener)modifier).OnCardPlayed);
+    }
+
+    public IEnumerable<T> GetModifiers<T>() where T : class
+    {
+        return modifiers.OfType<T>();
+    }
+
+    public void AddModifier(IModifier modifier)
+    {
+        modifiers.Add(modifier);
     }
 }

@@ -20,7 +20,10 @@ public class PassiveEffect : ICardEffect
                 modifier = new BonusDamageModifier(modifierData.value);
                 break;
             case PassiveModifier.ModifierType.HealPerCardThisTurn:
-                modifier = new HealPerCardModifier(modifierData.value);
+                modifier = new HealPerCardModifier(modifierData.value, modifierData.duration);
+                break;
+            case PassiveModifier.ModifierType.DamagePerCard:
+                modifier = new DamagePerCardModifier(modifierData.value, modifierData.duration);
                 break;
         }
 
