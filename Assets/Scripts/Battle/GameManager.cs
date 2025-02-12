@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,15 +10,66 @@ public class GameManager : MonoBehaviour
     public Enemy enemy;
     public GameObject handObject;
     public GameObject cardPrefab;
-    public List<Card> deck = new List<Card>();
     public List<Card> discardPile = new List<Card>();
-
     public int MaxHandSize = 10;
+    private List<Card> deck = new List<Card>();
+    public static GameManager Instance { get; private set; }
+    public enum TurnState
+    {
+        PlayerTurn,
+        EnemyTurn
+    }
+
+    public TurnState currentTurn;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+            Destroy(this);
+        else
+            Instance = this;
+    }
 
     void Start()
     {
+        LoadAndShuffleDeck();
+        player.mana = 0;
+        DrawCards(player.startHandSize);
+        StartPlayerTurn();
         // Initialize game state
-        // LoadDeck();
+    }
+
+    public void StartPlayerTurn()
+    {
+        currentTurn = TurnState.PlayerTurn;
+        player.IncrementStartTurnMana();
+        player.mana = Math.Min(player.maxMana, player.startTurnMana);
+        GameEvents.Instance.OnTurnStart.Invoke();
+        Debug.Log("Player's turn");
+    }
+
+    public void StartEnemyTurn()
+    {
+        currentTurn = TurnState.EnemyTurn;
+        StartCoroutine(EnemyAttackCoroutine());
+    }
+
+    private IEnumerator EnemyAttackCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        enemy.Attack(player);
+        yield return new WaitForSeconds(1f);
+        StartPlayerTurn();
+    }
+
+    public void EndPlayerTurn()
+    {
+        if (currentTurn == TurnState.PlayerTurn)
+        {
+            DrawCard();
+            StartEnemyTurn();
+            GameEvents.Instance.OnTurnEnd.Invoke();
+        }
     }
 
     public void PlayCard(CardDisplay cardDisplay)
@@ -28,6 +80,7 @@ public class GameManager : MonoBehaviour
             player.mana -= card.manaCost;
             card.PlayCard(player, enemy);
             Debug.Log("Played card: " + card.cardName);
+            GameEvents.Instance.OnCardPlayed.Invoke(card);
             Destroy(cardDisplay.gameObject);
             discardPile.Add(card);
             StartCoroutine(AlignCardsNextFrame());
@@ -37,6 +90,20 @@ public class GameManager : MonoBehaviour
             Debug.Log("Cannot play this card!");
         }
     }
+    public void DrawCards(int count)
+    {
+        StartCoroutine(DrawCardsCoroutine(count));
+    }
+
+    public IEnumerator DrawCardsCoroutine(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            DrawCard();
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
 
     public void DrawCard()
     {
@@ -64,36 +131,27 @@ public class GameManager : MonoBehaviour
 
     public void SaveDeck()
     {
-        string path = Application.persistentDataPath + "/deck.json";
-        List<string> deckJsonList = new List<string>();
-        for (int i = 0; i < deck.Count; i++)
-        {
-            deckJsonList.Add(JsonUtility.ToJson(deck[i]));
-        }
-        File.WriteAllText(path, JsonUtility.ToJson(deckJsonList));
-        Debug.Log("Deck saved to " + path);
+        Debug.Log("Saving deck");
+        string deckJson = JsonUtility.ToJson(deck);
+        PlayerPrefs.SetString("PlayerDeck", deckJson);
+        PlayerPrefs.Save();
     }
 
-    public void LoadDeck()
+    public void LoadAndShuffleDeck()
     {
-        string path = Application.persistentDataPath + "/deck.json";
-        if (File.Exists(path))
+        deck = ShuffleDeck(DeckManager.Instance.deck);
+    }
+
+    private List<Card> ShuffleDeck(List<Card> deck)
+    {
+        for (int i = 0; i < deck.Count; i++)
         {
-            string deckJson = File.ReadAllText(path);
-            List<string> deckJsonList = JsonUtility.FromJson<List<string>>(deckJson);
-            deck.Clear();
-            foreach (string cardJson in deckJsonList)
-            {
-                Card card = ScriptableObject.CreateInstance<Card>();
-                JsonUtility.FromJsonOverwrite(cardJson, card);
-                deck.Add(card);
-            }
-            Debug.Log("Deck loaded from " + path);
+            Card temp = deck[i];
+            int randomIndex = UnityEngine.Random.Range(i, deck.Count);
+            deck[i] = deck[randomIndex];
+            deck[randomIndex] = temp;
         }
-        else
-        {
-            Debug.Log("No saved deck found at " + path);
-        }
+        return deck;
     }
 
     void OnApplicationQuit()
