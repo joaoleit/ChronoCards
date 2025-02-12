@@ -1,18 +1,31 @@
-public class DoubleDamageModifier : IModifier, ITurnListener, IDamageModifier
+using UnityEngine;
+
+public class DoubleDamageModifier : IModifier, ITurnEndListener, IDamageModifier
 {
     private int duration;
+    private bool isNextTurn = false;
 
     public DoubleDamageModifier(int duration)
     {
         this.duration = duration;
     }
 
-    public int ModifyDamage(int damage) => damage * 2;
+    public int ModifyDamage(int damage) => isNextTurn ? damage * 2 : damage;
 
-    public void OnTurnStart()
+    public void OnTurnEnd()
     {
-        duration--;
+        if (isNextTurn)
+        {
+            duration--;
+            if (IsExpired())
+                GameEvents.Instance.OnModifierExpired.Invoke(this);
+        }
+
+        isNextTurn = true;
     }
 
-    public bool IsExpired() => duration <= 0;
+    public bool IsExpired()
+    {
+        return duration <= 0;
+    }
 }

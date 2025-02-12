@@ -12,22 +12,17 @@ public class EffectManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if (GameEvents.Instance != null)
-        {
-            GameEvents.Instance.OnTurnStart.AddListener(HandleTurnStart);
-            GameEvents.Instance.OnCardPlayed.AddListener(HandleCardPlayed);
-            GameEvents.Instance.OnModifierAdded.AddListener(HandleNewModifier);
-            GameEvents.Instance.OnModifierExpired.AddListener(RemoveModifier);
-        }
-        else
-        {
-            Debug.LogError("GameEvents.Instance is null in OnEnable");
-        }
+        GameEvents.Instance.OnTurnStart.AddListener(HandleTurnStart);
+        GameEvents.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
+        GameEvents.Instance.OnCardPlayed.AddListener(HandleCardPlayed);
+        GameEvents.Instance.OnModifierAdded.AddListener(HandleNewModifier);
+        GameEvents.Instance.OnModifierExpired.AddListener(RemoveModifier);
     }
 
     private void OnDisable()
     {
         GameEvents.Instance.OnTurnStart.RemoveListener(HandleTurnStart);
+        GameEvents.Instance.OnTurnEnd.RemoveListener(HandleTurnEnd);
         GameEvents.Instance.OnCardPlayed.RemoveListener(HandleCardPlayed);
         GameEvents.Instance.OnModifierAdded.RemoveListener(HandleNewModifier);
         GameEvents.Instance.OnModifierExpired.RemoveListener(RemoveModifier);
@@ -47,6 +42,18 @@ public class EffectManager : MonoBehaviour
         {
             if (modifier is ITurnListener turnListener)
                 turnListener.OnTurnStart();
+
+            if (modifier.IsExpired())
+                GameEvents.Instance.OnModifierExpired.Invoke(modifier);
+        }
+    }
+
+    private void HandleTurnEnd()
+    {
+        foreach (var modifier in modifiers.ToList())
+        {
+            if (modifier is ITurnEndListener turnEndListener)
+                turnEndListener.OnTurnEnd();
 
             if (modifier.IsExpired())
                 GameEvents.Instance.OnModifierExpired.Invoke(modifier);

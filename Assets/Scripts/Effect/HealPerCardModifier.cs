@@ -18,6 +18,8 @@ public class HealPerCardModifier : IModifier, ICardPlayedListener, ITurnListener
     public void OnTurnStart()
     {
         duration--;
+        if (IsExpired())
+            GameEvents.Instance.OnModifierExpired.Invoke(this);
     }
 
     public bool IsExpired() => duration <= 0;

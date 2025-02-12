@@ -3,37 +3,35 @@ using System.Collections.Generic;
 
 public class DeckManager : MonoBehaviour
 {
-    [SerializeField] private PersistentDataManager dataManager;
-    [SerializeField] private int maxDeckSize = 20;
+    public static DeckManager Instance;
 
-    public bool AddCardToDeck(Card card)
+    public List<Card> chest = new List<Card>();
+    public List<Card> deck = new List<Card>();
+    public const int MaxDeckSize = 20;
+
+    void Awake()
     {
-        if (dataManager.currentSave.deckCards.Count >= maxDeckSize)
+        if (Instance == null)
         {
-            Debug.LogWarning("Deck is full!");
-            return false;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-
-        dataManager.currentSave.deckCards.Add(card.cardName);
-        dataManager.SavePersistentData();
-        return true;
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public bool RemoveCardFromDeck(string cardName)
+    public void AddCardToDeck(Card card)
     {
-        bool removed = dataManager.currentSave.deckCards.Remove(cardName);
-        if (removed) dataManager.SavePersistentData();
-        return removed;
+        if (deck.Count < MaxDeckSize)
+        {
+            deck.Add(card);
+        }
     }
 
-    public List<Card> GetCurrentDeck(CardDatabase database)
+    public void AddCardToChest(Card card)
     {
-        List<Card> deck = new List<Card>();
-        foreach (string cardName in dataManager.currentSave.deckCards)
-        {
-            Card card = database.GetCardByName(cardName);
-            if (card != null) deck.Add(card);
-        }
-        return deck;
+        chest.Add(card);
     }
 }

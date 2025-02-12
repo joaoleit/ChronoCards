@@ -3,10 +3,6 @@ using System.Collections.Generic;
 
 public class StarterDeckCreator : MonoBehaviour
 {
-    [SerializeField] private PersistentDataManager dataManager;
-    [SerializeField] private ChestManager chestManager;
-    [SerializeField] private CardDatabase cardDatabase;
-
     private readonly List<CardConfig> starterCards = new List<CardConfig>
     {
         // Damage Cards (5)
@@ -55,15 +51,6 @@ public class StarterDeckCreator : MonoBehaviour
                     duration = 1
                 }
             }, new Color(0.5f, 0.5f, 1)),
-        new CardConfig("Preparation", "Next card deals +3 damage", 1,
-            new CardEffect {
-                effectType = CardEffect.EffectType.Passive,
-                passiveModifier = new PassiveModifier {
-                    modifierType = PassiveModifier.ModifierType.BonusDamageNextCard,
-                    value = 3,
-                    duration = 1
-                }
-            }, new Color(0.5f, 0.5f, 1)),
         new CardConfig("Fortify", "Heal 2 per card this turn", 2,
             new CardEffect {
                 effectType = CardEffect.EffectType.Passive,
@@ -73,15 +60,15 @@ public class StarterDeckCreator : MonoBehaviour
                     duration = 1
                 }
             }, Color.gray),
-        // new CardConfig("Overload", "Deal 2 damage per card played", 3,
-        //     new CardEffect {
-        //         effectType = CardEffect.EffectType.Passive,
-        //         passiveModifier = new PassiveModifier {
-        //             modifierType = PassiveModifier.ModifierType.DealDamagePerCard,
-        //             value = 2,
-        //             duration = 1
-        //         }
-        //     }, Color.black),
+        new CardConfig("Overload", "Deal 2 damage per card played", 3,
+            new CardEffect {
+                effectType = CardEffect.EffectType.Passive,
+                passiveModifier = new PassiveModifier {
+                    modifierType = PassiveModifier.ModifierType.DamagePerCard,
+                    value = 2,
+                    duration = 1
+                }
+            }, Color.black),
         new CardConfig("Double Strike", "Double damage next turn", 4,
             new CardEffect {
                 effectType = CardEffect.EffectType.Passive,
@@ -119,38 +106,26 @@ public class StarterDeckCreator : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        InitializeStarterDeck();
-    }
-
-    private void InitializeStarterDeck()
+    public void CreateStarterDeck()
     {
         // Only create starter deck if no saved data exists
-        if (dataManager.currentSave.deckCards.Count == 0)
+        foreach (var config in starterCards)
         {
-            foreach (var config in starterCards)
-            {
-                // Create card instance
-                Card card = CardFactory.CreateCard(
-                    config.name,
-                    config.manaCost,
-                    new List<CardEffect> { config.effect },
-                    config.color
-                );
+            // Create card instance
+            Card card = CardFactory.CreateCard(
+                config.name,
+                config.manaCost,
+                new List<CardEffect> { config.effect },
+                config.color
+            );
 
-                // Add to database
-                cardDatabase.allCards.Add(card);
+            // Add to chest
+            DeckManager.Instance.AddCardToChest(card);
 
-                // Add to chest
-                chestManager.AddCardToChest(card);
-
-                // Add to deck
-                dataManager.currentSave.deckCards.Add(card.cardName);
-            }
-
-            dataManager.SavePersistentData();
-            Debug.Log("Starter deck initialized with 20 cards");
+            // Add to deck
+            DeckManager.Instance.AddCardToDeck(card);
         }
+
+        Debug.Log("Starter deck initialized with 20 cards");
     }
 }

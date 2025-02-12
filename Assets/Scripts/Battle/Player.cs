@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public int maxMana = 10;
     public int mana = 0;
     public int startTurnMana = 0;
+    public int startHandSize = 5;
 
     private void Start()
     {

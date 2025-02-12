@@ -8,6 +8,11 @@ public interface ITurnListener
     void OnTurnStart();
 }
 
+public interface ITurnEndListener
+{
+    void OnTurnEnd();
+}
+
 public interface ICardPlayedListener
 {
     void OnCardPlayed(Card card);

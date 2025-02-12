@@ -48,6 +48,8 @@ public static class CardFactory
         return $"Next card deals +{modifier.value} damage. ";
       case PassiveModifier.ModifierType.HealPerCardThisTurn:
         return $"Heal {modifier.value} health per card this turn. ";
+      case PassiveModifier.ModifierType.DamagePerCard:
+        return $"Deal {modifier.value} damage per card this turn. ";
       default:
         return "Unknown effect. ";
     }

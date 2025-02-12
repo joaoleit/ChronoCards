@@ -10,10 +10,9 @@ public class GameManager : MonoBehaviour
     public Enemy enemy;
     public GameObject handObject;
     public GameObject cardPrefab;
-    public List<Card> deck = new List<Card>();
     public List<Card> discardPile = new List<Card>();
     public int MaxHandSize = 10;
-
+    private List<Card> deck = new List<Card>();
     public static GameManager Instance { get; private set; }
     public enum TurnState
     {
@@ -33,11 +32,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        LoadAndShuffleDeck();
         player.mana = 0;
-        DrawCards(3);
+        DrawCards(player.startHandSize);
         StartPlayerTurn();
         // Initialize game state
-        // LoadDeck();
     }
 
     public void StartPlayerTurn()
@@ -45,7 +44,6 @@ public class GameManager : MonoBehaviour
         currentTurn = TurnState.PlayerTurn;
         player.IncrementStartTurnMana();
         player.mana = Math.Min(player.maxMana, player.startTurnMana);
-        DrawCard();
         GameEvents.Instance.OnTurnStart.Invoke();
         Debug.Log("Player's turn");
     }
@@ -68,6 +66,7 @@ public class GameManager : MonoBehaviour
     {
         if (currentTurn == TurnState.PlayerTurn)
         {
+            DrawCard();
             StartEnemyTurn();
             GameEvents.Instance.OnTurnEnd.Invoke();
         }
@@ -132,36 +131,27 @@ public class GameManager : MonoBehaviour
 
     public void SaveDeck()
     {
-        string path = Application.persistentDataPath + "/deck.json";
-        List<string> deckJsonList = new List<string>();
-        for (int i = 0; i < deck.Count; i++)
-        {
-            deckJsonList.Add(JsonUtility.ToJson(deck[i]));
-        }
-        File.WriteAllText(path, JsonUtility.ToJson(deckJsonList));
-        Debug.Log("Deck saved to " + path);
+        Debug.Log("Saving deck");
+        string deckJson = JsonUtility.ToJson(deck);
+        PlayerPrefs.SetString("PlayerDeck", deckJson);
+        PlayerPrefs.Save();
     }
 
-    public void LoadDeck()
+    public void LoadAndShuffleDeck()
     {
-        string path = Application.persistentDataPath + "/deck.json";
-        if (File.Exists(path))
+        deck = ShuffleDeck(DeckManager.Instance.deck);
+    }
+
+    private List<Card> ShuffleDeck(List<Card> deck)
+    {
+        for (int i = 0; i < deck.Count; i++)
         {
-            string deckJson = File.ReadAllText(path);
-            List<string> deckJsonList = JsonUtility.FromJson<List<string>>(deckJson);
-            deck.Clear();
-            foreach (string cardJson in deckJsonList)
-            {
-                Card card = ScriptableObject.CreateInstance<Card>();
-                JsonUtility.FromJsonOverwrite(cardJson, card);
-                deck.Add(card);
-            }
-            Debug.Log("Deck loaded from " + path);
+            Card temp = deck[i];
+            int randomIndex = UnityEngine.Random.Range(i, deck.Count);
+            deck[i] = deck[randomIndex];
+            deck[randomIndex] = temp;
         }
-        else
-        {
-            Debug.Log("No saved deck found at " + path);
-        }
+        return deck;
     }
 
     void OnApplicationQuit()
