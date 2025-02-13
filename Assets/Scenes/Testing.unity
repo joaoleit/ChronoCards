@@ -154,27 +154,8 @@ MonoBehaviour:
   enemy: {fileID: 968601694}
   handObject: {fileID: 1241932695}
   cardPrefab: {fileID: 1741558291971154216, guid: 88647a968338f2a44a3fac6bbed06069, type: 3}
-  deck:
-  - {fileID: 11400000, guid: 18127bc94acb96049b85830c1b96ef9c, type: 2}
-  - {fileID: 11400000, guid: 89b777c38109449429280d36ac7487bc, type: 2}
-  - {fileID: 11400000, guid: fc84530059b6f1c4aae41fb42c6151f4, type: 2}
-  - {fileID: 11400000, guid: fc84530059b6f1c4aae41fb42c6151f4, type: 2}
-  - {fileID: 11400000, guid: fc84530059b6f1c4aae41fb42c6151f4, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
-  - {fileID: 11400000, guid: 9674ab16530082f47b48085ec7decb10, type: 2}
   discardPile: []
   MaxHandSize: 10
-  dataManager: {fileID: 0}
   currentTurn: 0
 --- !u!4 &148073497
 Transform:
@@ -360,14 +341,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153059874}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.14600216, y: -0, z: -0, w: 0.9892843}
-  m_LocalPosition: {x: 319, y: 10, z: 10}
+  m_LocalRotation: {x: 0.32603568, y: -0, z: -0, w: 0.94535756}
+  m_LocalPosition: {x: 319, y: 11.58, z: 12.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1241932696}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 16.791, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 38.057, y: 0, z: 0}
 --- !u!1001 &189755750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -712,6 +693,7 @@ MonoBehaviour:
   maxMana: 10
   mana: 10
   startTurnMana: 0
+  startHandSize: 5
 --- !u!4 &841468979
 Transform:
   m_ObjectHideFlags: 0
@@ -1138,6 +1120,65 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa9ca6a857a59ef41ae20d89ee09bc46, type: 3}
+--- !u!1 &1309942656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1309942658}
+  - component: {fileID: 1309942657}
+  - component: {fileID: 1309942659}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1309942657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309942656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a4ac9a5b492374cb758f18ed3de7c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chest: []
+  deck: []
+--- !u!4 &1309942658
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309942656}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 334.0082, y: 14.21508, z: 15.88057}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1309942659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309942656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13aace857fbd0f849af06e3f27e65472, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1311969494
 GameObject:
   m_ObjectHideFlags: 0
@@ -1831,3 +1872,4 @@ SceneRoots:
   - {fileID: 1267657867}
   - {fileID: 841179894}
   - {fileID: 1112184398}
+  - {fileID: 1309942658}

@@ -8,6 +8,7 @@ public class CardEffect
         Damage,
         Heal,
         Mana,
+        Draw,
         Passive
     }
 
@@ -27,6 +28,8 @@ public class CardEffect
                 return new HealEffect(value);
             case EffectType.Mana:
                 return new ManaEffect(value);
+            case EffectType.Draw:
+                return new DrawEffect(value);
             case EffectType.Passive:
                 return new PassiveEffect(passiveModifier);
             default:

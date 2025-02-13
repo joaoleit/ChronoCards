@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject cardPrefab;
     public List<Card> discardPile = new List<Card>();
     public int MaxHandSize = 10;
-    private List<Card> deck = new List<Card>();
+    private List<Card> deck;
     public static GameManager Instance { get; private set; }
     public enum TurnState
     {
@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Cannot play this card!");
         }
     }
+
     public void DrawCards(int count)
     {
         StartCoroutine(DrawCardsCoroutine(count));
@@ -100,7 +101,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             DrawCard();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.3f);
         }
     }
 
@@ -129,17 +130,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SaveDeck()
-    {
-        Debug.Log("Saving deck");
-        string deckJson = JsonUtility.ToJson(deck);
-        PlayerPrefs.SetString("PlayerDeck", deckJson);
-        PlayerPrefs.Save();
-    }
-
     public void LoadAndShuffleDeck()
     {
-        deck = ShuffleDeck(DeckManager.Instance.deck);
+        deck = new List<Card>(ShuffleDeck(DeckManager.Instance.deck));
+        if (deck.Count == 0)
+        {
+            StarterDeckCreator.CreateStarterDeck();
+            deck = new List<Card>(ShuffleDeck(DeckManager.Instance.deck));
+        }
     }
 
     private List<Card> ShuffleDeck(List<Card> deck)
@@ -152,11 +150,6 @@ public class GameManager : MonoBehaviour
             deck[randomIndex] = temp;
         }
         return deck;
-    }
-
-    void OnApplicationQuit()
-    {
-        SaveDeck();
     }
 
     public void AlignCards()
@@ -179,7 +172,6 @@ public class GameManager : MonoBehaviour
     {
         GameObject cardObject = Instantiate(cardPrefab, handObject.transform);
         cardObject.GetComponent<CardDisplay>().card = card;
-        cardObject.GetComponent<CardDisplay>().manager = this;
         cardObject.transform.localPosition = Vector3.right * 10;
     }
 

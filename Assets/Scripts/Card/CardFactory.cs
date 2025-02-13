@@ -30,6 +30,9 @@ public static class CardFactory
         case CardEffect.EffectType.Mana:
           description += $"Gain {effect.value} mana. ";
           break;
+        case CardEffect.EffectType.Draw:
+          description += $"Draw {effect.value} cards. ";
+          break;
         case CardEffect.EffectType.Passive:
           description += GeneratePassiveDescription(effect.passiveModifier);
           break;

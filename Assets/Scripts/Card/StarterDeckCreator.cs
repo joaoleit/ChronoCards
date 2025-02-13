@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class StarterDeckCreator : MonoBehaviour
 {
-    private readonly List<CardConfig> starterCards = new List<CardConfig>
+    private static readonly List<CardConfig> starterCards = new List<CardConfig>
     {
         // Damage Cards (5)
         new CardConfig("Strike", "Deal 5 damage", 1,
@@ -40,6 +40,18 @@ public class StarterDeckCreator : MonoBehaviour
             new CardEffect { effectType = CardEffect.EffectType.Mana, value = 1 }, new Color(0.7f, 0, 1)),
         new CardConfig("Power Flow", "Gain 2 mana", 1,
             new CardEffect { effectType = CardEffect.EffectType.Mana, value = 2 }, new Color(0, 1, 1)),
+        
+        /// Draw Cards (5)
+        new CardConfig("Draw 1", "Draw 1 card", 1,
+            new CardEffect { effectType = CardEffect.EffectType.Draw, value = 1 }, Color.yellow),
+        new CardConfig("Draw 2", "Draw 2 cards", 2,
+            new CardEffect { effectType = CardEffect.EffectType.Draw, value = 2 }, Color.green),
+        new CardConfig("Draw 3", "Draw 3 cards", 3,
+            new CardEffect { effectType = CardEffect.EffectType.Draw, value = 3 }, Color.blue),
+        new CardConfig("Draw 4", "Draw 4 cards", 4,
+            new CardEffect { effectType = CardEffect.EffectType.Draw, value = 4 }, Color.magenta),
+        new CardConfig("Draw 5", "Draw 5 cards", 5,
+            new CardEffect { effectType = CardEffect.EffectType.Draw, value = 5 }, Color.red),
 
         // Passive Cards (5)
         new CardConfig("Preparation", "Next card deals +3 damage", 1,
@@ -106,7 +118,7 @@ public class StarterDeckCreator : MonoBehaviour
         }
     }
 
-    public void CreateStarterDeck()
+    public static void CreateStarterDeck()
     {
         // Only create starter deck if no saved data exists
         foreach (var config in starterCards)

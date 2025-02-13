@@ -7,7 +7,6 @@ public class CardDisplay : MonoBehaviour
     public new TMP_Text name;
     public TMP_Text description;
     public TMP_Text manaCost;
-    public GameManager manager;
     public float playableAreaThreshold = 0.5f; // Now based on viewport Y (0-1)
     private Vector3 offset;
     public bool isDragging = false;
@@ -36,7 +35,7 @@ public class CardDisplay : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (manager.currentTurn != GameManager.TurnState.PlayerTurn) return;
+        if (GameManager.Instance.currentTurn != GameManager.TurnState.PlayerTurn) return;
         StartDragging();
     }
 
@@ -98,7 +97,7 @@ public class CardDisplay : MonoBehaviour
         }
         else if (IsInPlayableArea())
         {
-            manager.PlayCard(this);
+            GameManager.Instance.PlayCard(this);
             return;
         }
 
@@ -110,16 +109,14 @@ public class CardDisplay : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit[] hits = Physics.RaycastAll(ray);
 
-        // Iterate over all hits and see if one of them is an enemy
         foreach (RaycastHit hit in hits)
         {
-            // Ignore the card's own collider
             if (hit.collider.gameObject == gameObject)
                 continue;
 
             if (hit.collider.gameObject.CompareTag("Enemy"))
             {
-                manager.PlayCard(this);
+                GameManager.Instance.PlayCard(this);
                 return true;
             }
         }
@@ -137,18 +134,6 @@ public class CardDisplay : MonoBehaviour
         {
             Debug.LogWarning("CardHover component not found!");
         }
-    }
-
-    private Vector3 GetMouseWorldPosition()
-    {
-        // Cast ray to the drag plane to get accurate world position
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        float distance;
-        if (dragPlane.Raycast(ray, out distance))
-        {
-            return ray.GetPoint(distance);
-        }
-        return transform.position; // Fallback to current position
     }
 
     private bool IsInPlayableArea()
