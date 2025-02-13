@@ -42,6 +42,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        GameEvents.Instance.OnEnemyDeath.Invoke();
         gameObject.tag = "Untagged"; // Remove the "Enemy" tag
         transform.Find("Gob1").gameObject.SetActive(false);
         GameObject particles = Instantiate(deathParticles, transform.position, Quaternion.identity); // Instantiate particle effect

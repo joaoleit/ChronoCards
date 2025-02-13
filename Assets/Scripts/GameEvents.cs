@@ -11,6 +11,7 @@ public class GameEvents : MonoBehaviour
     public UnityEvent<Card> OnCardPlayed = new UnityEvent<Card>();
     public UnityEvent<IModifier> OnModifierAdded = new UnityEvent<IModifier>();
     public UnityEvent<IModifier> OnModifierExpired = new UnityEvent<IModifier>();
+    public UnityEvent OnEnemyDeath = new UnityEvent();
 
     private void Awake()
     {

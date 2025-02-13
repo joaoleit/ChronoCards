@@ -11,7 +11,7 @@ public class DrawEffect : ICardEffect
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        GameManager.Instance.DrawCards(drawAmount);
+        BattleManager.Instance.DrawCards(drawAmount);
     }
 
     public bool ShouldTriggerOnEnemy()

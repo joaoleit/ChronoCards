@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO;
 using System;
 
-public class GameManager : MonoBehaviour
+public class BattleManager : MonoBehaviour
 {
     public Player player;
     public Enemy enemy;
@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public List<Card> discardPile = new List<Card>();
     public int MaxHandSize = 10;
     private List<Card> deck;
-    public static GameManager Instance { get; private set; }
+    public static BattleManager Instance { get; private set; }
     public enum TurnState
     {
         PlayerTurn,
@@ -21,6 +21,16 @@ public class GameManager : MonoBehaviour
     }
 
     public TurnState currentTurn;
+    private int turnCount = 0;
+
+    private void OnEnable()
+    {
+        GameEvents.Instance.OnEnemyDeath.AddListener(() =>
+        {
+            Debug.Log("Enemy died!");
+            // End the game
+        });
+    }
 
     private void Awake()
     {
@@ -41,6 +51,7 @@ public class GameManager : MonoBehaviour
 
     public void StartPlayerTurn()
     {
+        turnCount++;
         currentTurn = TurnState.PlayerTurn;
         player.IncrementStartTurnMana();
         player.mana = Math.Min(player.maxMana, player.startTurnMana);

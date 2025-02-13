@@ -35,7 +35,7 @@ public class CardDisplay : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (GameManager.Instance.currentTurn != GameManager.TurnState.PlayerTurn) return;
+        if (BattleManager.Instance.currentTurn != BattleManager.TurnState.PlayerTurn) return;
         StartDragging();
     }
 
@@ -97,7 +97,7 @@ public class CardDisplay : MonoBehaviour
         }
         else if (IsInPlayableArea())
         {
-            GameManager.Instance.PlayCard(this);
+            BattleManager.Instance.PlayCard(this);
             return;
         }
 
@@ -116,7 +116,7 @@ public class CardDisplay : MonoBehaviour
 
             if (hit.collider.gameObject.CompareTag("Enemy"))
             {
-                GameManager.Instance.PlayCard(this);
+                BattleManager.Instance.PlayCard(this);
                 return true;
             }
         }

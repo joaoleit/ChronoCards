@@ -211,6 +211,9 @@ MonoBehaviour:
   OnModifierExpired:
     m_PersistentCalls:
       m_Calls: []
+  OnEnemyDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &153059874
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,11 +458,11 @@ PrefabInstance:
       objectReference: {fileID: 153059878}
     - target: {fileID: 8429157250432206837, guid: 60f16d45182e56d48a0b460f80624fdd, type: 3}
       propertyPath: health
-      value: 200
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 8429157250432206837, guid: 60f16d45182e56d48a0b460f80624fdd, type: 3}
       propertyPath: maxHealth
-      value: 200
+      value: 40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
