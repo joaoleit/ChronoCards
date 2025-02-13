@@ -4,16 +4,19 @@ using UnityEngine;
 using System.IO;
 using System;
 
-public class GameManager : MonoBehaviour
+public class BattleManager : MonoBehaviour
 {
     public Player player;
     public Enemy enemy;
     public GameObject handObject;
     public GameObject cardPrefab;
+    public GameObject basicEnemyPrefab;
+    public GameObject selfHealingEnemyPrefab;
+    public GameObject aggressiveEnemyPrefab;
     public List<Card> discardPile = new List<Card>();
     public int MaxHandSize = 10;
-    private List<Card> deck = new List<Card>();
-    public static GameManager Instance { get; private set; }
+    private List<Card> deck;
+    public static BattleManager Instance { get; private set; }
     public enum TurnState
     {
         PlayerTurn,
@@ -21,6 +24,17 @@ public class GameManager : MonoBehaviour
     }
 
     public TurnState currentTurn;
+    private int turnCount = 0;
+    private Vector3 enemyPosition = new Vector3(319.23f, 0, 30);
+
+    private void OnEnable()
+    {
+        GameEvents.Instance.OnEnemyDeath.AddListener(() =>
+        {
+            Debug.Log("Enemy died!");
+            Debug.Log("Took " + turnCount + " turns to defeat the enemy.");
+        });
+    }
 
     private void Awake()
     {
@@ -32,6 +46,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        SpawnEnemy(enemyPosition);
         LoadAndShuffleDeck();
         player.mana = 0;
         DrawCards(player.startHandSize);
@@ -41,6 +56,7 @@ public class GameManager : MonoBehaviour
 
     public void StartPlayerTurn()
     {
+        turnCount++;
         currentTurn = TurnState.PlayerTurn;
         player.IncrementStartTurnMana();
         player.mana = Math.Min(player.maxMana, player.startTurnMana);
@@ -51,13 +67,13 @@ public class GameManager : MonoBehaviour
     public void StartEnemyTurn()
     {
         currentTurn = TurnState.EnemyTurn;
-        StartCoroutine(EnemyAttackCoroutine());
+        StartCoroutine(EnemyTurnCoroutine());
     }
 
-    private IEnumerator EnemyAttackCoroutine()
+    private IEnumerator EnemyTurnCoroutine()
     {
-        yield return new WaitForSeconds(1f);
-        enemy.Attack(player);
+        // Calls the enemy's own turn logic, which now supports multiple moves and critical hits.
+        yield return enemy.ExecuteTurn(player);
         yield return new WaitForSeconds(1f);
         StartPlayerTurn();
     }
@@ -90,6 +106,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Cannot play this card!");
         }
     }
+
     public void DrawCards(int count)
     {
         StartCoroutine(DrawCardsCoroutine(count));
@@ -100,7 +117,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             DrawCard();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.3f);
         }
     }
 
@@ -129,17 +146,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SaveDeck()
-    {
-        Debug.Log("Saving deck");
-        string deckJson = JsonUtility.ToJson(deck);
-        PlayerPrefs.SetString("PlayerDeck", deckJson);
-        PlayerPrefs.Save();
-    }
-
     public void LoadAndShuffleDeck()
     {
-        deck = ShuffleDeck(DeckManager.Instance.deck);
+        deck = new List<Card>(ShuffleDeck(DeckManager.Instance.deck));
+        if (deck.Count == 0)
+        {
+            StarterDeckCreator.CreateStarterDeck();
+            deck = new List<Card>(ShuffleDeck(DeckManager.Instance.deck));
+        }
     }
 
     private List<Card> ShuffleDeck(List<Card> deck)
@@ -152,11 +166,6 @@ public class GameManager : MonoBehaviour
             deck[randomIndex] = temp;
         }
         return deck;
-    }
-
-    void OnApplicationQuit()
-    {
-        SaveDeck();
     }
 
     public void AlignCards()
@@ -179,7 +188,6 @@ public class GameManager : MonoBehaviour
     {
         GameObject cardObject = Instantiate(cardPrefab, handObject.transform);
         cardObject.GetComponent<CardDisplay>().card = card;
-        cardObject.GetComponent<CardDisplay>().manager = this;
         cardObject.transform.localPosition = Vector3.right * 10;
     }
 
@@ -187,5 +195,50 @@ public class GameManager : MonoBehaviour
     {
         yield return null; // Wait for the next frame
         AlignCards();
+    }
+
+    // Spawns a new enemy at the specified position.
+    public void SpawnEnemy(Vector3 spawnPosition)
+    {
+        Debug.Log("Spawning enemy at position: " + spawnPosition);
+        // Calculate the difficulty factor based on turns taken.
+        GameManager.Instance.CalculateDifficultyFactor(50);
+
+        // Select the appropriate enemy prefab based on the difficulty factor.
+        GameObject enemyPrefab = SelectEnemyPrefab(GameManager.Instance.enemyDifficulty);
+        Debug.Log("Selected enemy prefab: " + enemyPrefab.name);
+        if (enemyPrefab != null)
+        {
+            // Instantiate the enemy.
+            GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+
+            // Retrieve the Enemy component.
+            Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
+            if (enemyScript != null)
+            {
+                // Set the difficulty factor and reinitialize the enemy's attributes.
+                enemy = enemyScript;
+                enemyScript.difficultyFactor = GameManager.Instance.enemyDifficulty;
+                enemyScript.InitializeAttributes();  // Ensure attributes are updated immediately.
+                Debug.Log("Spawned enemy with difficulty factor: " + GameManager.Instance.enemyDifficulty);
+            }
+        }
+    }
+
+    // Chooses an enemy prefab based on the difficulty factor.
+    private GameObject SelectEnemyPrefab(float difficultyFactor)
+    {
+        if (difficultyFactor < 1.5f)
+        {
+            return basicEnemyPrefab;
+        }
+        else if (difficultyFactor < 2.5f)
+        {
+            return selfHealingEnemyPrefab;
+        }
+        else
+        {
+            return aggressiveEnemyPrefab;
+        }
     }
 }

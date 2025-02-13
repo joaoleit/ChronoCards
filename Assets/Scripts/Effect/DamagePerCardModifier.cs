@@ -11,7 +11,7 @@ public class DamagePerCardModifier : IModifier, ICardPlayedListener, ITurnListen
 
     public void OnCardPlayed(Card card)
     {
-        Enemy enemy = GameManager.Instance.enemy;
+        Enemy enemy = BattleManager.Instance.enemy;
         enemy.TakeDamage(damagePerCard);
     }
 

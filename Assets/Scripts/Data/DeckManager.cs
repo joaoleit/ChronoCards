@@ -7,7 +7,7 @@ public class DeckManager : MonoBehaviour
 
     public List<Card> chest = new List<Card>();
     public List<Card> deck = new List<Card>();
-    public const int MaxDeckSize = 20;
+    public const int MaxDeckSize = 30;
 
     void Awake()
     {
@@ -33,5 +33,19 @@ public class DeckManager : MonoBehaviour
     public void AddCardToChest(Card card)
     {
         chest.Add(card);
+    }
+
+
+    void OnApplicationQuit()
+    {
+        SaveDeck();
+    }
+
+    public void SaveDeck()
+    {
+        Debug.Log("Saving deck");
+        string deckJson = JsonUtility.ToJson(deck);
+        PlayerPrefs.SetString("PlayerDeck", deckJson);
+        PlayerPrefs.Save();
     }
 }

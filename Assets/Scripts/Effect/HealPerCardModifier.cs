@@ -11,7 +11,7 @@ public class HealPerCardModifier : IModifier, ICardPlayedListener, ITurnListener
 
     public void OnCardPlayed(Card card)
     {
-        Player player = GameManager.Instance.player;
+        Player player = BattleManager.Instance.player;
         player.Heal(healAmount);
     }
 

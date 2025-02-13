@@ -26,13 +26,13 @@ public class UIManager : MonoBehaviour
 
     public void UpdateMana()
     {
-        int mana = GameManager.Instance.player.mana;
+        int mana = BattleManager.Instance.player.mana;
         ManaText.text = "Mana: " + mana;
     }
 
     public void UpdateTurn()
     {
-        string turn = GameManager.Instance.currentTurn == GameManager.TurnState.PlayerTurn ? "Player's" : "Enemy's";
+        string turn = BattleManager.Instance.currentTurn == BattleManager.TurnState.PlayerTurn ? "Player's" : "Enemy's";
         TurnText.text = turn + " turn";
     }
 }
