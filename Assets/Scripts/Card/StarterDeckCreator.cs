@@ -5,7 +5,7 @@ public class StarterDeckCreator : MonoBehaviour
 {
     private static readonly List<CardConfig> starterCards = new List<CardConfig>
     {
-        // Damage Cards (5)
+        // Damage Cards (10)
         new CardConfig("Strike", "Deal 5 damage", 1,
             new CardEffect { effectType = CardEffect.EffectType.Damage, value = 5 }, Color.red),
         new CardConfig("Fire Bolt", "Deal 7 damage", 2,
@@ -16,6 +16,16 @@ public class StarterDeckCreator : MonoBehaviour
             new CardEffect { effectType = CardEffect.EffectType.Damage, value = 6 }, Color.yellow),
         new CardConfig("Poison Dart", "Deal 3 damage", 1,
             new CardEffect { effectType = CardEffect.EffectType.Damage, value = 3 }, Color.green),
+        new CardConfig("Shadow Strike", "Deal 8 damage", 3,
+            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 8 }, Color.black),
+        new CardConfig("Magma Blast", "Deal 6 damage", 2,
+            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 6 }, Color.red),
+        new CardConfig("Frost Nova", "Deal 4 damage", 1,
+            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 4 }, Color.blue),
+        new CardConfig("Lightning Bolt", "Deal 7 damage", 3,
+            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 7 }, Color.yellow),
+        new CardConfig("Venom Strike", "Deal 5 damage", 2,
+            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 5 }, Color.green),
 
         // Heal Cards (5)
         new CardConfig("Healing Touch", "Heal 5 health", 1,
@@ -42,15 +52,15 @@ public class StarterDeckCreator : MonoBehaviour
             new CardEffect { effectType = CardEffect.EffectType.Mana, value = 2 }, new Color(0, 1, 1)),
         
         /// Draw Cards (5)
-        new CardConfig("Draw 1", "Draw 1 card", 1,
+        new CardConfig("Quick Draw", "Draw 1 card", 1,
             new CardEffect { effectType = CardEffect.EffectType.Draw, value = 1 }, Color.yellow),
-        new CardConfig("Draw 2", "Draw 2 cards", 2,
+        new CardConfig("Double Take", "Draw 2 cards", 2,
             new CardEffect { effectType = CardEffect.EffectType.Draw, value = 2 }, Color.green),
-        new CardConfig("Draw 3", "Draw 3 cards", 3,
+        new CardConfig("Triple Threat", "Draw 3 cards", 3,
             new CardEffect { effectType = CardEffect.EffectType.Draw, value = 3 }, Color.blue),
-        new CardConfig("Draw 4", "Draw 4 cards", 4,
+        new CardConfig("Quadruple Fortune", "Draw 4 cards", 4,
             new CardEffect { effectType = CardEffect.EffectType.Draw, value = 4 }, Color.magenta),
-        new CardConfig("Draw 5", "Draw 5 cards", 5,
+        new CardConfig("Pentadraw", "Draw 5 cards", 5,
             new CardEffect { effectType = CardEffect.EffectType.Draw, value = 5 }, Color.red),
 
         // Passive Cards (5)

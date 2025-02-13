@@ -10,6 +10,9 @@ public class BattleManager : MonoBehaviour
     public Enemy enemy;
     public GameObject handObject;
     public GameObject cardPrefab;
+    public GameObject basicEnemyPrefab;
+    public GameObject selfHealingEnemyPrefab;
+    public GameObject aggressiveEnemyPrefab;
     public List<Card> discardPile = new List<Card>();
     public int MaxHandSize = 10;
     private List<Card> deck;
@@ -22,13 +25,14 @@ public class BattleManager : MonoBehaviour
 
     public TurnState currentTurn;
     private int turnCount = 0;
+    private Vector3 enemyPosition = new Vector3(319.23f, 0, 30);
 
     private void OnEnable()
     {
         GameEvents.Instance.OnEnemyDeath.AddListener(() =>
         {
             Debug.Log("Enemy died!");
-            // End the game
+            Debug.Log("Took " + turnCount + " turns to defeat the enemy.");
         });
     }
 
@@ -42,6 +46,7 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
+        SpawnEnemy(enemyPosition);
         LoadAndShuffleDeck();
         player.mana = 0;
         DrawCards(player.startHandSize);
@@ -62,13 +67,13 @@ public class BattleManager : MonoBehaviour
     public void StartEnemyTurn()
     {
         currentTurn = TurnState.EnemyTurn;
-        StartCoroutine(EnemyAttackCoroutine());
+        StartCoroutine(EnemyTurnCoroutine());
     }
 
-    private IEnumerator EnemyAttackCoroutine()
+    private IEnumerator EnemyTurnCoroutine()
     {
-        yield return new WaitForSeconds(1f);
-        enemy.Attack(player);
+        // Calls the enemy's own turn logic, which now supports multiple moves and critical hits.
+        yield return enemy.ExecuteTurn(player);
         yield return new WaitForSeconds(1f);
         StartPlayerTurn();
     }
@@ -190,5 +195,50 @@ public class BattleManager : MonoBehaviour
     {
         yield return null; // Wait for the next frame
         AlignCards();
+    }
+
+    // Spawns a new enemy at the specified position.
+    public void SpawnEnemy(Vector3 spawnPosition)
+    {
+        Debug.Log("Spawning enemy at position: " + spawnPosition);
+        // Calculate the difficulty factor based on turns taken.
+        GameManager.Instance.CalculateDifficultyFactor(50);
+
+        // Select the appropriate enemy prefab based on the difficulty factor.
+        GameObject enemyPrefab = SelectEnemyPrefab(GameManager.Instance.enemyDifficulty);
+        Debug.Log("Selected enemy prefab: " + enemyPrefab.name);
+        if (enemyPrefab != null)
+        {
+            // Instantiate the enemy.
+            GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+
+            // Retrieve the Enemy component.
+            Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
+            if (enemyScript != null)
+            {
+                // Set the difficulty factor and reinitialize the enemy's attributes.
+                enemy = enemyScript;
+                enemyScript.difficultyFactor = GameManager.Instance.enemyDifficulty;
+                enemyScript.InitializeAttributes();  // Ensure attributes are updated immediately.
+                Debug.Log("Spawned enemy with difficulty factor: " + GameManager.Instance.enemyDifficulty);
+            }
+        }
+    }
+
+    // Chooses an enemy prefab based on the difficulty factor.
+    private GameObject SelectEnemyPrefab(float difficultyFactor)
+    {
+        if (difficultyFactor < 1.5f)
+        {
+            return basicEnemyPrefab;
+        }
+        else if (difficultyFactor < 2.5f)
+        {
+            return selfHealingEnemyPrefab;
+        }
+        else
+        {
+            return aggressiveEnemyPrefab;
+        }
     }
 }
