@@ -10,6 +10,9 @@ public class TriggerBattleScene : MonoBehaviour
 
     public FadeInOutAnimationController fadeInOutAnimationController;
 
+    public CustomSceneManager customSceneManager;
+    public EnemyType enemyType;
+
     void Start()
     {
         if (mainCamera == null)
@@ -22,6 +25,7 @@ public class TriggerBattleScene : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(battleSceneName))
         {
+            customSceneManager.SetTriggerEnemy(enemyType);
             StartCoroutine(StartBattleSceneRoutine());
         }
         else
