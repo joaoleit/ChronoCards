@@ -35,9 +35,8 @@ public class BattleManager : MonoBehaviour
     {
         GameEvents.Instance.OnEnemyDeath.AddListener(() =>
         {
-            Debug.Log("Enemy died!");
-            Debug.Log("Took " + turnCount + " turns to defeat the enemy.");
             GameManager.Instance.EndBattle(true);
+            GameManager.Instance.setBattleTurns(turnCount);
             TransitionManager.Instance.Transition(transition, 0);
         });
     }
@@ -55,9 +54,13 @@ public class BattleManager : MonoBehaviour
         SpawnEnemy(enemyPosition);
         LoadAndShuffleDeck();
         player.mana = 0;
+        StartBattle();
+    }
+
+    public void StartBattle()
+    {
         DrawCards(player.startHandSize);
         StartPlayerTurn();
-        // Initialize game state
     }
 
     public void StartPlayerTurn()
@@ -67,7 +70,6 @@ public class BattleManager : MonoBehaviour
         player.IncrementStartTurnMana();
         player.mana = Math.Min(player.maxMana, player.startTurnMana);
         GameEvents.Instance.OnTurnStart.Invoke();
-        Debug.Log("Player's turn");
     }
 
     public void StartEnemyTurn()
@@ -101,7 +103,6 @@ public class BattleManager : MonoBehaviour
         {
             player.mana -= card.manaCost;
             card.PlayCard(player, enemy);
-            Debug.Log("Played card: " + card.cardName);
             GameEvents.Instance.OnCardPlayed.Invoke(card);
             Destroy(cardDisplay.gameObject);
             discardPile.Add(card);
@@ -206,9 +207,8 @@ public class BattleManager : MonoBehaviour
     // Spawns a new enemy at the specified position.
     public void SpawnEnemy(Vector3 spawnPosition)
     {
-        Debug.Log("Spawning enemy at position: " + spawnPosition);
         // Calculate the difficulty factor based on turns taken.
-        GameManager.Instance.CalculateDifficultyFactor(50);
+        GameManager.Instance.CalculateDifficultyFactor();
 
         // Select the appropriate enemy prefab based on the difficulty factor.
         GameObject enemyPrefab = SelectEnemyPrefab(GameManager.Instance.enemyDifficulty);

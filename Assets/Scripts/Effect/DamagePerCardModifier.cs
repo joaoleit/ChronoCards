@@ -11,8 +11,17 @@ public class DamagePerCardModifier : IModifier, ICardPlayedListener, ITurnListen
 
     public void OnCardPlayed(Card card)
     {
+        int finalDamage = damagePerCard;
+
+        // Apply damage modifiers before dealing damage
+        foreach (var modifier in EffectManager.Instance.GetModifiers<IDamageModifier>())
+        {
+            finalDamage = modifier.ModifyDamage(finalDamage);
+        }
+
         Enemy enemy = BattleManager.Instance.enemy;
-        enemy.TakeDamage(damagePerCard);
+        enemy.TakeDamage(finalDamage);
+        // enemy.TakeDamage(damagePerCard);
     }
 
     public void OnTurnStart()

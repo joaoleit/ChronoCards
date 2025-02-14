@@ -115,7 +115,6 @@ namespace EasyTransition
 
             onTransitionCutPointReached?.Invoke();
 
-
             SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
             Scene newScene = SceneManager.GetSceneByName(sceneName);
             SceneManager.SetActiveScene(newScene);
@@ -168,7 +167,7 @@ namespace EasyTransition
 
             template.GetComponent<Transition>().OnSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single);
 
-            SceneManager.UnloadScene("BattleScene");
+            SceneManager.UnloadSceneAsync("BattleScene");
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 

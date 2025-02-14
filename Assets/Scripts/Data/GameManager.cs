@@ -7,16 +7,17 @@ using EasyTransition;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public float enemyDifficulty { get; private set; } = 1.0f;
+    public float enemyDifficulty { get; private set; } = 0.5f;
 
     public GameObject enemyThatAttacked;
     public Vector3 savedPlayerPosition;
 
     public EnemyType triggerEnemyType;
     public PlayerController player;
-    public GameObject worldCamera;
-    public GameObject worldLight;
+    public List<GameObject> objectsToDisable;
     private bool isBattleActive = false;
+    private bool isFirstBattle = true;
+    private int previousBattleTurns = 0;
 
     void Awake()
     {
@@ -38,14 +39,6 @@ public class GameManager : MonoBehaviour
     public void StartBattle(GameObject enemy, PlayerController player)
     {
         isBattleActive = true;
-        if (worldCamera == null)
-        {
-            worldCamera = GameObject.FindWithTag("WorldCamera");
-        }
-        if (worldLight == null)
-        {
-            worldLight = GameObject.FindWithTag("WorldLight");
-        }
         enemyThatAttacked = enemy;
         this.player = player;
         savedPlayerPosition = player.transform.position;
@@ -64,9 +57,11 @@ public class GameManager : MonoBehaviour
 
     private void ToggleElements(bool active)
     {
-        worldCamera.SetActive(active);
-        worldLight.SetActive(active);
-        enemyThatAttacked?.SetActive(active);
+        foreach (GameObject obj in objectsToDisable)
+        {
+            obj.SetActive(active);
+        }
+        enemyThatAttacked.SetActive(active);
     }
 
     public void SetTriggerEnemy(EnemyType enemyType)
@@ -75,23 +70,38 @@ public class GameManager : MonoBehaviour
         Debug.Log($"TriggerEnemy definido como: {enemyType}");
     }
 
-    public void CalculateDifficultyFactor(int turnsTaken)
+    public void CalculateDifficultyFactor()
     {
-        // Define the parameters.
-        int minTurns = 1;      // Fewer turns = higher difficulty
-        int maxTurns = 10;     // More turns = lower difficulty
-        float maxFactor = 1.5f; // Highest difficulty factor when player wins fast
-        float minFactor = 0.5f; // Lowest difficulty factor when the battle takes longer
+        if (isFirstBattle)
+        {
+            isFirstBattle = false;
+            enemyDifficulty = 0.5f;
+            return;
+        }
 
-        // Clamp turnsTaken to ensure it's within the expected range.
-        turnsTaken = Mathf.Clamp(turnsTaken, minTurns, maxTurns);
+        // Define parameters
+        int minTurns = 1;      // Faster battles = higher increase
+        int maxTurns = 20;     // Longer battles = lower increase
+        float maxIncrease = 0.5f; // Maximum increase for very fast wins
+        float minIncrease = 0.01f; // Minimum increase for slow battles
+        float maxDifficulty = 5.0f; // Upper limit for difficulty
 
-        // Calculate a t value between 0 and 1.
-        // t = 0 when turnsTaken == minTurns, t = 1 when turnsTaken == maxTurns.
+        // Clamp turnsTaken within expected range
+        int turnsTaken = Mathf.Clamp(previousBattleTurns, minTurns, maxTurns);
+
+        // Normalize turnsTaken (0 when fast, 1 when slow)
         float t = (turnsTaken - minTurns) / (float)(maxTurns - minTurns);
 
-        // Inverse lerp: when t is 0, we return maxFactor; when t is 1, we return minFactor.
-        float difficultyFactor = Mathf.Lerp(maxFactor, minFactor, t);
-        enemyDifficulty = difficultyFactor;
+        // Inverse lerp: Higher increase when t is small (faster win), lower when t is large
+        float difficultyIncrease = Mathf.Lerp(maxIncrease, minIncrease, t);
+
+        // Increase difficulty instead of setting it
+        enemyDifficulty = Mathf.Clamp(enemyDifficulty + difficultyIncrease, 0, maxDifficulty);
+    }
+
+
+    public void setBattleTurns(int turns)
+    {
+        previousBattleTurns = turns;
     }
 }

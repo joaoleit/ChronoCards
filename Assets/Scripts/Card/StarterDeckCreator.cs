@@ -147,7 +147,5 @@ public class StarterDeckCreator : MonoBehaviour
             // Add to deck
             DeckManager.Instance.AddCardToDeck(card);
         }
-
-        Debug.Log("Starter deck initialized with 20 cards");
     }
 }

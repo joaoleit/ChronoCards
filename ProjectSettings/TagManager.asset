@@ -9,6 +9,7 @@ TagManager:
   - World
   - WorldCamera
   - WorldLight
+  - WorldEventSystem
   layers:
   - Default
   - TransparentFX
