@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using EasyTransition;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class GameManager : MonoBehaviour
     public Vector3 savedPlayerPosition;
 
     public EnemyType triggerEnemyType;
+    public PlayerController player;
+    public GameObject worldCamera;
+    public GameObject worldLight;
+    private bool isBattleActive = false;
 
     void Awake()
     {
@@ -26,24 +31,47 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StartBattle(GameObject enemy, Vector3 playerPos)
+    public void Start()
     {
+        TransitionManager.Instance.onTransitionCutPointReached += () => ToggleElements(!isBattleActive);
+    }
+    public void StartBattle(GameObject enemy, PlayerController player)
+    {
+        isBattleActive = true;
+        if (worldCamera == null)
+        {
+            worldCamera = GameObject.FindWithTag("WorldCamera");
+        }
+        if (worldLight == null)
+        {
+            worldLight = GameObject.FindWithTag("WorldLight");
+        }
         enemyThatAttacked = enemy;
-        savedPlayerPosition = playerPos;
+        this.player = player;
+        savedPlayerPosition = player.transform.position;
     }
 
     public void EndBattle(bool enemyDefeated)
     {
         if (enemyDefeated && enemyThatAttacked != null)
         {
+            isBattleActive = false;
             Destroy(enemyThatAttacked);
             enemyThatAttacked = null;
+            player.UnfreezePlayer();
         }
+    }
+
+    private void ToggleElements(bool active)
+    {
+        worldCamera.SetActive(active);
+        worldLight.SetActive(active);
+        enemyThatAttacked?.SetActive(active);
     }
 
     public void SetTriggerEnemy(EnemyType enemyType)
     {
-        this.triggerEnemyType = enemyType;
+        triggerEnemyType = enemyType;
         Debug.Log($"TriggerEnemy definido como: {enemyType}");
     }
 

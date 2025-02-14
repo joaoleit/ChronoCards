@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Battle
   - World
+  - WorldCamera
+  - WorldLight
   layers:
   - Default
   - TransparentFX

@@ -38,7 +38,7 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Enemy died!");
             Debug.Log("Took " + turnCount + " turns to defeat the enemy.");
             GameManager.Instance.EndBattle(true);
-            TransitionManager.Instance.Transition("New Scene", transition, 0);
+            TransitionManager.Instance.Transition(transition, 0);
         });
     }
 
