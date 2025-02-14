@@ -23,6 +23,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+
+        if (GameManager.Instance != null && GameManager.Instance.savedPlayerPosition != Vector3.zero)
+        {
+            transform.position = GameManager.Instance.savedPlayerPosition;
+        }
     }
 
     void Update()

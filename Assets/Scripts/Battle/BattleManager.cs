@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using UnityEngine.SceneManagement;
+using EasyTransition;
 
 public class BattleManager : MonoBehaviour
 {
@@ -27,12 +29,16 @@ public class BattleManager : MonoBehaviour
     private int turnCount = 0;
     private Vector3 enemyPosition = new Vector3(319.23f, 0, 30);
 
+    public TransitionSettings transition;
+
     private void OnEnable()
     {
         GameEvents.Instance.OnEnemyDeath.AddListener(() =>
         {
             Debug.Log("Enemy died!");
             Debug.Log("Took " + turnCount + " turns to defeat the enemy.");
+            GameManager.Instance.EndBattle(true);
+            TransitionManager.Instance.Transition("New Scene", transition, 0);
         });
     }
 

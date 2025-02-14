@@ -1,10 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public float enemyDifficulty { get; private set; } = 1.0f;
+
+    public GameObject enemyThatAttacked;
+    public Vector3 savedPlayerPosition;
+
+    public EnemyType triggerEnemyType;
 
     void Awake()
     {
@@ -17,6 +24,27 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void StartBattle(GameObject enemy, Vector3 playerPos)
+    {
+        enemyThatAttacked = enemy;
+        savedPlayerPosition = playerPos;
+    }
+
+    public void EndBattle(bool enemyDefeated)
+    {
+        if (enemyDefeated && enemyThatAttacked != null)
+        {
+            Destroy(enemyThatAttacked);
+            enemyThatAttacked = null;
+        }
+    }
+
+    public void SetTriggerEnemy(EnemyType enemyType)
+    {
+        this.triggerEnemyType = enemyType;
+        Debug.Log($"TriggerEnemy definido como: {enemyType}");
     }
 
     public void CalculateDifficultyFactor(int turnsTaken)
