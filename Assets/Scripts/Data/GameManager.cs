@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> objectsToDisable;
     private bool isBattleActive = false;
     private bool isFirstBattle = true;
+    public bool canUpgrade { get; private set; } = false;
     private int previousBattleTurns = 0;
 
     void Awake()
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour
             Destroy(enemyThatAttacked);
             enemyThatAttacked = null;
             player.UnfreezePlayer();
+            canUpgrade = true;
         }
     }
 
@@ -61,7 +63,7 @@ public class GameManager : MonoBehaviour
         {
             obj.SetActive(active);
         }
-        enemyThatAttacked.SetActive(active);
+        enemyThatAttacked?.SetActive(active);
     }
 
     public void SetTriggerEnemy(EnemyType enemyType)
@@ -103,5 +105,20 @@ public class GameManager : MonoBehaviour
     public void setBattleTurns(int turns)
     {
         previousBattleTurns = turns;
+    }
+
+    public void UpgradeCards()
+    {
+        if (!canUpgrade)
+        {
+            return;
+        }
+
+        foreach (Card card in DeckManager.Instance.chest)
+        {
+            card.UpgradeCard();
+        }
+
+        canUpgrade = false;
     }
 }

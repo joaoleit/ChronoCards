@@ -38,9 +38,14 @@ public class NPCInteract : MonoBehaviour
             GiveItem();
             hasMetPlayer = true;
         }
+        else if (GameManager.Instance.canUpgrade)
+        {
+            ShowDialogue("Ready? Take this upgrade.");
+            ShowUpgradeMenu();
+        }
         else
         {
-            ShowDialogue("Ready to upgrade? Choose your option.");
+            ShowDialogue("Sorry, I have nothing to offer.");
             ShowUpgradeMenu();
         }
     }
@@ -67,6 +72,7 @@ public class NPCInteract : MonoBehaviour
     {
         Debug.Log("Displaying upgrade menu...");
         // Implement upgrade logic here
+        GameManager.Instance.UpgradeCards();
     }
 
     void OnDrawGizmosSelected()

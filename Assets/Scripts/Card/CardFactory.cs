@@ -14,7 +14,7 @@ public static class CardFactory
     return card;
   }
 
-  private static string GenerateDescription(List<CardEffect> effects)
+  public static string GenerateDescription(List<CardEffect> effects)
   {
     string description = "";
     foreach (var effect in effects)
