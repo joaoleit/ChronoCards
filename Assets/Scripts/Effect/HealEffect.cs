@@ -4,9 +4,9 @@ public class HealEffect : ICardEffect
 {
     private int healAmount;
 
-    public HealEffect(int healAmount)
+    public HealEffect(EffectData data)
     {
-        this.healAmount = healAmount;
+        healAmount = data.value;
     }
 
     public void ApplyEffect(Player player, Enemy enemy)
@@ -18,4 +18,11 @@ public class HealEffect : ICardEffect
     {
         return false;
     }
+
+    public string GetDescription()
+    {
+        return "Heal " + healAmount + " health.";
+    }
+
+    public void UpgradeEffect() => healAmount += 1;
 }

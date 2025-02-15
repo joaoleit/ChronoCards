@@ -1,14 +1,25 @@
 using UnityEngine;
 
-public class DoubleDamageModifier : IModifier, ITurnEndListener, IDamageModifier
+public class DoubleDamageModifier : ICardEffect, IModifier, ITurnEndListener, IDamageModifier
 {
     private int duration;
     private bool isNextTurn = false;
 
-    public DoubleDamageModifier(int duration)
+    public DoubleDamageModifier(EffectData data)
     {
-        this.duration = duration;
+        duration = data.duration;
     }
+
+    public void ApplyEffect(Player player, Enemy enemy)
+    {
+        EffectManager.Instance.AddModifier(this);
+    }
+
+    public bool ShouldTriggerOnEnemy() => false;
+
+    public string GetDescription() => "Deal double damage for " + duration + " turn(s).";
+
+    public void UpgradeEffect() => duration += 1;
 
     public int ModifyDamage(int damage) => isNextTurn ? damage * 2 : damage;
 

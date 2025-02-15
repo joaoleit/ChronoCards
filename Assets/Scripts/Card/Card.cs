@@ -7,14 +7,14 @@ public class Card : ScriptableObject
     public string cardName;
     public string description;
     public int manaCost;
-    public List<CardEffect> effects = new List<CardEffect>();
+    public List<ICardEffect> effects = new List<ICardEffect>();
     public Color color;
 
     public void PlayCard(Player player, Enemy enemy)
     {
         foreach (var effect in effects)
         {
-            effect.GetEffect().ApplyEffect(player, enemy);
+            effect.ApplyEffect(player, enemy);
         }
     }
 
@@ -22,14 +22,9 @@ public class Card : ScriptableObject
     {
         foreach (var effect in effects)
         {
-            effect.value += 1; // Increase effect value by 1
-            if (effect.effectType == CardEffect.EffectType.Passive && effect.passiveModifier != null)
-            {
-                effect.passiveModifier.value += 1; // Upgrade passive effect if applicable
-            }
+            effect.UpgradeEffect();
         }
 
-        // Update description dynamically
         description = CardFactory.GenerateDescription(effects);
     }
 }

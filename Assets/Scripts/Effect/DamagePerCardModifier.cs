@@ -1,12 +1,27 @@
-public class DamagePerCardModifier : IModifier, ICardPlayedListener, ITurnListener
+public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener, ITurnListener
 {
     private int damagePerCard;
     private int duration;
 
-    public DamagePerCardModifier(int damagePerCard, int duration)
+    public DamagePerCardModifier(EffectData data)
     {
-        this.damagePerCard = damagePerCard;
-        this.duration = duration;
+        damagePerCard = data.value;
+        duration = data.duration;
+    }
+
+    public void ApplyEffect(Player player, Enemy enemy)
+    {
+        EffectManager.Instance.AddModifier(this);
+    }
+
+    public bool ShouldTriggerOnEnemy() => false;
+
+    public string GetDescription() => $"Deal {damagePerCard} damage per card, lasts {duration} turn(s).";
+
+    public void UpgradeEffect()
+    {
+        damagePerCard += 1;
+        duration += 1;
     }
 
     public void OnCardPlayed(Card card)

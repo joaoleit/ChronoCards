@@ -1,11 +1,11 @@
-public class BonusDamageModifier : IModifier, ICardPlayedListener, IDamageModifier
+public class BonusDamageModifier : ICardEffect, IModifier, ICardPlayedListener, IDamageModifier
 {
     private int bonusDamage;
     private bool isConsumed;
 
-    public BonusDamageModifier(int bonusDamage)
+    public BonusDamageModifier(EffectData data)
     {
-        this.bonusDamage = bonusDamage;
+        bonusDamage = data.value;
     }
 
     public int ModifyDamage(int damage)
@@ -26,5 +26,14 @@ public class BonusDamageModifier : IModifier, ICardPlayedListener, IDamageModifi
         }
     }
 
+    public void ApplyEffect(Player player, Enemy enemy)
+    {
+        EffectManager.Instance.AddModifier(this);
+    }
+
+    public bool ShouldTriggerOnEnemy() => false;
+
+    public string GetDescription() => $"Next card deals +{bonusDamage} damage.";
+    public void UpgradeEffect() => bonusDamage += 1;
     public bool IsExpired() => isConsumed;
 }

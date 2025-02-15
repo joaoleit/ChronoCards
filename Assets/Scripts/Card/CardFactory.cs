@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public static class CardFactory
 {
-  public static Card CreateCard(string cardName, int manaCost, List<CardEffect> effects, Color color)
+  public static Card CreateCard(string cardName, int manaCost, List<ICardEffect> effects, Color color)
   {
     Card card = ScriptableObject.CreateInstance<Card>();
     card.cardName = cardName;
@@ -14,47 +14,13 @@ public static class CardFactory
     return card;
   }
 
-  public static string GenerateDescription(List<CardEffect> effects)
+  public static string GenerateDescription(List<ICardEffect> effects)
   {
     string description = "";
     foreach (var effect in effects)
     {
-      switch (effect.effectType)
-      {
-        case CardEffect.EffectType.Damage:
-          description += $"Deal {effect.value} damage. ";
-          break;
-        case CardEffect.EffectType.Heal:
-          description += $"Heal {effect.value} health. ";
-          break;
-        case CardEffect.EffectType.Mana:
-          description += $"Gain {effect.value} mana. ";
-          break;
-        case CardEffect.EffectType.Draw:
-          description += $"Draw {effect.value} cards. ";
-          break;
-        case CardEffect.EffectType.Passive:
-          description += GeneratePassiveDescription(effect.passiveModifier);
-          break;
-      }
+      description += effect.GetDescription() + " ";
     }
     return description.Trim(); // Remove trailing space
-  }
-
-  private static string GeneratePassiveDescription(PassiveModifier modifier)
-  {
-    switch (modifier.modifierType)
-    {
-      case PassiveModifier.ModifierType.DoubleDamageNextTurn:
-        return "Double damage next turn. ";
-      case PassiveModifier.ModifierType.BonusDamageNextCard:
-        return $"Next card deals +{modifier.value} damage. ";
-      case PassiveModifier.ModifierType.HealPerCardThisTurn:
-        return $"Heal {modifier.value} health per card this turn. ";
-      case PassiveModifier.ModifierType.DamagePerCard:
-        return $"Deal {modifier.value} damage per card this turn. ";
-      default:
-        return "Unknown effect. ";
-    }
   }
 }

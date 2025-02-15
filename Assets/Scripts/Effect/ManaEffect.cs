@@ -4,9 +4,9 @@ public class ManaEffect : ICardEffect
 {
     private int manaAmount;
 
-    public ManaEffect(int manaAmount)
+    public ManaEffect(EffectData data)
     {
-        this.manaAmount = manaAmount;
+        manaAmount = data.value;
     }
 
     public void ApplyEffect(Player player, Enemy enemy)
@@ -18,4 +18,11 @@ public class ManaEffect : ICardEffect
     {
         return false;
     }
+
+    public string GetDescription()
+    {
+        return "Gain " + manaAmount + " mana.";
+    }
+
+    public void UpgradeEffect() => manaAmount += 1;
 }
