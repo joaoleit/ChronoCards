@@ -10,7 +10,6 @@ public class Player : MonoBehaviour
     public int startTurnMana = 0;
     public int startHandSize = 5;
     public HealthBar healthBar;
-    public GameObject floatingTextPrefab;
 
 
     private void Start()
@@ -34,25 +33,12 @@ public class Player : MonoBehaviour
     {
         health = Math.Min(maxHealth, health + amount);
         healthBar.SetHealth(health);
-        if (floatingTextPrefab)
-        {
-            GameObject textObj = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, GameObject.Find("Canvas").transform);
-            textObj.GetComponent<FloatingText>().offset = new Vector3(1000, 50f, 0);
-            textObj.GetComponent<FloatingText>().textColor = Color.green;
-            textObj.GetComponent<FloatingText>().SetText("+" + amount);
-        }
     }
 
     public void TakeDamage(int amount)
     {
         health -= amount;
         healthBar.SetHealth(health);
-        if (floatingTextPrefab)
-        {
-            GameObject textObj = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, GameObject.Find("Canvas").transform);
-            textObj.GetComponent<FloatingText>().offset = new Vector3(1000, 50f, 0);
-            textObj.GetComponent<FloatingText>().SetText("-" + amount);
-        }
     }
 
     public void GainMana(int amount)

@@ -103,6 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 3368838041012856923}
+  floatingTextPrefab: {fileID: 3315145946858954366, guid: eb4ec87e1f727b84aa201579c5a7f7da, type: 3}
 --- !u!1 &5714560618823668178
 GameObject:
   m_ObjectHideFlags: 0
