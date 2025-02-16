@@ -28,7 +28,6 @@ public class Player : MonoBehaviour
     public void IncrementStartTurnMana()
     {
         startTurnMana = Math.Min(maxMana, startTurnMana + 1);
-        Debug.Log("Player's start turn mana increased to " + startTurnMana);
     }
 
     public void Heal(int amount)
@@ -38,9 +37,10 @@ public class Player : MonoBehaviour
         if (floatingTextPrefab)
         {
             GameObject textObj = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, GameObject.Find("Canvas").transform);
-            textObj.GetComponent<FloatingText>().SetText(amount);
+            textObj.GetComponent<FloatingText>().offset = new Vector3(1000, 50f, 0);
+            textObj.GetComponent<FloatingText>().textColor = Color.green;
+            textObj.GetComponent<FloatingText>().SetText("+" + amount);
         }
-        Debug.Log("Player healed by " + amount + ". Current health: " + health);
     }
 
     public void TakeDamage(int amount)
@@ -50,14 +50,13 @@ public class Player : MonoBehaviour
         if (floatingTextPrefab)
         {
             GameObject textObj = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, GameObject.Find("Canvas").transform);
-            textObj.GetComponent<FloatingText>().SetText(amount);
+            textObj.GetComponent<FloatingText>().offset = new Vector3(1000, 50f, 0);
+            textObj.GetComponent<FloatingText>().SetText("-" + amount);
         }
-        Debug.Log("Player took " + amount + " damage. Current health: " + health);
     }
 
     public void GainMana(int amount)
     {
         mana += amount;
-        Debug.Log("Player gained " + amount + " mana. Current mana: " + mana);
     }
 }

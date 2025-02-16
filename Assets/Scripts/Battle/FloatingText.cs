@@ -34,8 +34,9 @@ public class FloatingText : MonoBehaviour
         transform.position += new Vector3(xMovement, yMovement, 0);
     }
 
-    public void SetText(int damage)
+    public void SetText(string text)
     {
-        GetComponent<TextMeshProUGUI>().text = "-" + damage.ToString();
+        GetComponent<TextMeshProUGUI>().text = text;
+        GetComponent<TextMeshProUGUI>().color = textColor;
     }
 }

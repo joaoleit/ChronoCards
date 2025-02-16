@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using EasyTransition;
 
 public class TriggerBattleScene : MonoBehaviour
 {
@@ -8,10 +9,10 @@ public class TriggerBattleScene : MonoBehaviour
     public PlayerController playerController;
     public Camera mainCamera;
 
-    public FadeInOutAnimationController fadeInOutAnimationController;
-
-    public CustomSceneManager customSceneManager;
     public EnemyType enemyType;
+
+    public TransitionSettings transition;
+    public float startDelay;
 
     void Start()
     {
@@ -23,10 +24,11 @@ public class TriggerBattleScene : MonoBehaviour
 
     public void StartBattleScene()
     {
-        if (!string.IsNullOrEmpty(battleSceneName))
+        if (!string.IsNullOrEmpty(battleSceneName) && SceneManager.GetSceneByName(battleSceneName) != null)
         {
-            customSceneManager.SetTriggerEnemy(enemyType);
-            StartCoroutine(StartBattleSceneRoutine());
+            GameManager.Instance.StartBattle(gameObject, playerController);
+            playerController.FreezePlayer(true);
+            TransitionManager.Instance.Transition(battleSceneName, transition, startDelay);
         }
         else
         {
@@ -34,19 +36,4 @@ public class TriggerBattleScene : MonoBehaviour
         }
     }
 
-    private IEnumerator StartBattleSceneRoutine()
-    {
-        FreezePlayer();
-
-        fadeInOutAnimationController.PlayFadeOut();
-
-        yield return new WaitForSeconds(fadeInOutAnimationController.fadeOutDuration);
-
-        SceneManager.LoadScene(battleSceneName);
-    }
-
-    public void FreezePlayer()
-    {
-        playerController.FreezePlayer(true);
-    }
 }

@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemy
+  - Battle
+  - World
+  - WorldCamera
+  - WorldLight
+  - WorldEventSystem
   layers:
   - Default
   - TransparentFX

@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour
         if (floatingTextPrefab)
         {
             GameObject textObj = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, GameObject.Find("EnemyCanvas").transform);
-            textObj.GetComponent<FloatingText>().SetText(amount);
+            textObj.GetComponent<FloatingText>().SetText("-" + amount);
         }
 
         if (health <= 0)
@@ -89,14 +89,18 @@ public class Enemy : MonoBehaviour
     {
         int moves = 1; // Every enemy gets at least one move.
         int extraMoveSlots = 2; // Allow up to 2 extra moves.
+
+        float probabilityScale = Mathf.Clamp01((difficultyFactor - 0.5f) / 4.5f);
+
         for (int i = 0; i < extraMoveSlots; i++)
         {
-            // For each slot, the chance to add a move is 10% multiplied by the difficulty factor.
-            if (Random.value < 0.1f * difficultyFactor)
+            // Chance to add a move scales dynamically with difficultyFactor.
+            if (Random.value < 0.1f + (0.3f * probabilityScale))
             {
                 moves++;
             }
         }
+
         return moves;
     }
 
@@ -107,10 +111,10 @@ public class Enemy : MonoBehaviour
         Debug.Log("Enemy will take " + moves + " move(s) this turn.");
         for (int i = 0; i < moves; i++)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
             Attack(player);
         }
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
     }
 
     // public void Attack(Player player)

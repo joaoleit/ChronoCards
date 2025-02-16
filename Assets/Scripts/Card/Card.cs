@@ -7,14 +7,24 @@ public class Card : ScriptableObject
     public string cardName;
     public string description;
     public int manaCost;
-    public List<CardEffect> effects = new List<CardEffect>();
+    public List<ICardEffect> effects = new List<ICardEffect>();
     public Color color;
 
     public void PlayCard(Player player, Enemy enemy)
     {
         foreach (var effect in effects)
         {
-            effect.GetEffect().ApplyEffect(player, enemy);
+            effect.ApplyEffect(player, enemy);
         }
+    }
+
+    public void UpgradeCard()
+    {
+        foreach (var effect in effects)
+        {
+            effect.UpgradeEffect();
+        }
+
+        description = CardFactory.GenerateDescription(effects);
     }
 }

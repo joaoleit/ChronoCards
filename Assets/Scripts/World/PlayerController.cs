@@ -23,6 +23,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+
+        if (GameManager.Instance != null && GameManager.Instance.savedPlayerPosition != Vector3.zero)
+        {
+            transform.position = GameManager.Instance.savedPlayerPosition;
+        }
     }
 
     void Update()
@@ -58,5 +63,10 @@ public class PlayerController : MonoBehaviour
             move = Vector2.zero;
             animator.SetBool("IsWalking", false); // Para a animação caso esteja congelado
         }
+    }
+
+    public void UnfreezePlayer()
+    {
+        isFrozen = false;
     }
 }

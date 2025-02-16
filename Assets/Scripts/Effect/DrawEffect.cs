@@ -4,9 +4,9 @@ public class DrawEffect : ICardEffect
 {
     private int drawAmount;
 
-    public DrawEffect(int drawAmount)
+    public DrawEffect(EffectData data)
     {
-        this.drawAmount = drawAmount;
+        drawAmount = data.value;
     }
 
     public void ApplyEffect(Player player, Enemy enemy)
@@ -18,4 +18,11 @@ public class DrawEffect : ICardEffect
     {
         return false;
     }
+
+    public string GetDescription()
+    {
+        return "Draw " + drawAmount + " card(s).";
+    }
+
+    public void UpgradeEffect() => drawAmount += 1;
 }

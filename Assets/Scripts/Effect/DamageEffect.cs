@@ -4,9 +4,9 @@ public class DamageEffect : ICardEffect
 {
     private int damage;
 
-    public DamageEffect(int damage)
+    public DamageEffect(EffectData data)
     {
-        this.damage = damage;
+        damage = data.value;
     }
 
     public void ApplyEffect(Player player, Enemy enemy)
@@ -23,4 +23,7 @@ public class DamageEffect : ICardEffect
     }
 
     public bool ShouldTriggerOnEnemy() => true;
+
+    public string GetDescription() => "Deal " + damage + " damage.";
+    public void UpgradeEffect() => damage += 1;
 }
