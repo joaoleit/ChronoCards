@@ -1,12 +1,29 @@
-public class HealPerCardModifier : IModifier, ICardPlayedListener, ITurnListener
+using UnityEngine;
+
+public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, ITurnListener
 {
     private int healAmount;
     private int duration;
 
-    public HealPerCardModifier(int healAmount, int duration)
+    public HealPerCardModifier(EffectData data)
     {
-        this.healAmount = healAmount;
-        this.duration = duration;
+        healAmount = data.value;
+        duration = data.duration;
+    }
+
+    public void ApplyEffect(Player player, Enemy enemy)
+    {
+        EffectManager.Instance.AddModifier(this);
+    }
+
+    public bool ShouldTriggerOnEnemy() => false;
+
+    public string GetDescription() => $"Heal {healAmount} health per card played for {duration} turn(s).";
+
+    public void UpgradeEffect()
+    {
+        healAmount += 1;
+        duration += 1;
     }
 
     public void OnCardPlayed(Card card)

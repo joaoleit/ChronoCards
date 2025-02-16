@@ -64,4 +64,9 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsWalking", false); // Para a animação caso esteja congelado
         }
     }
+
+    public void UnfreezePlayer()
+    {
+        isFrozen = false;
+    }
 }

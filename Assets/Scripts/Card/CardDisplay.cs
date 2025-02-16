@@ -25,7 +25,7 @@ public class CardDisplay : MonoBehaviour
         cardRenderer.material.color = card.color;
         foreach (var effect in card.effects)
         {
-            if (effect.effectType == CardEffect.EffectType.Damage)
+            if (effect is DamageEffect)
             {
                 shouldTriggerOnEnemy = true;
                 break;

@@ -7,107 +7,73 @@ public class StarterDeckCreator : MonoBehaviour
     {
         // Damage Cards (10)
         new CardConfig("Strike", "Deal 5 damage", 1,
-            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 5 }, Color.red),
+            new DamageEffect(new EffectData { value = 5 }), Color.red),
         new CardConfig("Fire Bolt", "Deal 7 damage", 2,
-            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 7 }, new Color(1, 0.5f, 0)),
+            new DamageEffect(new EffectData { value = 7 }), new Color(1, 0.5f, 0)),
         new CardConfig("Ice Shard", "Deal 4 damage", 1,
-            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 4 }, Color.cyan),
+            new DamageEffect(new EffectData { value = 4 }), Color.cyan),
         new CardConfig("Thunder Clap", "Deal 6 damage", 2,
-            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 6 }, Color.yellow),
+            new DamageEffect(new EffectData { value = 6 }), Color.yellow),
         new CardConfig("Poison Dart", "Deal 3 damage", 1,
-            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 3 }, Color.green),
+            new DamageEffect(new EffectData { value = 3 }), Color.green),
         new CardConfig("Shadow Strike", "Deal 8 damage", 3,
-            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 8 }, Color.black),
+            new DamageEffect(new EffectData { value = 8 }), Color.black),
         new CardConfig("Magma Blast", "Deal 6 damage", 2,
-            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 6 }, Color.red),
+            new DamageEffect(new EffectData { value = 6 }), Color.red),
         new CardConfig("Frost Nova", "Deal 4 damage", 1,
-            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 4 }, Color.blue),
+            new DamageEffect(new EffectData { value = 4 }), Color.blue),
         new CardConfig("Lightning Bolt", "Deal 7 damage", 3,
-            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 7 }, Color.yellow),
+            new DamageEffect(new EffectData { value = 7 }), Color.yellow),
         new CardConfig("Venom Strike", "Deal 5 damage", 2,
-            new CardEffect { effectType = CardEffect.EffectType.Damage, value = 5 }, Color.green),
+            new DamageEffect(new EffectData { value = 5 }), Color.green),
 
         // Heal Cards (5)
         new CardConfig("Healing Touch", "Heal 5 health", 1,
-            new CardEffect { effectType = CardEffect.EffectType.Heal, value = 5 }, Color.magenta),
+            new HealEffect(new EffectData { value = 5 }), Color.magenta),
         new CardConfig("Renew", "Heal 3 health", 1,
-            new CardEffect { effectType = CardEffect.EffectType.Heal, value = 3 }, new Color(1, 0.8f, 0.9f)),
+            new HealEffect(new EffectData { value = 3 }), new Color(1, 0.8f, 0.9f)),
         new CardConfig("Greater Heal", "Heal 8 health", 3,
-            new CardEffect { effectType = CardEffect.EffectType.Heal, value = 8 }, Color.white),
+            new HealEffect(new EffectData { value = 8 }), Color.white),
         new CardConfig("Bandage", "Heal 4 health", 1,
-            new CardEffect { effectType = CardEffect.EffectType.Heal, value = 4 }, new Color(1, 0.2f, 0.2f)),
+            new HealEffect(new EffectData { value = 4 }), new Color(1, 0.2f, 0.2f)),
         new CardConfig("Vitality Boost", "Heal 6 health", 2,
-            new CardEffect { effectType = CardEffect.EffectType.Heal, value = 6 }, new Color(0.5f, 1, 0.5f)),
+            new HealEffect(new EffectData { value = 6 }), new Color(0.5f, 1, 0.5f)),
 
         // Mana Cards (5)
         new CardConfig("Mana Crystal", "Gain 2 mana", 0,
-            new CardEffect { effectType = CardEffect.EffectType.Mana, value = 2 }, Color.blue),
+            new ManaEffect(new EffectData { value = 2 }), Color.blue),
         new CardConfig("Arcane Intellect", "Gain 3 mana", 1,
-            new CardEffect { effectType = CardEffect.EffectType.Mana, value = 3 }, new Color(0, 0.5f, 1)),
+            new ManaEffect(new EffectData { value = 3 }), new Color(0, 0.5f, 1)),
         new CardConfig("Energy Surge", "Gain 4 mana", 2,
-            new CardEffect { effectType = CardEffect.EffectType.Mana, value = 4 }, Color.cyan),
+            new ManaEffect(new EffectData { value = 4 }), Color.cyan),
         new CardConfig("Mystic Charge", "Gain 1 mana", 0,
-            new CardEffect { effectType = CardEffect.EffectType.Mana, value = 1 }, new Color(0.7f, 0, 1)),
+            new ManaEffect(new EffectData { value = 1 }), new Color(0.7f, 0, 1)),
         new CardConfig("Power Flow", "Gain 2 mana", 1,
-            new CardEffect { effectType = CardEffect.EffectType.Mana, value = 2 }, new Color(0, 1, 1)),
+            new ManaEffect(new EffectData { value = 2 }), new Color(0, 1, 1)),
         
         /// Draw Cards (5)
         new CardConfig("Quick Draw", "Draw 1 card", 1,
-            new CardEffect { effectType = CardEffect.EffectType.Draw, value = 1 }, Color.yellow),
+            new DrawEffect(new EffectData { value = 1 }), Color.yellow),
         new CardConfig("Double Take", "Draw 2 cards", 2,
-            new CardEffect { effectType = CardEffect.EffectType.Draw, value = 2 }, Color.green),
+            new DrawEffect(new EffectData { value = 2 }), Color.green),
         new CardConfig("Triple Threat", "Draw 3 cards", 3,
-            new CardEffect { effectType = CardEffect.EffectType.Draw, value = 3 }, Color.blue),
+            new DrawEffect(new EffectData { value = 3 }), Color.blue),
         new CardConfig("Quadruple Fortune", "Draw 4 cards", 4,
-            new CardEffect { effectType = CardEffect.EffectType.Draw, value = 4 }, Color.magenta),
+            new DrawEffect(new EffectData { value = 4 }), Color.magenta),
         new CardConfig("Pentadraw", "Draw 5 cards", 5,
-            new CardEffect { effectType = CardEffect.EffectType.Draw, value = 5 }, Color.red),
+            new DrawEffect(new EffectData { value = 5 }), Color.red),
 
         // Passive Cards (5)
         new CardConfig("Preparation", "Next card deals +3 damage", 1,
-            new CardEffect {
-                effectType = CardEffect.EffectType.Passive,
-                passiveModifier = new PassiveModifier {
-                    modifierType = PassiveModifier.ModifierType.BonusDamageNextCard,
-                    value = 3,
-                    duration = 1
-                }
-            }, new Color(0.5f, 0.5f, 1)),
+            new BonusDamageModifier(new EffectData { value = 3, duration = 1 }), new Color(0.5f, 0.5f, 1)),
         new CardConfig("Fortify", "Heal 2 per card this turn", 2,
-            new CardEffect {
-                effectType = CardEffect.EffectType.Passive,
-                passiveModifier = new PassiveModifier {
-                    modifierType = PassiveModifier.ModifierType.HealPerCardThisTurn,
-                    value = 2,
-                    duration = 1
-                }
-            }, Color.gray),
+            new HealPerCardModifier(new EffectData { value = 2, duration = 1 }), Color.gray),
         new CardConfig("Overload", "Deal 2 damage per card played", 3,
-            new CardEffect {
-                effectType = CardEffect.EffectType.Passive,
-                passiveModifier = new PassiveModifier {
-                    modifierType = PassiveModifier.ModifierType.DamagePerCard,
-                    value = 2,
-                    duration = 1
-                }
-            }, Color.black),
+            new DamagePerCardModifier(new EffectData { value = 2, duration = 1 }), Color.black),
         new CardConfig("Double Strike", "Double damage next turn", 4,
-            new CardEffect {
-                effectType = CardEffect.EffectType.Passive,
-                passiveModifier = new PassiveModifier {
-                    modifierType = PassiveModifier.ModifierType.DoubleDamageNextTurn,
-                    duration = 1
-                }
-            }, new Color(1, 0.8f, 0)),
+            new DoubleDamageModifier(new EffectData { duration = 1 }), new Color(1, 0.8f, 0)),
         new CardConfig("Empower", "Next card gains +5 damage", 2,
-            new CardEffect {
-                effectType = CardEffect.EffectType.Passive,
-                passiveModifier = new PassiveModifier {
-                    modifierType = PassiveModifier.ModifierType.BonusDamageNextCard,
-                    value = 5,
-                    duration = 1
-                }
-            }, new Color(1, 0, 1))
+            new BonusDamageModifier(new EffectData { value = 5, duration = 1 }), new Color(1, 0, 1))
     };
 
     private struct CardConfig
@@ -115,10 +81,10 @@ public class StarterDeckCreator : MonoBehaviour
         public string name;
         public string description;
         public int manaCost;
-        public CardEffect effect;
+        public ICardEffect effect;
         public Color color;
 
-        public CardConfig(string name, string description, int manaCost, CardEffect effect, Color color)
+        public CardConfig(string name, string description, int manaCost, ICardEffect effect, Color color)
         {
             this.name = name;
             this.description = description;
@@ -137,7 +103,7 @@ public class StarterDeckCreator : MonoBehaviour
             Card card = CardFactory.CreateCard(
                 config.name,
                 config.manaCost,
-                new List<CardEffect> { config.effect },
+                new List<ICardEffect> { config.effect },
                 config.color
             );
 
@@ -147,7 +113,5 @@ public class StarterDeckCreator : MonoBehaviour
             // Add to deck
             DeckManager.Instance.AddCardToDeck(card);
         }
-
-        Debug.Log("Starter deck initialized with 20 cards");
     }
 }
