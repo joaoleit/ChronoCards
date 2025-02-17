@@ -33,12 +33,16 @@ public class BattleManager : MonoBehaviour
 
     private void OnEnable()
     {
+        GameEvents.Instance.OnEnemyTurnStart.AddListener(StartEnemyTurn);
+        GameEvents.Instance.OnTurnStart.AddListener(StartPlayerTurn);
+
         GameEvents.Instance.OnEnemyDeath.AddListener(() =>
         {
             GameManager.Instance.EndBattle(true);
             GameManager.Instance.setBattleTurns(turnCount);
             TransitionManager.Instance.Transition(transition, 0);
         });
+
     }
 
     private void Awake()
@@ -60,7 +64,7 @@ public class BattleManager : MonoBehaviour
     public void StartBattle()
     {
         DrawCards(player.startHandSize);
-        StartPlayerTurn();
+        GameEvents.Instance.OnTurnStart.Invoke();
     }
 
     public void StartPlayerTurn()
@@ -69,7 +73,6 @@ public class BattleManager : MonoBehaviour
         currentTurn = TurnState.PlayerTurn;
         player.IncrementStartTurnMana();
         player.mana = Math.Min(player.maxMana, player.startTurnMana);
-        GameEvents.Instance.OnTurnStart.Invoke();
     }
 
     public void StartEnemyTurn()
@@ -83,7 +86,7 @@ public class BattleManager : MonoBehaviour
         // Calls the enemy's own turn logic, which now supports multiple moves and critical hits.
         yield return enemy.ExecuteTurn(player);
         yield return new WaitForSeconds(1f);
-        StartPlayerTurn();
+        GameEvents.Instance.OnEnemyTurnEnd.Invoke();
     }
 
     public void EndPlayerTurn()
@@ -91,7 +94,6 @@ public class BattleManager : MonoBehaviour
         if (currentTurn == TurnState.PlayerTurn)
         {
             DrawCard();
-            StartEnemyTurn();
             GameEvents.Instance.OnTurnEnd.Invoke();
         }
     }

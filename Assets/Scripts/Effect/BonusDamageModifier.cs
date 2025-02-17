@@ -2,6 +2,7 @@ public class BonusDamageModifier : ICardEffect, IModifier, ICardPlayedListener, 
 {
     private int bonusDamage;
     private bool isConsumed;
+    private BonusDamageModifier modifier;
 
     public BonusDamageModifier(EffectData data)
     {
@@ -18,17 +19,12 @@ public class BonusDamageModifier : ICardEffect, IModifier, ICardPlayedListener, 
         return damage;
     }
 
-    public void OnCardPlayed(Card card)
-    {
-        if (isConsumed)
-        {
-            GameEvents.Instance.OnModifierExpired.Invoke(this);
-        }
-    }
+    public void OnCardPlayed(Card card) { }
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        EffectManager.Instance.AddModifier(this);
+        modifier = new BonusDamageModifier(new EffectData { value = bonusDamage });
+        GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 
     public bool ShouldTriggerOnEnemy() => false;

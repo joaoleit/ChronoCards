@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class HealEffect : ICardEffect
 {
     private int healAmount;
@@ -21,7 +19,7 @@ public class HealEffect : ICardEffect
 
     public string GetDescription()
     {
-        return "Heal " + healAmount + " health.";
+        return "Heal " + healAmount + ".";
     }
 
     public void UpgradeEffect() => healAmount += 1;

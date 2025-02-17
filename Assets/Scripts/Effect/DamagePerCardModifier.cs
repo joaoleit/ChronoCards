@@ -2,6 +2,7 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
 {
     private int damagePerCard;
     private int duration;
+    private DamagePerCardModifier modifier;
 
     public DamagePerCardModifier(EffectData data)
     {
@@ -11,7 +12,8 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        EffectManager.Instance.AddModifier(this);
+        modifier = new DamagePerCardModifier(new EffectData { duration = duration, value = damagePerCard });
+        GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 
     public bool ShouldTriggerOnEnemy() => false;
@@ -42,9 +44,6 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
     public void OnTurnStart()
     {
         duration--;
-        if (IsExpired())
-            GameEvents.Instance.OnModifierExpired.Invoke(this);
-
     }
 
     public bool IsExpired() => duration <= 0;

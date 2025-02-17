@@ -12,10 +12,14 @@ public class Enemy : MonoBehaviour
     public int health;
     public HealthBar healthBar;
     public GameObject deathParticles;
+    public GameObject enemyObject;
+    private Animator anim;
 
     void Start()
     {
         InitializeAttributes();
+        anim = enemyObject.GetComponent<Animator>();
+        Debug.Log(anim);
     }
 
     // Recalculates maxHealth and damage based on the difficulty factor.
@@ -35,6 +39,7 @@ public class Enemy : MonoBehaviour
     {
         health -= amount;
         healthBar.SetHealth(health);
+        anim.SetTrigger("Punched");
         Debug.Log("Enemy took " + amount + " damage. Current health: " + health);
 
         if (health <= 0)
@@ -72,11 +77,10 @@ public class Enemy : MonoBehaviour
     {
         int actualDamage = GetDamage();
         player.TakeDamage(actualDamage);
+        anim.SetTrigger("Attack");
         Debug.Log("Enemy attacked player for " + actualDamage + " damage.");
     }
 
-    // Calculate how many moves this enemy gets based on difficulty.
-    // The algorithm below uses extra move slots with a chance that increases with difficultyFactor.
     protected virtual int CalculateMoves()
     {
         int moves = 1; // Every enemy gets at least one move.

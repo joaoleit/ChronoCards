@@ -236,7 +236,7 @@ MonoBehaviour:
   health: 0
   healthBar: {fileID: 760425724416674992}
   deathParticles: {fileID: 100000, guid: 5b6c2f68addb63847b151f0d41a9d3b1, type: 3}
-  floatingTextPrefab: {fileID: 3315145946858954366, guid: eb4ec87e1f727b84aa201579c5a7f7da, type: 3}
+  enemyObject: {fileID: 2544430423636357588}
 --- !u!212 &244054676003681753
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -561,6 +561,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79b746b986fa2bd4084f5995105d42b9, type: 3}
+--- !u!1 &2544430423636357588 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 800856810696115431, guid: 79b746b986fa2bd4084f5995105d42b9, type: 3}
+  m_PrefabInstance: {fileID: 2905550718447662387}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2883554257858653038 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 24461566129659485, guid: 79b746b986fa2bd4084f5995105d42b9, type: 3}

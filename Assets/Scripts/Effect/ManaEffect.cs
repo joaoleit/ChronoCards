@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class ManaEffect : ICardEffect
 {
     private int manaAmount;

@@ -1,9 +1,8 @@
-using UnityEngine;
-
 public class DoubleDamageModifier : ICardEffect, IModifier, ITurnEndListener, IDamageModifier
 {
     private int duration;
     private bool isNextTurn = false;
+    private DoubleDamageModifier modifier;
 
     public DoubleDamageModifier(EffectData data)
     {
@@ -12,7 +11,8 @@ public class DoubleDamageModifier : ICardEffect, IModifier, ITurnEndListener, ID
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        EffectManager.Instance.AddModifier(this);
+        modifier = new DoubleDamageModifier(new EffectData { duration = duration });
+        GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 
     public bool ShouldTriggerOnEnemy() => false;
@@ -28,8 +28,6 @@ public class DoubleDamageModifier : ICardEffect, IModifier, ITurnEndListener, ID
         if (isNextTurn)
         {
             duration--;
-            if (IsExpired())
-                GameEvents.Instance.OnModifierExpired.Invoke(this);
         }
 
         isNextTurn = true;
