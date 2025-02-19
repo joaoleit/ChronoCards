@@ -16,7 +16,7 @@ public class Slot : MonoBehaviour
 
     void Update()
     {
-        if (Card2.IsDragging)
+        if (CardInventory.IsDragging)
         {
             CheckMouseOverlap();
         }
@@ -43,7 +43,7 @@ public class Slot : MonoBehaviour
 
     void OnMouseEnter()
     {
-        if (Card2.IsDragging)
+        if (CardInventory.IsDragging)
         {
             GetComponent<Renderer>().material.color = Color.green;
         }

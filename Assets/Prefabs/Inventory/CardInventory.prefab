@@ -11,12 +11,11 @@ GameObject:
   - component: {fileID: 7303939786653594584}
   - component: {fileID: 9128037004129220950}
   - component: {fileID: 8400772064293744215}
-  - component: {fileID: 7363269217181639123}
   - component: {fileID: 1418057090050982148}
   - component: {fileID: 1383371096113819030}
-  - component: {fileID: 3956626829291456910}
+  - component: {fileID: 7727067299468966510}
   m_Layer: 0
-  m_Name: Card
+  m_Name: CardInventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,18 +92,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1741558291971154216}
   m_Mesh: {fileID: -6042599767011845567, guid: faf369f6fd323004692933a60ea8f13e, type: 3}
---- !u!114 &7363269217181639123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1741558291971154216}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f5612559e288e246bbf8efafe94c05e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &1418057090050982148
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -142,7 +129,7 @@ MonoBehaviour:
   nameText: {fileID: 8226728869115015818}
   descriptionText: {fileID: 1620392434930879483}
   manaCostText: {fileID: 8471847683338509775}
---- !u!114 &3956626829291456910
+--- !u!114 &7727067299468966510
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,11 +138,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1741558291971154216}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c46c8ce1e0b9dc44ad7cf5d2b2f323f, type: 3}
+  m_Script: {fileID: 11500000, guid: f3eabbd1420b8aa4db36f0441fa3551e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playableAreaThreshold: 0.5
-  dragSpeed: 10
 --- !u!1 &6877832537391026195
 GameObject:
   m_ObjectHideFlags: 0

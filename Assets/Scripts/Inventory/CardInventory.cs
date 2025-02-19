@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class Card2 : MonoBehaviour
+[RequireComponent(typeof(CardVisuals))]
+public class CardInventory : MonoBehaviour
 {
     public static bool IsDragging;
     private Vector3 offset;
@@ -9,20 +10,39 @@ public class Card2 : MonoBehaviour
     private float fixedYPosition;
     private bool isOverSlot;
     private int originalLayer;
+    private Card _card;
+
+    void Start()
+    {
+        _card = GetComponent<CardVisuals>().card;
+    }
 
 
     void OnMouseDown()
     {
         IsDragging = true;
-        zCoord = Camera.main.WorldToScreenPoint(transform.position).z;
-        fixedYPosition = transform.position.y; // Store initial Y
-        offset = transform.position - GetMouseWorldPos();
-        originalSlot = GetComponentInParent<Slot>();
+
         originalLayer = gameObject.layer;
         gameObject.layer = LayerMask.NameToLayer("Drag");
-        if (originalSlot != null) originalSlot.isOccupied = false;
-        fixedYPosition = transform.position.y + 0.2f; // Lift card slightly
-        transform.position = new Vector3(transform.position.x, fixedYPosition, transform.position.z);
+
+        originalSlot = GetComponentInParent<Slot>();
+
+        if (originalSlot != null)
+        {
+            originalSlot.isOccupied = false;
+            originalSlot.currentCard = null;
+        }
+
+        zCoord = Camera.main.WorldToScreenPoint(transform.position).z;
+
+        fixedYPosition = transform.position.y + 0.2f;
+        transform.position = new Vector3(
+            transform.position.x,
+            fixedYPosition,
+            transform.position.z
+        );
+
+        offset = transform.position - GetMouseWorldPos();
     }
 
     void OnMouseDrag()
@@ -62,7 +82,7 @@ public class Card2 : MonoBehaviour
 
     Slot FindNearestSlot()
     {
-        Slot[] slots = FindObjectsOfType<Slot>();
+        Slot[] slots = FindObjectsByType<Slot>(FindObjectsSortMode.None);
         Slot nearestSlot = null;
         float minDistance = Mathf.Infinity;
 
@@ -80,6 +100,23 @@ public class Card2 : MonoBehaviour
 
     void MoveToSlot(Slot newSlot)
     {
+        if (newSlot.inventoryType != originalSlot.inventoryType)
+        {
+            if (newSlot.inventoryType == InventoryType.Deck)
+            {
+                DeckManager.Instance.RemoveCardFromChest(_card);
+                DeckManager.Instance.AddCardToDeck(_card);
+                Debug.Log($"{_card.cardName} added to Deck");
+            }
+
+            if (newSlot.inventoryType == InventoryType.Chest)
+            {
+                DeckManager.Instance.RemoveCardFromDeck(_card);
+                DeckManager.Instance.AddCardToChest(_card);
+                Debug.Log($"{_card.cardName} added to Chest");
+            }
+        }
+
         originalSlot.currentCard = null;
         newSlot.currentCard = gameObject;
         newSlot.isOccupied = true;
@@ -93,7 +130,6 @@ public class Card2 : MonoBehaviour
         {
             originalSlot.isOccupied = true;
             Vector3 targetPos = originalSlot.transform.position;
-            // targetPos.y = fixedYPosition; // Maintain lifted position during return
             StartCoroutine(MoveToPosition(targetPos));
         }
     }

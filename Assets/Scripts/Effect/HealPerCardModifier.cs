@@ -1,4 +1,4 @@
-public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, ITurnListener
+public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, ITurnEndListener
 {
     private int healAmount;
     private int duration;
@@ -32,7 +32,7 @@ public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, 
         player.Heal(healAmount);
     }
 
-    public void OnTurnStart()
+    public void OnTurnEnd()
     {
         duration--;
     }

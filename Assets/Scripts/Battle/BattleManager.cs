@@ -98,15 +98,15 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void PlayCard(CardDisplay cardDisplay)
+    public void PlayCard(CardLogic cardLogic)
     {
-        Card card = cardDisplay.card;
+        Card card = cardLogic._card;
         if (player.mana >= card.manaCost)
         {
             player.mana -= card.manaCost;
             card.PlayCard(player, enemy);
             GameEvents.Instance.OnCardPlayed.Invoke(card);
-            Destroy(cardDisplay.gameObject);
+            Destroy(cardLogic.gameObject);
             discardPile.Add(card);
             StartCoroutine(AlignCardsNextFrame());
         }
@@ -196,7 +196,7 @@ public class BattleManager : MonoBehaviour
     private void InstantiateCard(Card card)
     {
         GameObject cardObject = Instantiate(cardPrefab, handObject.transform);
-        cardObject.GetComponent<CardDisplay>().card = card;
+        cardObject.GetComponent<CardVisuals>().card = card;
         cardObject.transform.localPosition = Vector3.right * 10;
     }
 
