@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using EasyTransition;
+using Unity.Behavior;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class GameManager : MonoBehaviour
     public EnemyType triggerEnemyType;
     public PlayerController player;
     public List<GameObject> objectsToDisable;
-    private bool isBattleActive = false;
+    public bool isBattleActive = false;
     private bool isFirstBattle = true;
     public bool canUpgrade { get; private set; } = false;
     private int previousBattleTurns = 0;
@@ -39,6 +40,19 @@ public class GameManager : MonoBehaviour
     }
     public void StartBattle(GameObject enemy, PlayerController player)
     {
+        System.Type[] componentsToDisable = new System.Type[]
+            {
+                typeof(BehaviorGraphAgent),
+                typeof(TriggerBattleScene),
+                typeof(EnemyAI),
+            };
+            
+        foreach (System.Type componentType in componentsToDisable)
+        {
+            Component component = enemy.GetComponent(componentType);
+            if (component != null) (component as Behaviour).enabled = false;
+        }
+
         isBattleActive = true;
         enemyThatAttacked = enemy;
         this.player = player;
