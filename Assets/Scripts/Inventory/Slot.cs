@@ -7,6 +7,9 @@ public class Slot : MonoBehaviour
     public InventoryType inventoryType;
     private Material originalMaterial;
     private Color originalColor;
+    public Vector3 viewerPosition = new Vector3(0, 2, 0);
+    public float viewerScale = 2f;
+    public Camera viewerCamera;
 
     void Start()
     {

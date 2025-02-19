@@ -102,18 +102,24 @@ public class CardInventory : MonoBehaviour
     {
         if (newSlot.inventoryType != originalSlot.inventoryType)
         {
-            if (newSlot.inventoryType == InventoryType.Deck)
+            switch (newSlot.inventoryType)
             {
-                DeckManager.Instance.RemoveCardFromChest(_card);
-                DeckManager.Instance.AddCardToDeck(_card);
-                Debug.Log($"{_card.cardName} added to Deck");
-            }
-
-            if (newSlot.inventoryType == InventoryType.Chest)
-            {
-                DeckManager.Instance.RemoveCardFromDeck(_card);
-                DeckManager.Instance.AddCardToChest(_card);
-                Debug.Log($"{_card.cardName} added to Chest");
+                case InventoryType.Chest:
+                    DeckManager.Instance.RemoveCardFromDeck(_card);
+                    DeckManager.Instance.AddCardToChest(_card);
+                    Debug.Log($"{_card.cardName} added to Chest");
+                    break;
+                case InventoryType.Deck:
+                    DeckManager.Instance.RemoveCardFromChest(_card);
+                    DeckManager.Instance.AddCardToDeck(_card);
+                    Debug.Log($"{_card.cardName} added to Deck");
+                    break;
+                case InventoryType.Upgrade:
+                    Debug.Log($"{_card.cardName} added to Upgrade");
+                    break;
+                default:
+                    Debug.Log("Neither Inventory");
+                    break;
             }
         }
 

@@ -24,7 +24,7 @@ public class DeckManager : MonoBehaviour
 
     public void AddCardToDeck(Card card)
     {
-        if (deck.Count < MaxDeckSize)
+        if (deck.Count < MaxDeckSize && !deck.Contains(card))
         {
             deck.Add(card);
         }
@@ -40,7 +40,8 @@ public class DeckManager : MonoBehaviour
 
     public void AddCardToChest(Card card)
     {
-        chest.Add(card);
+        if (!chest.Contains(card))
+            chest.Add(card);
     }
 
     public void RemoveCardFromChest(Card card)

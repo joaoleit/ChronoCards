@@ -88,5 +88,6 @@ public class InventoryManager : MonoBehaviour
 public enum InventoryType
 {
     Chest,
-    Deck
+    Deck,
+    Upgrade
 }

@@ -14,6 +14,17 @@ public static class CardFactory
     return card;
   }
 
+  public static Card CreateCard(Card _card)
+  {
+    Card card = ScriptableObject.CreateInstance<Card>();
+    card.cardName = _card.cardName;
+    card.manaCost = _card.manaCost;
+    card.effects = _card.effects;
+    card.color = _card.color;
+    card.description = _card.description;
+    return card;
+  }
+
   public static string GenerateDescription(List<ICardEffect> effects)
   {
     string description = "";
