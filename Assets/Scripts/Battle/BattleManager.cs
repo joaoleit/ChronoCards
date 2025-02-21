@@ -10,6 +10,7 @@ public class BattleManager : MonoBehaviour
 {
     public Player player;
     public Enemy enemy;
+    public List<Enemy> enemies;
     public GameObject handObject;
     public GameObject cardPrefab;
     public GameObject basicEnemyPrefab;
@@ -84,8 +85,11 @@ public class BattleManager : MonoBehaviour
     private IEnumerator EnemyTurnCoroutine()
     {
         // Calls the enemy's own turn logic, which now supports multiple moves and critical hits.
-        yield return enemy.ExecuteTurn(player);
-        yield return new WaitForSeconds(1f);
+        foreach (var enemy in enemies)
+        {
+            yield return enemy.ExecuteTurn(player);
+            yield return new WaitForSeconds(1f);
+        }
         GameEvents.Instance.OnEnemyTurnEnd.Invoke();
     }
 
@@ -98,7 +102,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void PlayCard(CardLogic cardLogic)
+    public void PlayCard(CardLogic cardLogic, Enemy enemy)
     {
         Card card = cardLogic._card;
         if (player.mana >= card.manaCost)
@@ -214,70 +218,76 @@ public class BattleManager : MonoBehaviour
 
         // Select the appropriate enemy prefab based on the difficulty factor.
         GameObject enemyPrefab = GameManager.Instance.enemyThatAttacked;
-        
+
         if (enemyPrefab != null)
         {
-            // Instantiate the enemy.
-            GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-            enemyInstance.SetActive(true);
 
-            enemyInstance.transform.LookAt(Camera.main.transform);
-
-            float difficultyFactor = GameManager.Instance.enemyDifficulty;
-
-            if (difficultyFactor < 1.5f)
+            for (int i = 0; i < 2; i++)
             {
-                Enemy newEnemyScript = enemyInstance.GetComponent<Enemy>();
-                if (newEnemyScript != null) newEnemyScript.enabled = true;
-            }
-            else if (difficultyFactor < 2.5f)
-            {
-                Enemy selfHealingEnemy = enemyInstance.GetComponent<SelfHealingEnemy>();
-                if (selfHealingEnemy != null) selfHealingEnemy.enabled = true;
-            }
-            else
-            {
-                Enemy aggressiveEnemy = enemyInstance.GetComponent<AggressiveEnemy>();
-                if (aggressiveEnemy != null) aggressiveEnemy.enabled = true;
-            }
+                var pos = spawnPosition;
+                pos.x += 10 * i;
+                // Instantiate the enemy.
+                GameObject enemyInstance = Instantiate(enemyPrefab, pos, Quaternion.identity);
+                enemyInstance.SetActive(true);
 
-            Transform enemyCanvasTransform = enemyInstance.transform.Find("EnemyCanvas");
-            if (enemyCanvasTransform != null)
-            {
-                enemyCanvasTransform.gameObject.SetActive(true);
-            }
+                enemyInstance.transform.LookAt(Camera.main.transform);
 
-            // foreach (Transform child in enemyInstance.transform)
-            // {
-            //     if (child.CompareTag("Monster"))
-            //     {
-            //         // float scaleMultiplier = 2.0f;
-            //         // child.localScale *= scaleMultiplier;
+                float difficultyFactor = GameManager.Instance.enemyDifficulty;
 
-            //         if (enemyCanvasTransform != null)
-            //         {
-            //             float enemyHeight = child.localScale.y;
+                if (difficultyFactor < 1.5f)
+                {
+                    Enemy newEnemyScript = enemyInstance.GetComponent<Enemy>();
+                    if (newEnemyScript != null) newEnemyScript.enabled = true;
+                }
+                else if (difficultyFactor < 2.5f)
+                {
+                    Enemy selfHealingEnemy = enemyInstance.GetComponent<SelfHealingEnemy>();
+                    if (selfHealingEnemy != null) selfHealingEnemy.enabled = true;
+                }
+                else
+                {
+                    Enemy aggressiveEnemy = enemyInstance.GetComponent<AggressiveEnemy>();
+                    if (aggressiveEnemy != null) aggressiveEnemy.enabled = true;
+                }
 
-            //             enemyCanvasTransform.position = new Vector3(
-            //                 enemyCanvasTransform.position.x,
-            //                 child.position.y + enemyHeight + 1.0f,
-            //                 enemyCanvasTransform.position.z
-            //             );
-            //         }
-            //     }
-            // }
+                Transform enemyCanvasTransform = enemyInstance.transform.Find("EnemyCanvas");
+                if (enemyCanvasTransform != null)
+                {
+                    enemyCanvasTransform.gameObject.SetActive(true);
+                }
 
-            // Retrieve the Enemy component.
-            Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
-            if (enemyScript != null)
-            {
-                // Set the difficulty factor and reinitialize the enemy's attributes.
-                enemy = enemyScript;
-                enemyScript.difficultyFactor = GameManager.Instance.enemyDifficulty;
-                enemyScript.InitializeAttributes();  // Ensure attributes are updated immediately.
-                Debug.Log("Spawned enemy with difficulty factor: " + GameManager.Instance.enemyDifficulty);
+                // foreach (Transform child in enemyInstance.transform)
+                // {
+                //     if (child.CompareTag("Monster"))
+                //     {
+                //         // float scaleMultiplier = 2.0f;
+                //         // child.localScale *= scaleMultiplier;
+
+                //         if (enemyCanvasTransform != null)
+                //         {
+                //             float enemyHeight = child.localScale.y;
+
+                //             enemyCanvasTransform.position = new Vector3(
+                //                 enemyCanvasTransform.position.x,
+                //                 child.position.y + enemyHeight + 1.0f,
+                //                 enemyCanvasTransform.position.z
+                //             );
+                //         }
+                //     }
+                // }
+
+                // Retrieve the Enemy component.
+                Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
+
+                if (enemyScript != null)
+                {
+                    // Set the difficulty factor and reinitialize the enemy's attributes.
+                    enemies.Add(enemyScript);
+                    enemyScript.difficultyFactor = GameManager.Instance.enemyDifficulty;
+                    enemyScript.InitializeAttributes();  // Ensure attributes are updated immediately.
+                    Debug.Log("Spawned enemy with difficulty factor: " + GameManager.Instance.enemyDifficulty);
+                }
             }
         }
     }
-
 }
