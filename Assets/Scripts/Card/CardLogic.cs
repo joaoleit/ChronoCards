@@ -79,8 +79,9 @@ public class CardLogic : MonoBehaviour
         {
             if (hit.collider.gameObject == gameObject) continue;
             if (!hit.collider.CompareTag("Enemy")) continue;
-
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
+            if (enemy == null) continue;
+
             BattleManager.Instance.PlayCard(this, enemy);
             return true;
         }
