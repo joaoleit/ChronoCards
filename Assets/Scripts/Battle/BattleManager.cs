@@ -1,16 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 using System;
-using UnityEngine.SceneManagement;
 using EasyTransition;
 
 public class BattleManager : MonoBehaviour
 {
     public Player player;
-    public Enemy enemy;
-    public List<Enemy> enemies;
+    public List<Enemy> enemies = new List<Enemy>();
     public GameObject handObject;
     public GameObject cardPrefab;
     public GameObject basicEnemyPrefab;
@@ -28,7 +25,7 @@ public class BattleManager : MonoBehaviour
 
     public TurnState currentTurn;
     private int turnCount = 0;
-    private Vector3 enemyPosition = new Vector3(319.23f, 0, 30);
+    private Vector3 baseEnemyPosition = new Vector3(319.23f, 0, 30);
 
     public TransitionSettings transition;
 
@@ -39,6 +36,10 @@ public class BattleManager : MonoBehaviour
 
         GameEvents.Instance.OnEnemyDeath.AddListener(() =>
         {
+            foreach (var e in enemies)
+            {
+                if (e != null && e.health >= 0) return;
+            }
             GameManager.Instance.EndBattle(true);
             GameManager.Instance.setBattleTurns(turnCount);
             TransitionManager.Instance.Transition(transition, 0);
@@ -56,7 +57,7 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
-        SpawnEnemy(enemyPosition);
+        SpawnEnemies();
         LoadAndShuffleDeck();
         player.mana = 0;
         StartBattle();
@@ -87,6 +88,7 @@ public class BattleManager : MonoBehaviour
         // Calls the enemy's own turn logic, which now supports multiple moves and critical hits.
         foreach (var enemy in enemies)
         {
+            if (enemy.health <= 0) continue;
             yield return enemy.ExecuteTurn(player);
             yield return new WaitForSeconds(1f);
         }
@@ -210,36 +212,32 @@ public class BattleManager : MonoBehaviour
         AlignCards();
     }
 
-    // Spawns a new enemy at the specified position.
-    public void SpawnEnemy(Vector3 spawnPosition)
+    private void SpawnEnemies()
     {
-        // Calculate the difficulty factor based on turns taken.
         GameManager.Instance.CalculateDifficultyFactor();
+        float totalDifficulty = GameManager.Instance.enemyDifficulty;
+        int numberOfEnemies = UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
 
-        for (int i = 0; i < 2; i++)
+        Debug.Log($"Number of enemies: {numberOfEnemies}");
+
+        float partialDifficulty = totalDifficulty / numberOfEnemies;
+
+        GameObject selectedEnemyPrefab = SelectEnemyPrefab(totalDifficulty);
+        float spacing = 7f;
+
+        for (int i = 0; i < numberOfEnemies; i++)
         {
-            var pos = spawnPosition;
-            pos.x += 10 * i;
-            // Select the appropriate enemy prefab based on the difficulty factor.
-            GameObject enemyPrefab = SelectEnemyPrefab(GameManager.Instance.enemyDifficulty);
-            Debug.Log("Selected enemy prefab: " + enemyPrefab.name);
-            if (enemyPrefab != null)
-            {
-                // Instantiate the enemy.
-                GameObject enemyInstance = Instantiate(enemyPrefab, pos, Quaternion.identity);
-
-                // Retrieve the Enemy component.
-                Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
-                if (enemyScript != null)
-                {
-                    // Set the difficulty factor and reinitialize the enemy's attributes.
-                    enemies.Add(enemyScript);
-                    enemyScript.difficultyFactor = GameManager.Instance.enemyDifficulty;
-                    enemyScript.InitializeAttributes();  // Ensure attributes are updated immediately.
-                    Debug.Log("Spawned enemy with difficulty factor: " + GameManager.Instance.enemyDifficulty);
-                }
-            }
+            Vector3 spawnPos = CalculateEnemyPosition(i, numberOfEnemies, spacing);
+            float part = UnityEngine.Random.Range(0.8f, 1.2f);
+            float enemyDifficulty = partialDifficulty * part;
+            SpawnEnemy(spawnPos, enemyDifficulty, selectedEnemyPrefab);
         }
+    }
+
+    private Vector3 CalculateEnemyPosition(int index, int totalEnemies, float spacing)
+    {
+        float xOffset = (index - (totalEnemies - 1) / 2f) * spacing;
+        return baseEnemyPosition + new Vector3(xOffset, 0, 0);
     }
 
     // Chooses an enemy prefab based on the difficulty factor.
@@ -256,6 +254,19 @@ public class BattleManager : MonoBehaviour
         else
         {
             return aggressiveEnemyPrefab;
+        }
+    }
+
+    private void SpawnEnemy(Vector3 spawnPosition, float difficulty, GameObject enemyPrefab)
+    {
+        GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
+        if (enemyScript != null)
+        {
+            enemyScript.difficultyFactor = difficulty;
+            enemyScript.InitializeAttributes();
+            enemies.Add(enemyScript);
+            Debug.Log("Spawned enemy with difficulty: " + difficulty);
         }
     }
 }
