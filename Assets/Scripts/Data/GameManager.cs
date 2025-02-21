@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.SceneManagement;
 using EasyTransition;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -119,6 +118,26 @@ public class GameManager : MonoBehaviour
             card.UpgradeCard();
         }
 
+        foreach (Card card in DeckManager.Instance.chest)
+        {
+            card.UpgradeCard();
+        }
+
         canUpgrade = false;
+    }
+
+    public Card CombineCards(Card card1, Card card2)
+    {
+        if (card1 == null || card2 == null) return null;
+
+        string cardName = card1.cardName;
+        int manaCost = Math.Min(card1.manaCost + card2.manaCost - 1, 10);
+        List<ICardEffect> effects = new List<ICardEffect>();
+        effects.AddRange(card1.effects);
+        effects.AddRange(card2.effects);
+        Color color = card2.color;
+        Card card = CardFactory.CreateCard(cardName, manaCost, effects, color);
+
+        return card;
     }
 }

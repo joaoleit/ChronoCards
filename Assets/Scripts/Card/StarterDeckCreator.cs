@@ -51,7 +51,7 @@ public class StarterDeckCreator : MonoBehaviour
         new CardConfig("Power Flow", "Gain 2 mana", 1,
             new ManaEffect(new EffectData { value = 2 }), new Color(0, 1, 1)),
         
-        /// Draw Cards (5)
+        // Draw Cards (5)
         new CardConfig("Quick Draw", "Draw 1 card", 1,
             new DrawEffect(new EffectData { value = 1 }), Color.yellow),
         new CardConfig("Double Take", "Draw 2 cards", 2,
@@ -106,9 +106,6 @@ public class StarterDeckCreator : MonoBehaviour
                 new List<ICardEffect> { config.effect },
                 config.color
             );
-
-            // Add to chest
-            // DeckManager.Instance.AddCardToChest(card);
 
             // Add to deck
             DeckManager.Instance.AddCardToDeck(card);

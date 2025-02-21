@@ -6,14 +6,10 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance;
     public int deckSizeLimit = 25;
 
-    private List<Slot> chestSlots = new List<Slot>();
-    private List<Slot> deckSlots = new List<Slot>();
     [SerializeField]
     private GameObject _cardPrefab;
-    [SerializeField]
-    private GameObject _chestInventory;
-    [SerializeField]
-    private GameObject _deckInventory;
+    public GameObject _chestInventory;
+    public GameObject _deckInventory;
 
     void Awake()
     {
@@ -35,7 +31,6 @@ public class InventoryManager : MonoBehaviour
         for (int i = 0; i < _chestSlots.Length; i++)
         {
             Slot slot = _chestSlots[i];
-            chestSlots.Add(slot);
             slot.isOccupied = false;
             slot.inventoryType = InventoryType.Chest;
 
@@ -48,7 +43,6 @@ public class InventoryManager : MonoBehaviour
         for (int i = 0; i < _deckSlots.Length; i++)
         {
             Slot slot = _deckSlots[i];
-            deckSlots.Add(slot);
             slot.inventoryType = InventoryType.Deck;
 
             if (!(i < deck.Count)) continue;
@@ -60,6 +54,11 @@ public class InventoryManager : MonoBehaviour
     {
         if (to.isOccupied) return false;
 
+        if (to.inventoryType == InventoryType.Combine)
+        {
+            Debug.Log(from.currentCard);
+        }
+
         if (to.inventoryType == InventoryType.Deck)
         {
             return GetCurrentDeckCount() < deckSizeLimit;
@@ -70,7 +69,7 @@ public class InventoryManager : MonoBehaviour
     int GetCurrentDeckCount()
     {
         int count = 0;
-        foreach (Slot slot in deckSlots)
+        foreach (Slot slot in _deckInventory.GetComponentsInChildren<Slot>())
         {
             if (slot.isOccupied) count++;
         }
@@ -89,5 +88,6 @@ public enum InventoryType
 {
     Chest,
     Deck,
-    Upgrade
+    Offer,
+    Combine
 }
