@@ -1,16 +1,52 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(CardVisuals))]
 public class CardInventory : MonoBehaviour
 {
     public static bool IsDragging;
     private Vector3 offset;
-    private Slot originalSlot;
+    public Slot originalSlot { get; private set; }
     private float zCoord;
     private float fixedYPosition;
     private bool isOverSlot;
     private int originalLayer;
     private Card _card;
+
+    private bool isZoomed;
+    private Vector3 originalPosition;
+    private Vector3 originalScale;
+    private int originalSortingOrder;
+    private Coroutine zoomCoroutine;
+    private bool inputProcessedThisFrame;
+
+    private float zoomScale = 4f;
+    private float zoomDuration = 0.3f;
+
+    public Color dimColor = new Color(0, 0, 0, 0.7f);
+
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(1)) // Right click detection
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit) && hit.transform == transform)
+            {
+                if (!isZoomed) ToggleZoom();
+                inputProcessedThisFrame = true;
+            }
+        }
+
+        if (isZoomed && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
+        {
+            if (!inputProcessedThisFrame) ToggleZoom();
+        }
+
+        StartCoroutine(ResetInputFlag());
+    }
 
     void Start()
     {
@@ -20,12 +56,22 @@ public class CardInventory : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (isZoomed) return;
+
         IsDragging = true;
+
+        Slot currentSlot = GetComponentInParent<Slot>();
+        if (
+            currentSlot == null ||
+            currentSlot.inventoryType != InventoryType.Combine ||
+            currentSlot.inventoryType != InventoryType.Offer
+        )
+        {
+            originalSlot = currentSlot;
+        }
 
         originalLayer = gameObject.layer;
         gameObject.layer = LayerMask.NameToLayer("Drag");
-
-        originalSlot = GetComponentInParent<Slot>();
 
         if (originalSlot != null)
         {
@@ -47,16 +93,17 @@ public class CardInventory : MonoBehaviour
 
     void OnMouseDrag()
     {
-        if (IsDragging)
-        {
-            Vector3 newPosition = GetMouseWorldPos() + offset;
-            newPosition.y = fixedYPosition; // Maintain original Y position
-            transform.position = newPosition;
-        }
+        if (!IsDragging) return;
+
+        Vector3 newPosition = GetMouseWorldPos() + offset;
+        newPosition.y = fixedYPosition;
+        transform.position = newPosition;
     }
 
     void OnMouseUp()
     {
+        if (!IsDragging) return;
+
         IsDragging = false;
         gameObject.layer = originalLayer;
         Slot newSlot = FindNearestSlot();
@@ -76,7 +123,7 @@ public class CardInventory : MonoBehaviour
         Vector3 mousePoint = Input.mousePosition;
         mousePoint.z = zCoord;
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePoint);
-        worldPos.y = fixedYPosition; // Lock Y to initial value
+        worldPos.y = fixedYPosition;
         return worldPos;
     }
 
@@ -105,17 +152,24 @@ public class CardInventory : MonoBehaviour
             switch (newSlot.inventoryType)
             {
                 case InventoryType.Chest:
+                    Debug.Log($"{_card.cardName} added to Chest");
                     DeckManager.Instance.RemoveCardFromDeck(_card);
                     DeckManager.Instance.AddCardToChest(_card);
-                    Debug.Log($"{_card.cardName} added to Chest");
                     break;
                 case InventoryType.Deck:
+                    Debug.Log($"{_card.cardName} added to Deck");
                     DeckManager.Instance.RemoveCardFromChest(_card);
                     DeckManager.Instance.AddCardToDeck(_card);
-                    Debug.Log($"{_card.cardName} added to Deck");
                     break;
-                case InventoryType.Upgrade:
+                case InventoryType.Offer:
+                    Debug.Log($"{_card.cardName} added to offer");
+                    break;
+                case InventoryType.Combine:
                     Debug.Log($"{_card.cardName} added to Upgrade");
+                    // DeckManager.Instance.RemoveCardFromDeck(_card);
+                    // DeckManager.Instance.RemoveCardFromChest(_card);
+                    // originalSlot.currentCard = null;
+                    // Destroy(gameObject);
                     break;
                 default:
                     Debug.Log("Neither Inventory");
@@ -130,17 +184,23 @@ public class CardInventory : MonoBehaviour
         transform.SetParent(newSlot.transform);
     }
 
-    void ReturnToOriginalSlot()
+    public void ReturnToOriginalSlot()
     {
         if (originalSlot != null)
         {
+            // Reset slot state
             originalSlot.isOccupied = true;
-            Vector3 targetPos = originalSlot.transform.position;
-            StartCoroutine(MoveToPosition(targetPos));
+            originalSlot.currentCard = gameObject;
+
+            // Ensure proper parent relationship
+            transform.SetParent(originalSlot.transform);
+
+            // Visual movement
+            StartCoroutine(MoveToPosition(originalSlot.transform.position));
         }
     }
 
-    System.Collections.IEnumerator MoveToPosition(Vector3 target)
+    IEnumerator MoveToPosition(Vector3 target)
     {
         float duration = 0.2f;
         Vector3 startPos = transform.position;
@@ -154,4 +214,83 @@ public class CardInventory : MonoBehaviour
         }
         transform.position = target;
     }
+
+    IEnumerator ResetInputFlag()
+    {
+        yield return new WaitForEndOfFrame();
+        inputProcessedThisFrame = false;
+    }
+
+    void ToggleZoom()
+    {
+        if (zoomCoroutine != null)
+            StopCoroutine(zoomCoroutine);
+
+        if (isZoomed)
+        {
+            zoomCoroutine = StartCoroutine(ZoomOut());
+        }
+        else
+        {
+            StoreOriginalValues();
+            zoomCoroutine = StartCoroutine(ZoomIn());
+        }
+        isZoomed = !isZoomed;
+    }
+
+    void StoreOriginalValues()
+    {
+        originalPosition = transform.position;
+        originalScale = transform.localScale;
+
+        if (TryGetComponent<Canvas>(out var canvas))
+        {
+            originalSortingOrder = canvas.sortingOrder;
+        }
+    }
+
+    IEnumerator ZoomIn()
+    {
+        Vector3 targetPosition = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 10f));
+
+        float elapsed = 0;
+        while (elapsed < zoomDuration)
+        {
+            transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsed / zoomDuration);
+            transform.localScale = Vector3.Lerp(originalScale, originalScale * zoomScale, elapsed / zoomDuration);
+
+            if (TryGetComponent<Canvas>(out var canvas))
+            {
+                canvas.sortingOrder = 100;
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    IEnumerator ZoomOut()
+    {
+        float elapsed = 0;
+        Vector3 startPosition = transform.position;
+        Vector3 startScale = transform.localScale;
+
+        while (elapsed < zoomDuration)
+        {
+            transform.position = Vector3.Lerp(startPosition, originalPosition, elapsed / zoomDuration);
+            transform.localScale = Vector3.Lerp(startScale, originalScale, elapsed / zoomDuration);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = originalPosition;
+        transform.localScale = originalScale;
+
+        if (TryGetComponent<Canvas>(out var canvas))
+        {
+            canvas.sortingOrder = originalSortingOrder;
+        }
+    }
 }
+

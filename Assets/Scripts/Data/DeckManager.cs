@@ -14,6 +14,7 @@ public class DeckManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            StarterDeckCreator.CreateStarterDeck();
             DontDestroyOnLoad(gameObject);
         }
         else if (Instance != this)
