@@ -68,7 +68,7 @@ public class CardLogic : MonoBehaviour
         _isDragging = false;
 
         if (_shouldTriggerOnEnemy && TryTriggerEffectOnEnemy()) return;
-        if (IsInPlayableArea()) BattleManager.Instance.PlayCard(this);
+        if (IsInPlayableArea()) BattleManager.Instance.PlayCard(this, null);
         else ReturnToOriginalPosition();
     }
 
@@ -79,8 +79,10 @@ public class CardLogic : MonoBehaviour
         {
             if (hit.collider.gameObject == gameObject) continue;
             if (!hit.collider.CompareTag("Enemy")) continue;
+            Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
+            if (enemy == null) continue;
 
-            BattleManager.Instance.PlayCard(this);
+            BattleManager.Instance.PlayCard(this, enemy);
             return true;
         }
         return false;

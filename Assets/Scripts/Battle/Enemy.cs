@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class Enemy : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class Enemy : MonoBehaviour
     public void InitializeAttributes()
     {
         maxHealth = Mathf.RoundToInt(baseMaxHealth * difficultyFactor);
-        damage = Mathf.RoundToInt(baseDamage * difficultyFactor);
+        damage = Math.Max(1, Mathf.RoundToInt(baseDamage * difficultyFactor));
         health = maxHealth;
         if (healthBar != null)
         {
@@ -61,10 +62,10 @@ public class Enemy : MonoBehaviour
         int maxDamage = Mathf.RoundToInt(damage * (1 + variationPercentage)) + 1;
 
         // Generate a random base damage within the calculated range
-        int randomBaseDamage = Random.Range(minDamage, maxDamage);
+        int randomBaseDamage = UnityEngine.Random.Range(minDamage, maxDamage);
 
         // Check for a critical hit; if true, apply a multiplier (e.g., 1.5x)
-        if (Random.value < criticalChance * difficultyFactor)
+        if (UnityEngine.Random.value < criticalChance * difficultyFactor)
         {
             Debug.Log("Critical hit!");
             return Mathf.RoundToInt(randomBaseDamage * 1.5f);
@@ -91,7 +92,7 @@ public class Enemy : MonoBehaviour
         for (int i = 0; i < extraMoveSlots; i++)
         {
             // Chance to add a move scales dynamically with difficultyFactor.
-            if (Random.value < 0.1f + (0.3f * probabilityScale))
+            if (UnityEngine.Random.value < 0.1f + (0.3f * probabilityScale))
             {
                 moves++;
             }
@@ -107,10 +108,10 @@ public class Enemy : MonoBehaviour
         Debug.Log("Enemy will take " + moves + " move(s) this turn.");
         for (int i = 0; i < moves; i++)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             Attack(player);
         }
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
     }
 
     // public void Attack(Player player)

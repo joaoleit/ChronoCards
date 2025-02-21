@@ -1,15 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 using System;
-using UnityEngine.SceneManagement;
 using EasyTransition;
 
 public class BattleManager : MonoBehaviour
 {
     public Player player;
-    public Enemy enemy;
+    public List<Enemy> enemies = new List<Enemy>();
     public GameObject handObject;
     public GameObject cardPrefab;
     public GameObject basicEnemyPrefab;
@@ -27,8 +25,7 @@ public class BattleManager : MonoBehaviour
 
     public TurnState currentTurn;
     private int turnCount = 0;
-    private Vector3 enemyPosition = new Vector3(319.23f, 0, 25);
-
+    private Vector3 baseEnemyPosition = new Vector3(319.23f, 0, 28f);
     public TransitionSettings transition;
 
     private void OnEnable()
@@ -38,6 +35,10 @@ public class BattleManager : MonoBehaviour
 
         GameEvents.Instance.OnEnemyDeath.AddListener(() =>
         {
+            foreach (var e in enemies)
+            {
+                if (e != null && e.health >= 0) return;
+            }
             GameManager.Instance.EndBattle(true);
             GameManager.Instance.setBattleTurns(turnCount);
             TransitionManager.Instance.Transition(transition, 0);
@@ -55,7 +56,7 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
-        SpawnEnemy(enemyPosition);
+        SpawnEnemies();
         LoadAndShuffleDeck();
         player.mana = 0;
         StartBattle();
@@ -84,8 +85,12 @@ public class BattleManager : MonoBehaviour
     private IEnumerator EnemyTurnCoroutine()
     {
         // Calls the enemy's own turn logic, which now supports multiple moves and critical hits.
-        yield return enemy.ExecuteTurn(player);
-        yield return new WaitForSeconds(1f);
+        foreach (var enemy in enemies)
+        {
+            if (enemy.health <= 0) continue;
+            yield return enemy.ExecuteTurn(player);
+            yield return new WaitForSeconds(1f);
+        }
         GameEvents.Instance.OnEnemyTurnEnd.Invoke();
     }
 
@@ -98,7 +103,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void PlayCard(CardLogic cardLogic)
+    public void PlayCard(CardLogic cardLogic, Enemy enemy)
     {
         Card card = cardLogic._card;
         if (player.mana >= card.manaCost)
@@ -206,78 +211,83 @@ public class BattleManager : MonoBehaviour
         AlignCards();
     }
 
-    // Spawns a new enemy at the specified position.
-    public void SpawnEnemy(Vector3 spawnPosition)
+    private void SpawnEnemies()
     {
-        // Calculate the difficulty factor based on turns taken.
         GameManager.Instance.CalculateDifficultyFactor();
+        float totalDifficulty = GameManager.Instance.enemyDifficulty;
+        int numberOfEnemies = UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
 
         // Select the appropriate enemy prefab based on the difficulty factor.
         GameObject enemyPrefab = GameManager.Instance.enemyThatAttacked;
-        
-        if (enemyPrefab != null)
+        Debug.Log($"Number of enemies: {numberOfEnemies}");
+
+        float partialDifficulty = totalDifficulty / numberOfEnemies;
+
+        float spacing = 7f;
+
+        for (int i = 0; i < numberOfEnemies; i++)
         {
-            // Instantiate the enemy.
-            GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-            enemyInstance.SetActive(true);
-
-            enemyInstance.transform.LookAt(Camera.main.transform);
-
-            float difficultyFactor = GameManager.Instance.enemyDifficulty;
-
-            if (difficultyFactor < 1.5f)
-            {
-                Enemy newEnemyScript = enemyInstance.GetComponent<Enemy>();
-                if (newEnemyScript != null) newEnemyScript.enabled = true;
-            }
-            else if (difficultyFactor < 2.5f)
-            {
-                Enemy selfHealingEnemy = enemyInstance.GetComponent<SelfHealingEnemy>();
-                if (selfHealingEnemy != null) selfHealingEnemy.enabled = true;
-            }
-            else
-            {
-                Enemy aggressiveEnemy = enemyInstance.GetComponent<AggressiveEnemy>();
-                if (aggressiveEnemy != null) aggressiveEnemy.enabled = true;
-            }
-
-            Transform enemyCanvasTransform = enemyInstance.transform.Find("EnemyCanvas");
-            if (enemyCanvasTransform != null)
-            {
-                enemyCanvasTransform.gameObject.SetActive(true);
-            }
-
-            // foreach (Transform child in enemyInstance.transform)
-            // {
-            //     if (child.CompareTag("Monster"))
-            //     {
-            //         // float scaleMultiplier = 2.0f;
-            //         // child.localScale *= scaleMultiplier;
-
-            //         if (enemyCanvasTransform != null)
-            //         {
-            //             float enemyHeight = child.localScale.y;
-
-            //             enemyCanvasTransform.position = new Vector3(
-            //                 enemyCanvasTransform.position.x,
-            //                 child.position.y + enemyHeight + 1.0f,
-            //                 enemyCanvasTransform.position.z
-            //             );
-            //         }
-            //     }
-            // }
-
-            // Retrieve the Enemy component.
-            Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
-            if (enemyScript != null)
-            {
-                // Set the difficulty factor and reinitialize the enemy's attributes.
-                enemy = enemyScript;
-                enemyScript.difficultyFactor = GameManager.Instance.enemyDifficulty;
-                enemyScript.InitializeAttributes();  // Ensure attributes are updated immediately.
-                Debug.Log("Spawned enemy with difficulty factor: " + GameManager.Instance.enemyDifficulty);
-            }
+            Vector3 spawnPos = CalculateEnemyPosition(i, numberOfEnemies, spacing);
+            float part = UnityEngine.Random.Range(0.8f, 1.2f);
+            float enemyDifficulty = partialDifficulty * part;
+            SpawnEnemy(spawnPos, enemyDifficulty, enemyPrefab);
         }
     }
 
+    private Vector3 CalculateEnemyPosition(int index, int totalEnemies, float spacing)
+    {
+        float xOffset = (index - (totalEnemies - 1) / 2f) * spacing;
+        return baseEnemyPosition + new Vector3(xOffset, 0, 0);
+    }
+
+    private Enemy SelectEnemyScript(GameObject enemy, float difficultyFactor)
+    {
+        Enemy enemyScript;
+        if (difficultyFactor < 1.5f)
+        {
+            enemyScript = enemy.GetComponent<Enemy>();
+        }
+        else if (difficultyFactor < 2.5f)
+        {
+            enemyScript = enemy.GetComponent<SelfHealingEnemy>();
+        }
+        else
+        {
+            enemyScript = enemy.GetComponent<AggressiveEnemy>();
+        }
+
+        return enemyScript;
+    }
+
+    private void SpawnEnemy(Vector3 spawnPosition, float difficulty, GameObject enemyPrefab)
+    {
+        GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+
+        // Store the original X rotation
+        float originalXRotation = enemyInstance.transform.eulerAngles.x;
+
+        // Make the enemy face the camera
+        enemyInstance.transform.LookAt(Camera.main.transform);
+
+        // Keep the original X rotation, but update Y and Z to face the camera
+        Vector3 newRotation = enemyInstance.transform.eulerAngles;
+        newRotation.x = originalXRotation; // Restore original X rotation
+        enemyInstance.transform.eulerAngles = newRotation;
+
+        Transform enemyCanvasTransform = enemyInstance.transform.Find("EnemyCanvas");
+        if (enemyCanvasTransform != null)
+        {
+            enemyCanvasTransform.gameObject.SetActive(true);
+        }
+
+        Enemy enemyScript = SelectEnemyScript(enemyInstance, difficulty);
+        if (enemyScript != null)
+        {
+            enemyScript.enabled = true;
+            enemyScript.difficultyFactor = difficulty;
+            enemyScript.InitializeAttributes();
+            enemies.Add(enemyScript);
+            Debug.Log("Spawned enemy with difficulty: " + difficulty);
+        }
+    }
 }
