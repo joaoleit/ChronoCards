@@ -10,6 +10,7 @@ TagManager:
   - WorldCamera
   - WorldLight
   - WorldEventSystem
+  - Monster
   layers:
   - Default
   - TransparentFX
@@ -21,6 +22,9 @@ TagManager:
   - Slot
   - Card
   - Drag
+  - Grass
+  - 
+  - 
   - 
   - 
   - 

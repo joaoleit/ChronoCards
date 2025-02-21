@@ -24,15 +24,11 @@ public class TriggerBattleScene : MonoBehaviour
 
     public void StartBattleScene()
     {
-        if (!string.IsNullOrEmpty(battleSceneName) && SceneManager.GetSceneByName(battleSceneName) != null)
+        if (!string.IsNullOrEmpty(battleSceneName) && SceneManager.GetSceneByName(battleSceneName) != null && !GameManager.Instance.isBattleActive)
         {
             GameManager.Instance.StartBattle(gameObject, playerController);
             playerController.FreezePlayer(true);
             TransitionManager.Instance.Transition(battleSceneName, transition, startDelay);
-        }
-        else
-        {
-            Debug.LogError("Nome da cena de batalha não foi definido!");
         }
     }
 
