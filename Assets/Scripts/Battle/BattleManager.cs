@@ -27,7 +27,7 @@ public class BattleManager : MonoBehaviour
 
     public TurnState currentTurn;
     private int turnCount = 0;
-    private Vector3 enemyPosition = new Vector3(319.23f, 0, 30);
+    private Vector3 enemyPosition = new Vector3(319.23f, 0, 25);
 
     public TransitionSettings transition;
 
@@ -213,12 +213,59 @@ public class BattleManager : MonoBehaviour
         GameManager.Instance.CalculateDifficultyFactor();
 
         // Select the appropriate enemy prefab based on the difficulty factor.
-        GameObject enemyPrefab = SelectEnemyPrefab(GameManager.Instance.enemyDifficulty);
-        Debug.Log("Selected enemy prefab: " + enemyPrefab.name);
+        GameObject enemyPrefab = GameManager.Instance.enemyThatAttacked;
+        
         if (enemyPrefab != null)
         {
             // Instantiate the enemy.
             GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            enemyInstance.SetActive(true);
+
+            enemyInstance.transform.LookAt(Camera.main.transform);
+
+            float difficultyFactor = GameManager.Instance.enemyDifficulty;
+
+            if (difficultyFactor < 1.5f)
+            {
+                Enemy newEnemyScript = enemyInstance.GetComponent<Enemy>();
+                if (newEnemyScript != null) newEnemyScript.enabled = true;
+            }
+            else if (difficultyFactor < 2.5f)
+            {
+                Enemy selfHealingEnemy = enemyInstance.GetComponent<SelfHealingEnemy>();
+                if (selfHealingEnemy != null) selfHealingEnemy.enabled = true;
+            }
+            else
+            {
+                Enemy aggressiveEnemy = enemyInstance.GetComponent<AggressiveEnemy>();
+                if (aggressiveEnemy != null) aggressiveEnemy.enabled = true;
+            }
+
+            Transform enemyCanvasTransform = enemyInstance.transform.Find("EnemyCanvas");
+            if (enemyCanvasTransform != null)
+            {
+                enemyCanvasTransform.gameObject.SetActive(true);
+            }
+
+            // foreach (Transform child in enemyInstance.transform)
+            // {
+            //     if (child.CompareTag("Monster"))
+            //     {
+            //         // float scaleMultiplier = 2.0f;
+            //         // child.localScale *= scaleMultiplier;
+
+            //         if (enemyCanvasTransform != null)
+            //         {
+            //             float enemyHeight = child.localScale.y;
+
+            //             enemyCanvasTransform.position = new Vector3(
+            //                 enemyCanvasTransform.position.x,
+            //                 child.position.y + enemyHeight + 1.0f,
+            //                 enemyCanvasTransform.position.z
+            //             );
+            //         }
+            //     }
+            // }
 
             // Retrieve the Enemy component.
             Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
@@ -233,20 +280,4 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // Chooses an enemy prefab based on the difficulty factor.
-    private GameObject SelectEnemyPrefab(float difficultyFactor)
-    {
-        if (difficultyFactor < 1.5f)
-        {
-            return basicEnemyPrefab;
-        }
-        else if (difficultyFactor < 2.5f)
-        {
-            return selfHealingEnemyPrefab;
-        }
-        else
-        {
-            return aggressiveEnemyPrefab;
-        }
-    }
 }

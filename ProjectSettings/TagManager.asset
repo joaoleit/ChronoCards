@@ -10,6 +10,7 @@ TagManager:
   - WorldCamera
   - WorldLight
   - WorldEventSystem
+  - Monster
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
+  - Grass
   - 
   - 
   - 
