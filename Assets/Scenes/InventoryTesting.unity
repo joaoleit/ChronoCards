@@ -768,6 +768,7 @@ MonoBehaviour:
   triggerEnemyType: 0
   player: {fileID: 0}
   objectsToDisable: []
+  isBattleActive: 0
 --- !u!224 &119106346 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2300869578030161188, guid: c0801aea1881306429b64d88219544bb, type: 3}
@@ -6116,7 +6117,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2517164598337692414, guid: b7c158541d0b9af44be175bf0c087157, type: 3}
       propertyPath: m_text
-      value: Confirm
+      value: Forge
       objectReference: {fileID: 0}
     - target: {fileID: 2517164598337692414, guid: b7c158541d0b9af44be175bf0c087157, type: 3}
       propertyPath: m_fontSize
