@@ -1,15 +1,60 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class UpgradeManager : MonoBehaviour
 {
+    public UpgradeType upgradeType;
     [SerializeField] private GameObject _offerSlot;
     [SerializeField] private GameObject _combineGrid;
     [SerializeField] private GameObject _cardPrefab;
 
+    public void setUpgrade(UpgradeType upgradeType)
+    {
+        this.upgradeType = upgradeType;
+        _combineGrid.SetActive(upgradeType == UpgradeType.Forge);
+    }
+
+    public void BasicUpgrade()
+    {
+        if (!ValidateOffer()) return;
+
+        List<GameObject> offerCard = GetOfferCard();
+        switch (upgradeType)
+        {
+            case UpgradeType.Boost:
+                GameManager.Instance.UpgradeCards();
+                break;
+        }
+
+        RemoveOldCardsFromSystem(offerCard);
+        DestroyOldCards(offerCard);
+        ClearUpgradeSlots();
+        InventoryManager.Instance.InitializeSlots();
+    }
+
+    private bool ValidateOffer()
+    {
+        Slot offerSlot = _offerSlot.GetComponentInChildren<Slot>();
+
+        return offerSlot.currentCard != null;
+    }
+
+    public List<GameObject> GetOfferCard()
+    {
+        Slot offerSlot = _offerSlot.GetComponentInChildren<Slot>();
+
+        return new List<GameObject> { offerSlot.currentCard };
+    }
+
     public void GetSlotsInUpgrade()
     {
+        if (upgradeType != UpgradeType.Forge)
+        {
+            BasicUpgrade();
+            return;
+        }
         if (!ValidateSlots()) return;
 
         List<GameObject> involvedCards = GetInvolvedCards();
@@ -34,7 +79,7 @@ public class UpgradeManager : MonoBehaviour
                combineGridSlots.All(s => s.currentCard != null);
     }
 
-    private List<GameObject> GetInvolvedCards()
+    public List<GameObject> GetInvolvedCards()
     {
         Slot offerSlot = _offerSlot.GetComponentInChildren<Slot>();
         Slot[] combineGridSlots = _combineGrid.GetComponentsInChildren<Slot>();
@@ -58,10 +103,11 @@ public class UpgradeManager : MonoBehaviour
         return combinedCard != null && combinedCard.effects.Count < 4;
     }
 
-    private void ReturnCardsToOriginalSlots(List<GameObject> cards)
+    public void ReturnCardsToOriginalSlots(List<GameObject> cards)
     {
         foreach (GameObject card in cards)
         {
+            if (card == null) continue;
             CardInventory cardInventory = card.GetComponent<CardInventory>();
 
             // Explicitly reset parent before returning
@@ -70,7 +116,7 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    private void ClearUpgradeSlots()
+    public void ClearUpgradeSlots()
     {
         Slot offerSlot = _offerSlot.GetComponentInChildren<Slot>();
         Slot[] combineGridSlots = _combineGrid.GetComponentsInChildren<Slot>();
@@ -123,6 +169,14 @@ public class UpgradeManager : MonoBehaviour
             ? InventoryManager.Instance._deckInventory
             : InventoryManager.Instance._chestInventory;
 
+        if (targetInventory == InventoryType.Deck)
+        {
+            DeckManager.Instance.AddCardToDeck(newCard);
+        }
+        else
+        {
+            DeckManager.Instance.AddCardToChest(newCard);
+        }
         // Find first available slot
         Slot targetSlot = targetGrid.GetComponentsInChildren<Slot>()
             .FirstOrDefault(s => !s.isOccupied);

@@ -41,7 +41,7 @@ public class BattleManager : MonoBehaviour
             }
             GameManager.Instance.EndBattle(true);
             GameManager.Instance.setBattleTurns(turnCount);
-            TransitionManager.Instance.Transition(transition, 0);
+            TransitionManager.Instance.Transition(transition, 0, "BattleScene");
         });
 
     }
@@ -262,7 +262,7 @@ public class BattleManager : MonoBehaviour
     private void SpawnEnemy(Vector3 spawnPosition, float difficulty, GameObject enemyPrefab)
     {
         GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-
+        enemyInstance.SetActive(true);
         // Store the original X rotation
         float originalXRotation = enemyInstance.transform.eulerAngles.x;
 

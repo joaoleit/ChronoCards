@@ -527,7 +527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b333a5ed615138d46840dea96d5d9210, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyThatAttacked: {fileID: 0}
+  enemyThatAttacked: {fileID: 9026917960839129659, guid: 7d5ba017c9be39f41aec9fd516e870f6, type: 3}
   savedPlayerPosition: {x: 0, y: 0, z: 0}
   triggerEnemyType: 0
   player: {fileID: 0}

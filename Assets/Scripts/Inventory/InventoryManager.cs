@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using EasyTransition;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class InventoryManager : MonoBehaviour
     private GameObject _cardPrefab;
     public GameObject _chestInventory;
     public GameObject _deckInventory;
+    public TransitionSettings transition;
+
 
     void Awake()
     {
@@ -24,7 +27,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    void InitializeSlots()
+    public void InitializeSlots()
     {
         Slot[] _chestSlots = _chestInventory.GetComponentsInChildren<Slot>();
         List<Card> chest = DeckManager.Instance.chest;
@@ -32,6 +35,8 @@ public class InventoryManager : MonoBehaviour
         {
             Slot slot = _chestSlots[i];
             slot.isOccupied = false;
+            slot.currentCard = null;
+            if (slot.transform.childCount > 0) Destroy(slot.transform.GetChild(0).gameObject);
             slot.inventoryType = InventoryType.Chest;
 
             if (!(i < chest.Count)) continue;
@@ -43,6 +48,9 @@ public class InventoryManager : MonoBehaviour
         for (int i = 0; i < _deckSlots.Length; i++)
         {
             Slot slot = _deckSlots[i];
+            slot.isOccupied = false;
+            slot.currentCard = null;
+            if (slot.transform.childCount > 0) Destroy(slot.transform.GetChild(0).gameObject);
             slot.inventoryType = InventoryType.Deck;
 
             if (!(i < deck.Count)) continue;
@@ -81,6 +89,12 @@ public class InventoryManager : MonoBehaviour
         GameObject cardObject = Instantiate(_cardPrefab, slot.transform);
         cardObject.GetComponent<CardVisuals>().card = card;
         slot.isOccupied = true;
+    }
+
+    public void CloseInventory()
+    {
+        GameManager.Instance.CloseInventory();
+        TransitionManager.Instance.Transition(transition, 0, "InventoryTesting");
     }
 }
 

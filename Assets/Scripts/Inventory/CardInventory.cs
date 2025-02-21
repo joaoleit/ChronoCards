@@ -23,11 +23,9 @@ public class CardInventory : MonoBehaviour
     private float zoomScale = 4f;
     private float zoomDuration = 0.3f;
 
-    public Color dimColor = new Color(0, 0, 0, 0.7f);
-
-
     void Update()
     {
+        if (BlockingUI.IsBlocking) return;
         if (Input.GetMouseButtonDown(1)) // Right click detection
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -56,7 +54,7 @@ public class CardInventory : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (isZoomed) return;
+        if (BlockingUI.IsBlocking || isZoomed) return;
 
         IsDragging = true;
 
@@ -93,7 +91,7 @@ public class CardInventory : MonoBehaviour
 
     void OnMouseDrag()
     {
-        if (!IsDragging) return;
+        if (BlockingUI.IsBlocking || !IsDragging) return;
 
         Vector3 newPosition = GetMouseWorldPos() + offset;
         newPosition.y = fixedYPosition;
@@ -102,7 +100,7 @@ public class CardInventory : MonoBehaviour
 
     void OnMouseUp()
     {
-        if (!IsDragging) return;
+        if (BlockingUI.IsBlocking || !IsDragging) return;
 
         IsDragging = false;
         gameObject.layer = originalLayer;
