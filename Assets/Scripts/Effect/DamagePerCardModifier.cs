@@ -1,4 +1,4 @@
-public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener, ITurnListener
+public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener, ITurnEndListener
 {
     private int damagePerCard;
     private int duration;
@@ -41,7 +41,7 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
         // enemy.TakeDamage(damagePerCard);
     }
 
-    public void OnTurnStart()
+    public void OnTurnEnd()
     {
         duration--;
     }

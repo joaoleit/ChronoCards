@@ -10,9 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0b213db5087d734bb0673a9bb283567, type: 3}
-  m_Name: New Card
+  m_Name: Teste 1
   m_EditorClassIdentifier: 
-  cardName: Testing
-  description: 
-  manaCost: 0
-  color: {r: 0, g: 0, b: 0, a: 0}
+  cardName: Pump
+  description: Your next damage card deals +10
+  manaCost: 2
+  effects:
+  - effectType: 3
+    value: 0
+    passiveModifier:
+      modifierType: 1
+      value: 10
+      duration: 1
+  color: {r: 0.048727296, g: 0.6886792, b: 0.48884407, a: 0}

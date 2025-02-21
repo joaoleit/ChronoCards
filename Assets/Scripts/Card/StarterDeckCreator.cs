@@ -108,7 +108,7 @@ public class StarterDeckCreator : MonoBehaviour
             );
 
             // Add to chest
-            DeckManager.Instance.AddCardToChest(card);
+            // DeckManager.Instance.AddCardToChest(card);
 
             // Add to deck
             DeckManager.Instance.AddCardToDeck(card);

@@ -14,8 +14,8 @@ public class CardHover : MonoBehaviour
 
     void Update()
     {
-        var cardDisplay = GetComponent<CardDisplay>();
-        if (cardDisplay.isDragging) return;
+        var cardDisplay = GetComponent<CardLogic>();
+        if (cardDisplay._isDragging) return;
 
         if (isHovered)
         {
