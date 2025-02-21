@@ -25,7 +25,7 @@ public class BattleManager : MonoBehaviour
 
     public TurnState currentTurn;
     private int turnCount = 0;
-    private Vector3 baseEnemyPosition = new Vector3(319.23f, 0, 25);
+    private Vector3 baseEnemyPosition = new Vector3(319.23f, 0, 28f);
     public TransitionSettings transition;
 
     private void OnEnable()
@@ -262,7 +262,17 @@ public class BattleManager : MonoBehaviour
     private void SpawnEnemy(Vector3 spawnPosition, float difficulty, GameObject enemyPrefab)
     {
         GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+
+        // Store the original X rotation
+        float originalXRotation = enemyInstance.transform.eulerAngles.x;
+
+        // Make the enemy face the camera
         enemyInstance.transform.LookAt(Camera.main.transform);
+
+        // Keep the original X rotation, but update Y and Z to face the camera
+        Vector3 newRotation = enemyInstance.transform.eulerAngles;
+        newRotation.x = originalXRotation; // Restore original X rotation
+        enemyInstance.transform.eulerAngles = newRotation;
 
         Transform enemyCanvasTransform = enemyInstance.transform.Find("EnemyCanvas");
         if (enemyCanvasTransform != null)
