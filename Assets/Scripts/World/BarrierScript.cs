@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BarrierScript : MonoBehaviour
 {
@@ -9,11 +10,20 @@ public class BarrierScript : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(DeckManager.Instance.deck.Count != 0) {
             animator.SetTrigger("BarrierDown");
+            Transform obstacleTransform = transform.Find("Obstacle");
+            
+            if (obstacleTransform != null)
+            {
+                NavMeshObstacle navMeshObstacle = obstacleTransform.GetComponent<NavMeshObstacle>();
+                if (navMeshObstacle != null)
+                {
+                    navMeshObstacle.enabled = false;
+                }
+            }
         }
     }
 }
