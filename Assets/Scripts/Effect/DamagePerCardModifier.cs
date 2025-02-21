@@ -36,9 +36,10 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
             finalDamage = modifier.ModifyDamage(finalDamage);
         }
 
-        Enemy enemy = BattleManager.Instance.enemy;
-        enemy.TakeDamage(finalDamage);
-        // enemy.TakeDamage(damagePerCard);
+        foreach (var enemy in BattleManager.Instance.enemies)
+        {
+            enemy.TakeDamage(finalDamage);
+        }
     }
 
     public void OnTurnEnd()
