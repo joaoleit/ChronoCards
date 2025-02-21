@@ -1,9 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.SceneManagement;
 using EasyTransition;
 using Unity.Behavior;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -40,14 +39,14 @@ public class GameManager : MonoBehaviour
     }
     public void StartBattle(GameObject enemy, PlayerController player)
     {
-        System.Type[] componentsToDisable = new System.Type[]
+        Type[] componentsToDisable = new Type[]
             {
                 typeof(BehaviorGraphAgent),
                 typeof(TriggerBattleScene),
                 typeof(EnemyAI),
             };
-            
-        foreach (System.Type componentType in componentsToDisable)
+
+        foreach (Type componentType in componentsToDisable)
         {
             Component component = enemy.GetComponent(componentType);
             if (component != null) (component as Behaviour).enabled = false;
@@ -133,6 +132,26 @@ public class GameManager : MonoBehaviour
             card.UpgradeCard();
         }
 
+        foreach (Card card in DeckManager.Instance.chest)
+        {
+            card.UpgradeCard();
+        }
+
         canUpgrade = false;
+    }
+
+    public Card CombineCards(Card card1, Card card2)
+    {
+        if (card1 == null || card2 == null) return null;
+
+        string cardName = card1.cardName;
+        int manaCost = Math.Min(card1.manaCost + card2.manaCost - 1, 10);
+        List<ICardEffect> effects = new List<ICardEffect>();
+        effects.AddRange(card1.effects);
+        effects.AddRange(card2.effects);
+        Color color = card2.color;
+        Card card = CardFactory.CreateCard(cardName, manaCost, effects, color);
+
+        return card;
     }
 }
