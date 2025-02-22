@@ -40,7 +40,7 @@ namespace EasyTransition
         /// </summary>
         /// <param name="transition">The settings of the transition you want to use.</param>
         /// <param name="startDelay">The delay before the transition starts.</param>
-        public void Transition(TransitionSettings transition, float startDelay)
+        public void Transition(TransitionSettings transition, float startDelay, string sceneName)
         {
             // if (transition == null || runningTransition)
             // {
@@ -50,7 +50,7 @@ namespace EasyTransition
             // }
 
             runningTransition = true;
-            StartCoroutine(Timer(startDelay, transition));
+            StartCoroutine(Timer(startDelay, transition, sceneName));
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace EasyTransition
             onTransitionEnd?.Invoke();
         }
 
-        IEnumerator Timer(float delay, TransitionSettings transitionSettings)
+        IEnumerator Timer(float delay, TransitionSettings transitionSettings, string sceneName)
         {
             yield return new WaitForSecondsRealtime(delay);
 
@@ -167,7 +167,7 @@ namespace EasyTransition
 
             template.GetComponent<Transition>().OnSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single);
 
-            SceneManager.UnloadSceneAsync("BattleScene");
+            SceneManager.UnloadSceneAsync(sceneName);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 
@@ -179,12 +179,12 @@ namespace EasyTransition
 
         private IEnumerator Start()
         {
-            while (this.gameObject.activeInHierarchy)
+            while (gameObject.activeInHierarchy)
             {
                 //Check for multiple instances of the Transition Manager component
-                var managerCount = GameObject.FindObjectsOfType<TransitionManager>(true).Length;
+                var managerCount = FindObjectsByType<TransitionManager>(FindObjectsInactive.Include, FindObjectsSortMode.None).Length;
                 if (managerCount > 1)
-                    Debug.LogError($"There are {managerCount.ToString()} Transition Managers in your scene. Please ensure there is only one Transition Manager in your scene or overlapping transitions may occur.");
+                    Debug.LogError($"There are {managerCount} Transition Managers in your scene. Please ensure there is only one Transition Manager in your scene or overlapping transitions may occur.");
 
                 yield return new WaitForSecondsRealtime(1f);
             }

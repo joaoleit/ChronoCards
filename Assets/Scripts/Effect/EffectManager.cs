@@ -12,18 +12,18 @@ public class EffectManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.Instance.OnTurnStart.AddListener(HandleTurnStart);
-        GameEvents.Instance.OnTurnEnd.AddListener(HandleTurnEnd);
-        GameEvents.Instance.OnCardPlayed.AddListener(HandleCardPlayed);
+        GameEvents.Instance.OnTurnStart.AddListener(CheckIsExpired);
+        GameEvents.Instance.OnTurnEnd.AddListener(CheckIsExpired);
+        GameEvents.Instance.OnCardPlayed.AddListener((Card card) => CheckIsExpired());
         GameEvents.Instance.OnModifierAdded.AddListener(HandleNewModifier);
         GameEvents.Instance.OnModifierExpired.AddListener(RemoveModifier);
     }
 
     private void OnDisable()
     {
-        GameEvents.Instance.OnTurnStart.RemoveListener(HandleTurnStart);
-        GameEvents.Instance.OnTurnEnd.RemoveListener(HandleTurnEnd);
-        GameEvents.Instance.OnCardPlayed.RemoveListener(HandleCardPlayed);
+        GameEvents.Instance.OnTurnStart.RemoveListener(CheckIsExpired);
+        GameEvents.Instance.OnTurnEnd.RemoveListener(CheckIsExpired);
+        GameEvents.Instance.OnCardPlayed.RemoveListener((Card card) => CheckIsExpired());
         GameEvents.Instance.OnModifierAdded.RemoveListener(HandleNewModifier);
         GameEvents.Instance.OnModifierExpired.RemoveListener(RemoveModifier);
     }
@@ -36,36 +36,12 @@ public class EffectManager : MonoBehaviour
             Instance = this;
     }
 
-    private void HandleTurnStart()
+    private void CheckIsExpired()
     {
         foreach (var modifier in modifiers.ToList())
         {
-            if (modifier is ITurnListener turnListener)
-                turnListener.OnTurnStart();
-
-            if (modifier.IsExpired())
-                GameEvents.Instance.OnModifierExpired.Invoke(modifier);
-        }
-    }
-
-    private void HandleTurnEnd()
-    {
-        foreach (var modifier in modifiers.ToList())
-        {
-            if (modifier is ITurnEndListener turnEndListener)
-                turnEndListener.OnTurnEnd();
-
-            if (modifier.IsExpired())
-                GameEvents.Instance.OnModifierExpired.Invoke(modifier);
-        }
-    }
-
-    private void HandleCardPlayed(Card card)
-    {
-        foreach (var modifier in modifiers.ToList())
-        {
-            if (modifier is ICardPlayedListener cardListener)
-                cardListener.OnCardPlayed(card);
+            // if (modifier is ITurnListener turnListener)
+            //     turnListener.OnTurnStart();
 
             if (modifier.IsExpired())
                 GameEvents.Instance.OnModifierExpired.Invoke(modifier);
@@ -80,6 +56,9 @@ public class EffectManager : MonoBehaviour
 
         if (modifier is ICardPlayedListener)
             GameEvents.Instance.OnCardPlayed.AddListener(((ICardPlayedListener)modifier).OnCardPlayed);
+
+        if (modifier is ITurnEndListener)
+            GameEvents.Instance.OnTurnEnd.AddListener(((ITurnEndListener)modifier).OnTurnEnd);
     }
 
     public void RemoveModifier(IModifier modifier)
@@ -92,15 +71,13 @@ public class EffectManager : MonoBehaviour
 
         if (modifier is ICardPlayedListener)
             GameEvents.Instance.OnCardPlayed.RemoveListener(((ICardPlayedListener)modifier).OnCardPlayed);
+
+        if (modifier is ITurnEndListener)
+            GameEvents.Instance.OnTurnEnd.AddListener(((ITurnEndListener)modifier).OnTurnEnd);
     }
 
     public IEnumerable<T> GetModifiers<T>() where T : class
     {
         return modifiers.OfType<T>();
-    }
-
-    public void AddModifier(IModifier modifier)
-    {
-        modifiers.Add(modifier);
     }
 }

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class DamageEffect : ICardEffect
 {
     private int damage;

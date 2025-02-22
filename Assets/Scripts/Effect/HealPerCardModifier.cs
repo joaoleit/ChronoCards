@@ -1,9 +1,8 @@
-using UnityEngine;
-
-public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, ITurnListener
+public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, ITurnEndListener
 {
     private int healAmount;
     private int duration;
+    private HealPerCardModifier modifier;
 
     public HealPerCardModifier(EffectData data)
     {
@@ -13,12 +12,13 @@ public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, 
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        EffectManager.Instance.AddModifier(this);
+        modifier = new HealPerCardModifier(new EffectData { duration = duration, value = healAmount });
+        GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 
     public bool ShouldTriggerOnEnemy() => false;
 
-    public string GetDescription() => $"Heal {healAmount} health per card played for {duration} turn(s).";
+    public string GetDescription() => $"Heal {healAmount} per card played. Lasts {duration} turn(s).";
 
     public void UpgradeEffect()
     {
@@ -32,11 +32,9 @@ public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, 
         player.Heal(healAmount);
     }
 
-    public void OnTurnStart()
+    public void OnTurnEnd()
     {
         duration--;
-        if (IsExpired())
-            GameEvents.Instance.OnModifierExpired.Invoke(this);
     }
 
     public bool IsExpired() => duration <= 0;

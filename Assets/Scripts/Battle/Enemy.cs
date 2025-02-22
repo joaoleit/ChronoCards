@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class Enemy : MonoBehaviour
 {
@@ -10,21 +11,23 @@ public class Enemy : MonoBehaviour
     public int maxHealth;
     public int damage;
     public int health;
-
     public HealthBar healthBar;
     public GameObject deathParticles;
-    public GameObject floatingTextPrefab;
+    public GameObject enemyObject;
+    private Animator anim;
 
     void Start()
     {
         InitializeAttributes();
+        anim = enemyObject.GetComponent<Animator>();
+        Debug.Log(anim);
     }
 
     // Recalculates maxHealth and damage based on the difficulty factor.
     public void InitializeAttributes()
     {
         maxHealth = Mathf.RoundToInt(baseMaxHealth * difficultyFactor);
-        damage = Mathf.RoundToInt(baseDamage * difficultyFactor);
+        damage = Math.Max(1, Mathf.RoundToInt(baseDamage * difficultyFactor));
         health = maxHealth;
         if (healthBar != null)
         {
@@ -37,13 +40,8 @@ public class Enemy : MonoBehaviour
     {
         health -= amount;
         healthBar.SetHealth(health);
+        anim.SetTrigger("Punched");
         Debug.Log("Enemy took " + amount + " damage. Current health: " + health);
-
-        if (floatingTextPrefab)
-        {
-            GameObject textObj = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, GameObject.Find("EnemyCanvas").transform);
-            textObj.GetComponent<FloatingText>().SetText("-" + amount);
-        }
 
         if (health <= 0)
         {
@@ -64,10 +62,10 @@ public class Enemy : MonoBehaviour
         int maxDamage = Mathf.RoundToInt(damage * (1 + variationPercentage)) + 1;
 
         // Generate a random base damage within the calculated range
-        int randomBaseDamage = Random.Range(minDamage, maxDamage);
+        int randomBaseDamage = UnityEngine.Random.Range(minDamage, maxDamage);
 
         // Check for a critical hit; if true, apply a multiplier (e.g., 1.5x)
-        if (Random.value < criticalChance * difficultyFactor)
+        if (UnityEngine.Random.value < criticalChance * difficultyFactor)
         {
             Debug.Log("Critical hit!");
             return Mathf.RoundToInt(randomBaseDamage * 1.5f);
@@ -80,11 +78,10 @@ public class Enemy : MonoBehaviour
     {
         int actualDamage = GetDamage();
         player.TakeDamage(actualDamage);
+        anim.SetTrigger("Attack");
         Debug.Log("Enemy attacked player for " + actualDamage + " damage.");
     }
 
-    // Calculate how many moves this enemy gets based on difficulty.
-    // The algorithm below uses extra move slots with a chance that increases with difficultyFactor.
     protected virtual int CalculateMoves()
     {
         int moves = 1; // Every enemy gets at least one move.
@@ -95,7 +92,7 @@ public class Enemy : MonoBehaviour
         for (int i = 0; i < extraMoveSlots; i++)
         {
             // Chance to add a move scales dynamically with difficultyFactor.
-            if (Random.value < 0.1f + (0.3f * probabilityScale))
+            if (UnityEngine.Random.value < 0.1f + (0.3f * probabilityScale))
             {
                 moves++;
             }
@@ -111,10 +108,10 @@ public class Enemy : MonoBehaviour
         Debug.Log("Enemy will take " + moves + " move(s) this turn.");
         for (int i = 0; i < moves; i++)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             Attack(player);
         }
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
     }
 
     // public void Attack(Player player)
@@ -126,12 +123,11 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         GameEvents.Instance.OnEnemyDeath.Invoke();
-        gameObject.tag = "Untagged"; // Remove the "Enemy" tag
-        transform.Find("Gob1").gameObject.SetActive(false);
-        GameObject particles = Instantiate(deathParticles, transform.position, Quaternion.identity); // Instantiate particle effect
+        gameObject.SetActive(false);
+        GameObject particles = Instantiate(deathParticles, transform.position, Quaternion.identity);
         ParticleSystem ps = particles.GetComponent<ParticleSystem>();
-        ps.Stop(); // Stop the particle system
-        Destroy(particles, ps.main.duration + ps.main.startLifetime.constantMax); // Destroy after particle system duration
-        Destroy(gameObject, 2f); // Destroy the enemy after 2 seconds
+        ps.Stop();
+        Destroy(particles, ps.main.duration + ps.main.startLifetime.constantMax);
+        Destroy(gameObject, 2f);
     }
 }

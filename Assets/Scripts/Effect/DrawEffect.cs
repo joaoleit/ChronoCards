@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class DrawEffect : ICardEffect
 {
     private int drawAmount;

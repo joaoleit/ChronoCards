@@ -1,7 +1,8 @@
-public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener, ITurnListener
+public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener, ITurnEndListener
 {
     private int damagePerCard;
     private int duration;
+    private DamagePerCardModifier modifier;
 
     public DamagePerCardModifier(EffectData data)
     {
@@ -11,7 +12,8 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        EffectManager.Instance.AddModifier(this);
+        modifier = new DamagePerCardModifier(new EffectData { duration = duration, value = damagePerCard });
+        GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 
     public bool ShouldTriggerOnEnemy() => false;
@@ -34,17 +36,15 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
             finalDamage = modifier.ModifyDamage(finalDamage);
         }
 
-        Enemy enemy = BattleManager.Instance.enemy;
-        enemy.TakeDamage(finalDamage);
-        // enemy.TakeDamage(damagePerCard);
+        foreach (var enemy in BattleManager.Instance.enemies)
+        {
+            enemy.TakeDamage(finalDamage);
+        }
     }
 
-    public void OnTurnStart()
+    public void OnTurnEnd()
     {
         duration--;
-        if (IsExpired())
-            GameEvents.Instance.OnModifierExpired.Invoke(this);
-
     }
 
     public bool IsExpired() => duration <= 0;

@@ -6,7 +6,6 @@ public class FloatingText : MonoBehaviour
     public float moveSpeed = 5f;
     public float destroyTime = 5f;
     public Vector3 offset = new Vector3(0, 2, 0);
-    public Color textColor = Color.red;
 
     private float horizontalSpeed;
     private float verticalSpeed;
@@ -34,9 +33,9 @@ public class FloatingText : MonoBehaviour
         transform.position += new Vector3(xMovement, yMovement, 0);
     }
 
-    public void SetText(string text)
+    public void SetText(string text, Color color)
     {
         GetComponent<TextMeshProUGUI>().text = text;
-        GetComponent<TextMeshProUGUI>().color = textColor;
+        GetComponent<TextMeshProUGUI>().color = color;
     }
 }

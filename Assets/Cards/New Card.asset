@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0b213db5087d734bb0673a9bb283567, type: 3}
   m_Name: New Card
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: Testing
   description: 
   manaCost: 0
-  effects: []
   color: {r: 0, g: 0, b: 0, a: 0}

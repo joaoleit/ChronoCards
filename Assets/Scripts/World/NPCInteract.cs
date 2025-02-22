@@ -6,10 +6,11 @@ public class NPCInteract : MonoBehaviour
     public float interactionRange = 3f; // Interaction distance
     private bool hasMetPlayer = false;
     private Transform player;
-
+    [SerializeField]
     [Header("UI Elements")]
     public GameObject dialogueBox; // Reference to the UI Panel
     public TMP_Text dialogueText; // Reference to the TMP Text
+    public TriggerInventoryScene trigger;
 
     void Start()
     {
@@ -38,14 +39,9 @@ public class NPCInteract : MonoBehaviour
             GiveItem();
             hasMetPlayer = true;
         }
-        else if (GameManager.Instance.canUpgrade)
-        {
-            ShowDialogue("Ready? Take this upgrade.");
-            ShowUpgradeMenu();
-        }
         else
         {
-            ShowDialogue("Sorry, I have nothing to offer.");
+            ShowDialogue("Ready? Take this upgrade.");
             ShowUpgradeMenu();
         }
     }
@@ -54,7 +50,7 @@ public class NPCInteract : MonoBehaviour
     {
         dialogueText.text = message;
         dialogueBox.SetActive(true);
-        Invoke("HideDialogue", 3f); // Auto-hide after 3 seconds
+        // Invoke("HideDialogue", 3f); // Auto-hide after 3 seconds
     }
 
     void HideDialogue()
@@ -71,8 +67,9 @@ public class NPCInteract : MonoBehaviour
     void ShowUpgradeMenu()
     {
         Debug.Log("Displaying upgrade menu...");
-        // Implement upgrade logic here
-        GameManager.Instance.UpgradeCards();
+        trigger.StartInventoryScene();
+        // Scene Load Inventory Manager
+        // shopManager.OpenShop();
     }
 
     void OnDrawGizmosSelected()
