@@ -111,7 +111,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void PlayCard(CardLogic cardLogic, Enemy enemy)
+    public bool PlayCard(CardLogic cardLogic, Enemy enemy)
     {
         Card card = cardLogic._card;
         if (player.mana >= card.manaCost)
@@ -122,11 +122,10 @@ public class BattleManager : MonoBehaviour
             Destroy(cardLogic.gameObject);
             discardPile.Add(card);
             StartCoroutine(AlignCardsNextFrame());
+            return true;
         }
-        else
-        {
-            Debug.Log("Cannot play this card!");
-        }
+        PopUpManager.Instance.InstantiatePopUp("Not enough Mana");
+        return false;
     }
 
     public void DrawCards(int count)
@@ -160,11 +159,10 @@ public class BattleManager : MonoBehaviour
             InstantiateCard(drawnCard);
 
             StartCoroutine(AlignCardsNextFrame());
-            Debug.Log("Drew card: " + drawnCard.cardName);
         }
         else
         {
-            Debug.Log("No cards left in the deck!");
+            PopUpManager.Instance.InstantiatePopUp("No cards left in the deck!");
         }
     }
 
@@ -223,7 +221,7 @@ public class BattleManager : MonoBehaviour
     {
         GameManager.Instance.CalculateDifficultyFactor();
         float totalDifficulty = GameManager.Instance.enemyDifficulty;
-        int numberOfEnemies = UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
+        int numberOfEnemies = 1;//UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
 
         // Select the appropriate enemy prefab based on the difficulty factor.
         GameObject enemyPrefab = GameManager.Instance.enemyThatAttacked;

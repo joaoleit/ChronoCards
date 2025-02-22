@@ -67,9 +67,16 @@ public class CardLogic : MonoBehaviour
     {
         _isDragging = false;
 
-        if (_shouldTriggerOnEnemy && TryTriggerEffectOnEnemy()) return;
-        if (IsInPlayableArea()) BattleManager.Instance.PlayCard(this, null);
-        else ReturnToOriginalPosition();
+        if (_shouldTriggerOnEnemy)
+        {
+            if (TryTriggerEffectOnEnemy()) return;
+
+            ReturnToOriginalPosition();
+            return;
+        }
+        if (IsInPlayableArea() && BattleManager.Instance.PlayCard(this, null)) return;
+
+        ReturnToOriginalPosition();
     }
 
     private bool TryTriggerEffectOnEnemy()
@@ -77,20 +84,20 @@ public class CardLogic : MonoBehaviour
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         foreach (var hit in Physics.RaycastAll(ray))
         {
-            if (hit.collider.gameObject == gameObject) continue;
             if (!hit.collider.CompareTag("Enemy")) continue;
             Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
             if (enemy == null) continue;
 
-            BattleManager.Instance.PlayCard(this, enemy);
-            return true;
+            return BattleManager.Instance.PlayCard(this, enemy);
         }
+        PopUpManager.Instance.InstantiatePopUp("Card not played on an enemy");
         return false;
     }
 
     private bool IsInPlayableArea()
     {
         var viewportPos = Camera.main.WorldToViewportPoint(transform.position);
+        if (!(viewportPos.y > playableAreaThreshold)) PopUpManager.Instance.InstantiatePopUp("Card not played on top half area");
         return viewportPos.y > playableAreaThreshold;
     }
 

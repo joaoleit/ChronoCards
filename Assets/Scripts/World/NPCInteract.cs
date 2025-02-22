@@ -50,7 +50,7 @@ public class NPCInteract : MonoBehaviour
     {
         dialogueText.text = message;
         dialogueBox.SetActive(true);
-        // Invoke("HideDialogue", 3f); // Auto-hide after 3 seconds
+        Invoke("HideDialogue", 3f); // Auto-hide after 3 seconds
     }
 
     void HideDialogue()
