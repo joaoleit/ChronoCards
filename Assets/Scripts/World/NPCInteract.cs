@@ -9,6 +9,8 @@ public class NPCInteract : MonoBehaviour
     [SerializeField]
     [Header("UI Elements")]
     public GameObject dialogueBox; // Reference to the UI Panel
+    public GameObject exclamationBox; // Reference to the UI Panel
+    public GameObject pressEBox; // Reference to the UI Panel
     public TMP_Text dialogueText; // Reference to the TMP Text
     public TriggerInventoryScene trigger;
 
@@ -16,13 +18,22 @@ public class NPCInteract : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         dialogueBox.SetActive(false); // Hide dialogue initially
+        pressEBox.SetActive(false);
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && IsPlayerInRange())
+        if (IsPlayerInRange())
         {
-            Interact();
+            pressEBox.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Interact();
+            }
+        }
+        else
+        {
+            pressEBox.SetActive(false);
         }
     }
 
@@ -50,12 +61,14 @@ public class NPCInteract : MonoBehaviour
     {
         dialogueText.text = message;
         dialogueBox.SetActive(true);
+        exclamationBox.SetActive(false);
         Invoke("HideDialogue", 3f); // Auto-hide after 3 seconds
     }
 
     void HideDialogue()
     {
         dialogueBox.SetActive(false);
+        exclamationBox.SetActive(true);
     }
 
     void GiveItem()
