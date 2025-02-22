@@ -30,8 +30,8 @@ public class ShopManager : MonoBehaviour
         CreateUpgradeButton("Boost cards +1", () => HandleUpgrade(UpgradeType.Boost));
         CreateUpgradeButton("Cards cost -1", () => HandleUpgrade(UpgradeType.ManaCost));
         CreateUpgradeButton("Heal by 50", () => HandleUpgrade(UpgradeType.Heal));
-        CreateUpgradeButton("Maximun health +10%", () => HandleUpgrade(UpgradeType.IncreaseHealth));
-        CreateUpgradeButton("Maximun mana +1", () => HandleUpgrade(UpgradeType.IncreaseMaxMana));
+        CreateUpgradeButton("Maximum health +10%", () => HandleUpgrade(UpgradeType.IncreaseHealth));
+        CreateUpgradeButton("Maximum mana +1", () => HandleUpgrade(UpgradeType.IncreaseMaxMana));
         CreateUpgradeButton("Starting mana +1", () => HandleUpgrade(UpgradeType.IncreaseStartMana));
         CreateUpgradeButton("End turn draws +1 card", () => HandleUpgrade(UpgradeType.IncreaseDraw));
 

@@ -6,7 +6,6 @@ using EasyTransition;
 public class TriggerInventoryScene : MonoBehaviour
 {
     public string inventoryScene = "InventoryTesting";
-    public PlayerController playerController;
     public TransitionSettings transition;
     public float startDelay;
 
