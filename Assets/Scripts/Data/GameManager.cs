@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public EnemyType triggerEnemyType;
     public PlayerController player;
     public List<GameObject> objectsToDisable;
-    public bool isBattleActive = false;
+    public bool isWorldActive = true;
     private bool isFirstBattle = true;
     public bool canUpgrade { get; private set; } = false;
     private int previousBattleTurns = 0;
@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        TransitionManager.Instance.onTransitionCutPointReached += () => ToggleElements(!isBattleActive);
+        TransitionManager.Instance.onTransitionCutPointReached += () => ToggleElements(isWorldActive);
     }
     public void StartBattle(GameObject enemy, PlayerController player)
     {
@@ -52,17 +52,30 @@ public class GameManager : MonoBehaviour
             if (component != null) (component as Behaviour).enabled = false;
         }
 
-        isBattleActive = true;
+        isWorldActive = false;
         enemyThatAttacked = enemy;
         this.player = player;
         savedPlayerPosition = player.transform.position;
+    }
+
+    public void OpenInventory()
+    {
+        player.FreezePlayer(true);
+        isWorldActive = false;
+    }
+
+    public void CloseInventory()
+    {
+        isWorldActive = true;
+        player.UnfreezePlayer();
     }
 
     public void EndBattle(bool enemyDefeated)
     {
         if (enemyDefeated && enemyThatAttacked != null)
         {
-            isBattleActive = false;
+            CalculateCards();
+            isWorldActive = true;
             Destroy(enemyThatAttacked);
             enemyThatAttacked = null;
             player.UnfreezePlayer();
@@ -76,6 +89,7 @@ public class GameManager : MonoBehaviour
         {
             obj.SetActive(active);
         }
+        if (enemyThatAttacked == null) return;
         enemyThatAttacked?.SetActive(active);
     }
 
@@ -122,12 +136,7 @@ public class GameManager : MonoBehaviour
 
     public void UpgradeCards()
     {
-        if (!canUpgrade)
-        {
-            return;
-        }
-
-        foreach (Card card in DeckManager.Instance.chest)
+        foreach (Card card in DeckManager.Instance.deck)
         {
             card.UpgradeCard();
         }
@@ -153,5 +162,13 @@ public class GameManager : MonoBehaviour
         Card card = CardFactory.CreateCard(cardName, manaCost, effects, color);
 
         return card;
+    }
+
+    public void CalculateCards()
+    {
+        List<Card> chest = DeckManager.Instance.chest;
+        int interestCards = Mathf.FloorToInt(chest.Count / 3);
+
+        Debug.Log($"Would generate {interestCards + 1}");
     }
 }

@@ -40,7 +40,7 @@ namespace EasyTransition
         /// </summary>
         /// <param name="transition">The settings of the transition you want to use.</param>
         /// <param name="startDelay">The delay before the transition starts.</param>
-        public void Transition(TransitionSettings transition, float startDelay)
+        public void Transition(TransitionSettings transition, float startDelay, string sceneName)
         {
             // if (transition == null || runningTransition)
             // {
@@ -50,7 +50,7 @@ namespace EasyTransition
             // }
 
             runningTransition = true;
-            StartCoroutine(Timer(startDelay, transition));
+            StartCoroutine(Timer(startDelay, transition, sceneName));
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace EasyTransition
             onTransitionEnd?.Invoke();
         }
 
-        IEnumerator Timer(float delay, TransitionSettings transitionSettings)
+        IEnumerator Timer(float delay, TransitionSettings transitionSettings, string sceneName)
         {
             yield return new WaitForSecondsRealtime(delay);
 
@@ -167,7 +167,7 @@ namespace EasyTransition
 
             template.GetComponent<Transition>().OnSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single);
 
-            SceneManager.UnloadSceneAsync("BattleScene");
+            SceneManager.UnloadSceneAsync(sceneName);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 

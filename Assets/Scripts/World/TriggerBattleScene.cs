@@ -24,7 +24,7 @@ public class TriggerBattleScene : MonoBehaviour
 
     public void StartBattleScene()
     {
-        if (!string.IsNullOrEmpty(battleSceneName) && SceneManager.GetSceneByName(battleSceneName) != null && !GameManager.Instance.isBattleActive)
+        if (!string.IsNullOrEmpty(battleSceneName) && SceneManager.GetSceneByName(battleSceneName) != null && GameManager.Instance.isWorldActive)
         {
             GameManager.Instance.StartBattle(gameObject, playerController);
             playerController.FreezePlayer(true);
