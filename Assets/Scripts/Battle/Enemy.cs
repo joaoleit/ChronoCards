@@ -23,7 +23,6 @@ public class Enemy : MonoBehaviour
         InitializeAttributes();
         anim = enemyObject.GetComponent<Animator>();
         audioSource = enemyObject.GetComponent<AudioSource>();
-        Debug.Log(anim);
     }
 
     // Recalculates maxHealth and damage based on the difficulty factor.
@@ -36,7 +35,6 @@ public class Enemy : MonoBehaviour
         {
             healthBar.SetMaxHealth(maxHealth);
         }
-        Debug.Log("Enemy initialized: MaxHealth=" + maxHealth + ", Damage=" + damage);
     }
 
     public void TakeDamage(int amount)
@@ -44,7 +42,6 @@ public class Enemy : MonoBehaviour
         health -= amount;
         healthBar.SetHealth(health);
         anim.SetTrigger("Punched");
-        Debug.Log("Enemy took " + amount + " damage. Current health: " + health);
 
         // Enemy hit sound
         audioSource.Play();
@@ -73,7 +70,6 @@ public class Enemy : MonoBehaviour
         // Check for a critical hit; if true, apply a multiplier (e.g., 1.5x)
         if (UnityEngine.Random.value < criticalChance * difficultyFactor)
         {
-            Debug.Log("Critical hit!");
             return Mathf.RoundToInt(randomBaseDamage * 1.5f);
         }
 
@@ -85,7 +81,6 @@ public class Enemy : MonoBehaviour
         int actualDamage = GetDamage();
         player.TakeDamage(actualDamage);
         anim.SetTrigger("Attack");
-        Debug.Log("Enemy attacked player for " + actualDamage + " damage.");
 
         // Enemy hit sound
         audioSource.Play();
