@@ -1,4 +1,4 @@
-public class DamageEffect : ICardEffect
+public class DamageEffect : ICardEffect, IPlayAudioEffect
 {
     private int damage;
 
@@ -24,4 +24,9 @@ public class DamageEffect : ICardEffect
 
     public string GetDescription() => "Deal " + damage + " damage.";
     public void UpgradeEffect() => damage += 1;
+
+    public AudioName GetAudioName()
+    {
+        return AudioName.Damage;
+    }
 }

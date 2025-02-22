@@ -1,4 +1,4 @@
-public class HealEffect : ICardEffect
+public class HealEffect : ICardEffect, IPlayAudioEffect
 {
     private int healAmount;
 
@@ -23,4 +23,9 @@ public class HealEffect : ICardEffect
     }
 
     public void UpgradeEffect() => healAmount += 1;
+
+    public AudioName GetAudioName()
+    {
+        return AudioName.Heal;
+    }
 }

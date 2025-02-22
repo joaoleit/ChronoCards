@@ -3097,6 +3097,8 @@ MonoBehaviour:
   healthBar: {fileID: 5900410691339464916}
   deathParticles: {fileID: 100000, guid: 5b6c2f68addb63847b151f0d41a9d3b1, type: 3}
   enemyObject: {fileID: 9026917960839129659}
+  takeHitSound: {fileID: 8300000, guid: f091d6d79460fff478c8ca679feca756, type: 3}
+  damageCardSound: {fileID: 8300000, guid: 1d74880bed4586644a16a79a2d9dc8af, type: 3}
 --- !u!114 &4537537873078873168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3119,6 +3121,8 @@ MonoBehaviour:
   healthBar: {fileID: 5900410691339464916}
   deathParticles: {fileID: 100000, guid: 5b6c2f68addb63847b151f0d41a9d3b1, type: 3}
   enemyObject: {fileID: 9026917960839129659}
+  takeHitSound: {fileID: 0}
+  damageCardSound: {fileID: 0}
   healAmount: 15
   healChance: 0.5
 --- !u!114 &2381368334028944240
@@ -3143,6 +3147,8 @@ MonoBehaviour:
   healthBar: {fileID: 5900410691339464916}
   deathParticles: {fileID: 100000, guid: 5b6c2f68addb63847b151f0d41a9d3b1, type: 3}
   enemyObject: {fileID: 9026917960839129659}
+  takeHitSound: {fileID: 0}
+  damageCardSound: {fileID: 0}
   allyHealAmount: 10
   allyHealChance: 0.3
 --- !u!82 &7012862322556778718

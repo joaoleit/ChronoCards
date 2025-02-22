@@ -1,4 +1,4 @@
-public class ManaEffect : ICardEffect
+public class ManaEffect : ICardEffect, IPlayAudioEffect
 {
     private int manaAmount;
 
@@ -23,4 +23,10 @@ public class ManaEffect : ICardEffect
     }
 
     public void UpgradeEffect() => manaAmount += 1;
+
+    public AudioName GetAudioName()
+    {
+        return AudioName.Mana;
+    }
+
 }
