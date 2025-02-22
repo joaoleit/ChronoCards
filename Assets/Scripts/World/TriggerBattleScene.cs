@@ -29,7 +29,16 @@ public class TriggerBattleScene : MonoBehaviour
             GameManager.Instance.StartBattle(gameObject, playerController);
             playerController.FreezePlayer(true);
             TransitionManager.Instance.Transition(battleSceneName, transition, startDelay);
+            
+            StartCoroutine(SwitchMusic());
         }
+    }
+
+    private IEnumerator SwitchMusic()
+    {
+        yield return new WaitForSeconds(2f);
+
+        BackgroundMusic.Instance.SwitchToBattleMusic();
     }
 
 }

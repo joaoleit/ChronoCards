@@ -42,8 +42,16 @@ public class BattleManager : MonoBehaviour
             GameManager.Instance.EndBattle(true);
             GameManager.Instance.setBattleTurns(turnCount);
             TransitionManager.Instance.Transition(transition, 0, "BattleScene");
+            StartCoroutine(SwitchMusic());
         });
 
+    }
+
+    private IEnumerator SwitchMusic()
+    {
+        yield return new WaitForSeconds(2f);
+
+        BackgroundMusic.Instance.SwitchToWorldMusic();
     }
 
     private void Awake()

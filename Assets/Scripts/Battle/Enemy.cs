@@ -16,10 +16,13 @@ public class Enemy : MonoBehaviour
     public GameObject enemyObject;
     private Animator anim;
 
+    private AudioSource audioSource;
+
     void Start()
     {
         InitializeAttributes();
         anim = enemyObject.GetComponent<Animator>();
+        audioSource = enemyObject.GetComponent<AudioSource>();
         Debug.Log(anim);
     }
 
@@ -42,6 +45,9 @@ public class Enemy : MonoBehaviour
         healthBar.SetHealth(health);
         anim.SetTrigger("Punched");
         Debug.Log("Enemy took " + amount + " damage. Current health: " + health);
+
+        // Enemy hit sound
+        audioSource.Play();
 
         if (health <= 0)
         {
@@ -80,6 +86,9 @@ public class Enemy : MonoBehaviour
         player.TakeDamage(actualDamage);
         anim.SetTrigger("Attack");
         Debug.Log("Enemy attacked player for " + actualDamage + " damage.");
+
+        // Enemy hit sound
+        audioSource.Play();
     }
 
     protected virtual int CalculateMoves()
