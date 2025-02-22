@@ -167,6 +167,8 @@ public class BattleManager : MonoBehaviour
             // Instantiate the card display
             InstantiateCard(drawnCard);
 
+            AudioManager.Instance.Play("DrawCard");
+
             StartCoroutine(AlignCardsNextFrame());
         }
         else
