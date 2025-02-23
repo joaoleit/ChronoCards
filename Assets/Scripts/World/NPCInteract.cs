@@ -19,6 +19,7 @@ public class NPCInteract : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         dialogueBox.SetActive(false); // Hide dialogue initially
         pressEBox.SetActive(false);
+        hasMetPlayer = DeckManager.Instance.deck.Count + DeckManager.Instance.chest.Count > 0;
     }
 
     void Update()

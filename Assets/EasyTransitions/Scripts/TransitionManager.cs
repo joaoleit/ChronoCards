@@ -82,11 +82,11 @@ namespace EasyTransition
         /// <param name="startDelay">The delay before the transition starts.</param>
         public void Transition(int sceneIndex, TransitionSettings transition, float startDelay)
         {
-            if (transition == null || runningTransition)
-            {
-                Debug.LogError("You have to assing a transition.");
-                return;
-            }
+            // if (transition == null || runningTransition)
+            // {
+            //     Debug.LogError("You have to assing a transition.");
+            //     return;
+            // }
 
             runningTransition = true;
             StartCoroutine(Timer(sceneIndex, startDelay, transition));
@@ -141,8 +141,6 @@ namespace EasyTransition
                 transitionTime = transitionTime / transitionSettings.transitionSpeed;
 
             yield return new WaitForSecondsRealtime(transitionTime);
-
-            onTransitionCutPointReached?.Invoke();
 
             SceneManager.LoadScene(sceneIndex);
 

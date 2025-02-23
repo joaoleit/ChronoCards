@@ -24,4 +24,5 @@ public class DamageEffect : ICardEffect
 
     public string GetDescription() => "Deal " + damage + " damage.";
     public void UpgradeEffect() => damage += 1;
+    public EffectData GetEffectData() => new EffectData { value = damage };
 }

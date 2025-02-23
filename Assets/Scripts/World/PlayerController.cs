@@ -11,13 +11,13 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        if (GameManager.Instance.currentSave.playerPosition.ToVector3() != Vector3.zero)
+        if (GameManager.Instance.currentSave.playerPosition != Vector3.zero)
         {
-            transform.position = GameManager.Instance.currentSave.playerPosition.ToVector3();
+            transform.position = GameManager.Instance.currentSave.playerPosition;
         }
         else
         {
-            GameManager.Instance.currentSave.playerPosition = new SerializableVector3(transform.position);
+            GameManager.Instance.currentSave.playerPosition = transform.position;
         }
         GameManager.Instance.player = this;
     }

@@ -4,6 +4,7 @@ public interface ICardEffect
     bool ShouldTriggerOnEnemy();
     string GetDescription();
     void UpgradeEffect();
+    EffectData GetEffectData();
 }
 
 public class EffectData

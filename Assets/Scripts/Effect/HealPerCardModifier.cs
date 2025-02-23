@@ -38,4 +38,5 @@ public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, 
     }
 
     public bool IsExpired() => duration <= 0;
+    public EffectData GetEffectData() => new EffectData { value = healAmount, duration = duration };
 }

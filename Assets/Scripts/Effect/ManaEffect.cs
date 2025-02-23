@@ -23,4 +23,5 @@ public class ManaEffect : ICardEffect
     }
 
     public void UpgradeEffect() => manaAmount += 1;
+    public EffectData GetEffectData() => new EffectData { value = manaAmount };
 }

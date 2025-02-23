@@ -5,7 +5,7 @@ public static class CardFactory
 {
   public static Card CreateCard(string cardName, int manaCost, List<ICardEffect> effects, Color color)
   {
-    Card card = new Card();
+    Card card = ScriptableObject.CreateInstance<Card>();
     card.cardName = cardName;
     card.manaCost = manaCost;
     card.effects = effects;
@@ -16,7 +16,7 @@ public static class CardFactory
 
   public static Card CreateCard(Card _card)
   {
-    Card card = new Card();
+    Card card = ScriptableObject.CreateInstance<Card>();
     card.cardName = _card.cardName;
     card.manaCost = _card.manaCost;
     card.effects = _card.effects;

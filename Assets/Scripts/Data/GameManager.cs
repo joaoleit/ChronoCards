@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public Vector3 savedPlayerPosition;
     public EnemyType triggerEnemyType;
     public PlayerController player;
-    private GameObject[] objectsToDisable = Array.Empty<GameObject>();
+    public List<GameObject> objectsToDisable = new List<GameObject>();
     public bool isWorldActive = true;
     private bool isFirstBattle = true;
     private int previousBattleTurns = 0;
@@ -40,30 +40,28 @@ public class GameManager : MonoBehaviour
     public void LoadSave(SaveData data)
     {
         currentSave = data;
+        if (currentSave != null)
+        {
+            DeckManager.Instance.deck = currentSave.GetDeckCards();
+            DeckManager.Instance.chest = currentSave.GetChestCards();
+            enemyDifficulty = currentSave.enemyDifficulty;
+            isFirstBattle = currentSave.enemyDifficulty == 0.5f;
+        }
     }
 
     public void InitializeNewGame()
     {
-        currentSave = new SaveData
-        {
-            // Initialize default values
-            // playerPosition = player.transform.position,
-            playerHealth = 100,
-            deck = new List<Card>(),
-            chest = new List<Card>(),
-            defeatedEnemies = new List<string>()
-        };
+        currentSave = new SaveData(new List<Card>(), new List<Card>(), Vector3.zero, 100f, new List<string>(), enemyDifficulty);
     }
 
     public void SaveCurrentGame()
     {
-        // Update save data before saving
-        currentSave.playerPosition = new SerializableVector3(player.transform.position);
-        currentSave.deck = DeckManager.Instance.deck;
-        currentSave.chest = DeckManager.Instance.chest;
-        // Update other data...
+        List<Card> deck = DeckManager.Instance.deck;
+        List<Card> chest = DeckManager.Instance.chest;
+        Vector3 playerPosition = player.transform.position;
+        float playerHealth = 100;
 
-        SaveSystem.SaveGame(currentSave);
+        SaveSystem.SaveGame(deck, chest, playerPosition, playerHealth, currentSave.defeatedEnemies, enemyDifficulty);
     }
 
     public void StartBattle(GameObject enemy)
@@ -104,6 +102,7 @@ public class GameManager : MonoBehaviour
         if (enemyDefeated && enemyThatAttacked != null)
         {
             isWorldActive = true;
+            enemyThatAttacked.GetComponent<EnemyAI>().DefeatEnemy();
             Destroy(enemyThatAttacked);
             enemyThatAttacked = null;
             player.UnfreezePlayer();
@@ -112,10 +111,13 @@ public class GameManager : MonoBehaviour
 
     private void ToggleElements(bool active)
     {
-        Debug.Log(GameObject.FindGameObjectsWithTag("ToDisable"));
-        if (objectsToDisable.Length == 0) objectsToDisable = GameObject.FindGameObjectsWithTag("ToDisable");
         foreach (GameObject obj in objectsToDisable)
         {
+            if (obj == null)
+            {
+                objectsToDisable.Remove(obj);
+                continue;
+            }
             obj.SetActive(active);
         }
         if (enemyThatAttacked == null) return;

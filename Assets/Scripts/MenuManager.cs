@@ -17,7 +17,6 @@ public class MenuManager : MonoBehaviour
         SaveData data = SaveSystem.LoadGame();
         if (data != null)
         {
-            // Load game state
             GameManager.Instance.LoadSave(data);
             TransitionManager.Instance.Transition(1, transition, 0);
         }
@@ -33,8 +32,5 @@ public class MenuManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
     }
 }

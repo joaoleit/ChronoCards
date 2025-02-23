@@ -23,4 +23,5 @@ public class HealEffect : ICardEffect
     }
 
     public void UpgradeEffect() => healAmount += 1;
+    public EffectData GetEffectData() => new EffectData { value = healAmount };
 }
