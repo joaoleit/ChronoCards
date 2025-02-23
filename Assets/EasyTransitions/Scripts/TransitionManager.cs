@@ -24,7 +24,10 @@ namespace EasyTransition
             if (Instance != null && Instance != this)
                 Destroy(this);
             else
+            {
+                DontDestroyOnLoad(this);
                 Instance = this;
+            }
         }
 
         // public static TransitionManager Instance()

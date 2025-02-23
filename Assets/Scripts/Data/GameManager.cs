@@ -8,17 +8,16 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public float enemyDifficulty { get; private set; } = 0.5f;
-
     public GameObject enemyThatAttacked;
     public Vector3 savedPlayerPosition;
-
     public EnemyType triggerEnemyType;
     public PlayerController player;
-    public List<GameObject> objectsToDisable;
+    private GameObject[] objectsToDisable = Array.Empty<GameObject>();
     public bool isWorldActive = true;
     private bool isFirstBattle = true;
-    public bool canUpgrade { get; private set; } = false;
     private int previousBattleTurns = 0;
+    public RewardsManager rewards;
+    public SaveData currentSave;
 
     void Awake()
     {
@@ -37,7 +36,37 @@ public class GameManager : MonoBehaviour
     {
         TransitionManager.Instance.onTransitionCutPointReached += () => ToggleElements(isWorldActive);
     }
-    public void StartBattle(GameObject enemy, PlayerController player)
+
+    public void LoadSave(SaveData data)
+    {
+        currentSave = data;
+    }
+
+    public void InitializeNewGame()
+    {
+        currentSave = new SaveData
+        {
+            // Initialize default values
+            // playerPosition = player.transform.position,
+            playerHealth = 100,
+            deck = new List<Card>(),
+            chest = new List<Card>(),
+            defeatedEnemies = new List<string>()
+        };
+    }
+
+    public void SaveCurrentGame()
+    {
+        // Update save data before saving
+        currentSave.playerPosition = new SerializableVector3(player.transform.position);
+        currentSave.deck = DeckManager.Instance.deck;
+        currentSave.chest = DeckManager.Instance.chest;
+        // Update other data...
+
+        SaveSystem.SaveGame(currentSave);
+    }
+
+    public void StartBattle(GameObject enemy)
     {
         Type[] componentsToDisable = new Type[]
             {
@@ -54,8 +83,8 @@ public class GameManager : MonoBehaviour
 
         isWorldActive = false;
         enemyThatAttacked = enemy;
-        this.player = player;
         savedPlayerPosition = player.transform.position;
+        player.FreezePlayer(true);
     }
 
     public void OpenInventory()
@@ -74,17 +103,17 @@ public class GameManager : MonoBehaviour
     {
         if (enemyDefeated && enemyThatAttacked != null)
         {
-            CalculateCards();
             isWorldActive = true;
             Destroy(enemyThatAttacked);
             enemyThatAttacked = null;
             player.UnfreezePlayer();
-            canUpgrade = true;
         }
     }
 
     private void ToggleElements(bool active)
     {
+        Debug.Log(GameObject.FindGameObjectsWithTag("ToDisable"));
+        if (objectsToDisable.Length == 0) objectsToDisable = GameObject.FindGameObjectsWithTag("ToDisable");
         foreach (GameObject obj in objectsToDisable)
         {
             obj.SetActive(active);
@@ -145,8 +174,6 @@ public class GameManager : MonoBehaviour
         {
             card.UpgradeCard();
         }
-
-        canUpgrade = false;
     }
 
     public Card CombineCards(Card card1, Card card2)
@@ -164,11 +191,18 @@ public class GameManager : MonoBehaviour
         return card;
     }
 
-    public void CalculateCards()
+    public void GenerateRewards()
     {
-        List<Card> chest = DeckManager.Instance.chest;
-        int interestCards = Mathf.FloorToInt(chest.Count / 3);
+        int deckAmount = DeckManager.Instance.chest.Count;
+        int interestCards = Mathf.FloorToInt(deckAmount / 3);
+        int total = interestCards + 1;
 
-        Debug.Log($"Would generate {interestCards + 1}");
+        var cards = StarterDeckCreator.getRandomCards(total);
+
+        foreach (var card in cards)
+        {
+            DeckManager.Instance.AddCardToChest(card);
+        }
+        rewards.OpenPanel(interestCards, deckAmount, total);
     }
 }

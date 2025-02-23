@@ -33,6 +33,7 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame()
     {
+        GameManager.Instance.SaveCurrentGame();
         Application.Quit();
     }
     public void ToggleMute()

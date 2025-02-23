@@ -6,7 +6,6 @@ using EasyTransition;
 public class TriggerBattleScene : MonoBehaviour
 {
     public string battleSceneName = "BattleScene";
-    public PlayerController playerController;
     public Camera mainCamera;
 
     public EnemyType enemyType;
@@ -26,10 +25,9 @@ public class TriggerBattleScene : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(battleSceneName) && SceneManager.GetSceneByName(battleSceneName) != null && GameManager.Instance.isWorldActive)
         {
-            GameManager.Instance.StartBattle(gameObject, playerController);
-            playerController.FreezePlayer(true);
+            GameManager.Instance.StartBattle(gameObject);
             TransitionManager.Instance.Transition(battleSceneName, transition, startDelay);
-            
+
             StartCoroutine(SwitchMusic());
         }
     }

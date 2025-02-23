@@ -8,6 +8,20 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private bool isFrozen = false;
 
+
+    void Awake()
+    {
+        if (GameManager.Instance.currentSave.playerPosition.ToVector3() != Vector3.zero)
+        {
+            transform.position = GameManager.Instance.currentSave.playerPosition.ToVector3();
+        }
+        else
+        {
+            GameManager.Instance.currentSave.playerPosition = new SerializableVector3(transform.position);
+        }
+        GameManager.Instance.player = this;
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         if (!isFrozen)
@@ -24,10 +38,10 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        if (GameManager.Instance != null && GameManager.Instance.savedPlayerPosition != Vector3.zero)
-        {
-            transform.position = GameManager.Instance.savedPlayerPosition;
-        }
+        // if (GameManager.Instance != null && GameManager.Instance.savedPlayerPosition != Vector3.zero)
+        // {
+        //     transform.position = GameManager.Instance.savedPlayerPosition;
+        // }
     }
 
     void Update()
