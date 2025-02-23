@@ -1,4 +1,5 @@
 using System;
+using EasyTransition;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -11,6 +12,7 @@ public class Player : MonoBehaviour
     public int startHandSize = 5;
     public HealthBar healthBar;
 
+    public TransitionSettings transition;
 
     private void Start()
     {
@@ -39,6 +41,11 @@ public class Player : MonoBehaviour
     {
         health -= amount;
         healthBar.SetHealth(health);
+
+        if (health <= 0)
+        {
+            TransitionManager.Instance.Transition(5, transition, 0);
+        };
     }
 
     public void GainMana(int amount)

@@ -33,8 +33,13 @@ public class BattleManager : MonoBehaviour
         GameEvents.Instance.OnEnemyTurnStart.AddListener(StartEnemyTurn);
         GameEvents.Instance.OnTurnStart.AddListener(StartPlayerTurn);
 
-        GameEvents.Instance.OnEnemyDeath.AddListener(() =>
+        GameEvents.Instance.OnEnemyDeath.AddListener((enemy) =>
         {
+            if (enemy.isBoss) {
+                TransitionManager.Instance.Transition(4, transition, 0);
+                return;
+            }
+
             foreach (var e in enemies)
             {
                 if (e != null && e.health > 0) return;
@@ -232,10 +237,16 @@ public class BattleManager : MonoBehaviour
     private void SpawnEnemies()
     {
         float totalDifficulty = GameManager.Instance.enemyDifficulty;
+
         int numberOfEnemies = UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
 
         GameObject enemyPrefab = GameManager.Instance.enemyThatAttacked;
-        Debug.Log($"Number of enemies: {numberOfEnemies}");
+
+        if (enemyPrefab.GetComponent<Enemy>().isBoss)
+        {
+            numberOfEnemies = 1;
+            totalDifficulty *= 2;
+        }
 
         float partialDifficulty = totalDifficulty / numberOfEnemies;
 

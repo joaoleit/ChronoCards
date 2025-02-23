@@ -50,6 +50,9 @@ public class GameManager : MonoBehaviour
     public void InitializeNewGame()
     {
         currentSave = new SaveData(new List<Card>(), new List<Card>(), Vector3.zero, 100f, new List<string>(), enemyDifficulty);
+        DeckManager.Instance.deck = new List<Card>();
+        DeckManager.Instance.chest = new List<Card>();
+        enemyDifficulty = 0.5f;
     }
 
     public void SaveCurrentGame()
