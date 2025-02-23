@@ -11669,6 +11669,7 @@ MonoBehaviour:
   savedPlayerPosition: {x: 0, y: 0, z: 0}
   triggerEnemyType: 0
   player: {fileID: 0}
+  objectsToDisable: []
   isWorldActive: 1
   rewards: {fileID: 0}
   currentSave:
@@ -11677,6 +11678,7 @@ MonoBehaviour:
     playerPosition: {x: 0, y: 0, z: 0}
     playerHealth: 0
     defeatedEnemies: []
+    enemyDifficulty: 0
 --- !u!114 &2027827249
 MonoBehaviour:
   m_ObjectHideFlags: 0

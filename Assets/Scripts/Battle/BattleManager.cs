@@ -37,10 +37,10 @@ public class BattleManager : MonoBehaviour
         {
             foreach (var e in enemies)
             {
-                if (e != null && e.health >= 0) return;
+                if (e != null && e.health > 0) return;
             }
-            GameManager.Instance.EndBattle(true);
             GameManager.Instance.setBattleTurns(turnCount);
+            GameManager.Instance.EndBattle(true);
             TransitionManager.Instance.Transition(transition, 0, "BattleScene");
             StartCoroutine(ReturnToWorld());
         });
@@ -220,7 +220,6 @@ public class BattleManager : MonoBehaviour
 
     private void SpawnEnemies()
     {
-        GameManager.Instance.CalculateDifficultyFactor();
         float totalDifficulty = GameManager.Instance.enemyDifficulty;
         int numberOfEnemies = UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
 

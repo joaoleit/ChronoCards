@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     public PlayerController player;
     public List<GameObject> objectsToDisable = new List<GameObject>();
     public bool isWorldActive = true;
-    private bool isFirstBattle = true;
     private int previousBattleTurns = 0;
     public RewardsManager rewards;
     public SaveData currentSave;
@@ -45,7 +44,6 @@ public class GameManager : MonoBehaviour
             DeckManager.Instance.deck = currentSave.GetDeckCards();
             DeckManager.Instance.chest = currentSave.GetChestCards();
             enemyDifficulty = currentSave.enemyDifficulty;
-            isFirstBattle = currentSave.enemyDifficulty == 0.5f;
         }
     }
 
@@ -101,6 +99,8 @@ public class GameManager : MonoBehaviour
     {
         if (enemyDefeated && enemyThatAttacked != null)
         {
+            CalculateDifficultyFactor();
+            Debug.Log(enemyDifficulty);
             isWorldActive = true;
             enemyThatAttacked.GetComponent<EnemyAI>().DefeatEnemy();
             Destroy(enemyThatAttacked);
@@ -115,7 +115,6 @@ public class GameManager : MonoBehaviour
         {
             if (obj == null)
             {
-                objectsToDisable.Remove(obj);
                 continue;
             }
             obj.SetActive(active);
@@ -132,13 +131,6 @@ public class GameManager : MonoBehaviour
 
     public void CalculateDifficultyFactor()
     {
-        if (isFirstBattle)
-        {
-            isFirstBattle = false;
-            enemyDifficulty = 0.5f;
-            return;
-        }
-
         // Define parameters
         int minTurns = 1;      // Faster battles = higher increase
         int maxTurns = 20;     // Longer battles = lower increase
