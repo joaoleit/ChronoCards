@@ -37,20 +37,21 @@ public class BattleManager : MonoBehaviour
         {
             foreach (var e in enemies)
             {
-                if (e != null && e.health >= 0) return;
+                if (e != null && e.health > 0) return;
             }
-            GameManager.Instance.EndBattle(true);
             GameManager.Instance.setBattleTurns(turnCount);
+            GameManager.Instance.EndBattle(true);
             TransitionManager.Instance.Transition(transition, 0, "BattleScene");
-            StartCoroutine(SwitchMusic());
+            StartCoroutine(ReturnToWorld());
         });
 
     }
 
-    private IEnumerator SwitchMusic()
+    private IEnumerator ReturnToWorld()
     {
         yield return new WaitForSeconds(2f);
 
+        GameManager.Instance.GenerateRewards();
         BackgroundMusic.Instance.SwitchToWorldMusic();
     }
 
@@ -230,11 +231,9 @@ public class BattleManager : MonoBehaviour
 
     private void SpawnEnemies()
     {
-        GameManager.Instance.CalculateDifficultyFactor();
         float totalDifficulty = GameManager.Instance.enemyDifficulty;
-        int numberOfEnemies = 1;//UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
+        int numberOfEnemies = UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
 
-        // Select the appropriate enemy prefab based on the difficulty factor.
         GameObject enemyPrefab = GameManager.Instance.enemyThatAttacked;
         Debug.Log($"Number of enemies: {numberOfEnemies}");
 

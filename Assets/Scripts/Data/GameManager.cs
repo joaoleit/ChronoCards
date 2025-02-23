@@ -8,17 +8,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public float enemyDifficulty { get; private set; } = 0.5f;
-
     public GameObject enemyThatAttacked;
     public Vector3 savedPlayerPosition;
-
     public EnemyType triggerEnemyType;
     public PlayerController player;
-    public List<GameObject> objectsToDisable;
+    public List<GameObject> objectsToDisable = new List<GameObject>();
     public bool isWorldActive = true;
-    private bool isFirstBattle = true;
-    public bool canUpgrade { get; private set; } = false;
     private int previousBattleTurns = 0;
+    public RewardsManager rewards;
+    public SaveData currentSave;
 
     void Awake()
     {
@@ -37,7 +35,34 @@ public class GameManager : MonoBehaviour
     {
         TransitionManager.Instance.onTransitionCutPointReached += () => ToggleElements(isWorldActive);
     }
-    public void StartBattle(GameObject enemy, PlayerController player)
+
+    public void LoadSave(SaveData data)
+    {
+        currentSave = data;
+        if (currentSave != null)
+        {
+            DeckManager.Instance.deck = currentSave.GetDeckCards();
+            DeckManager.Instance.chest = currentSave.GetChestCards();
+            enemyDifficulty = currentSave.enemyDifficulty;
+        }
+    }
+
+    public void InitializeNewGame()
+    {
+        currentSave = new SaveData(new List<Card>(), new List<Card>(), Vector3.zero, 100f, new List<string>(), enemyDifficulty);
+    }
+
+    public void SaveCurrentGame()
+    {
+        List<Card> deck = DeckManager.Instance.deck;
+        List<Card> chest = DeckManager.Instance.chest;
+        Vector3 playerPosition = player.transform.position;
+        float playerHealth = 100;
+
+        SaveSystem.SaveGame(deck, chest, playerPosition, playerHealth, currentSave.defeatedEnemies, enemyDifficulty);
+    }
+
+    public void StartBattle(GameObject enemy)
     {
         Type[] componentsToDisable = new Type[]
             {
@@ -54,8 +79,8 @@ public class GameManager : MonoBehaviour
 
         isWorldActive = false;
         enemyThatAttacked = enemy;
-        this.player = player;
         savedPlayerPosition = player.transform.position;
+        player.FreezePlayer(true);
     }
 
     public void OpenInventory()
@@ -74,12 +99,13 @@ public class GameManager : MonoBehaviour
     {
         if (enemyDefeated && enemyThatAttacked != null)
         {
-            CalculateCards();
+            CalculateDifficultyFactor();
+            Debug.Log(enemyDifficulty);
             isWorldActive = true;
+            enemyThatAttacked.GetComponent<EnemyAI>().DefeatEnemy();
             Destroy(enemyThatAttacked);
             enemyThatAttacked = null;
             player.UnfreezePlayer();
-            canUpgrade = true;
         }
     }
 
@@ -87,6 +113,10 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject obj in objectsToDisable)
         {
+            if (obj == null)
+            {
+                continue;
+            }
             obj.SetActive(active);
         }
         if (enemyThatAttacked == null) return;
@@ -101,13 +131,6 @@ public class GameManager : MonoBehaviour
 
     public void CalculateDifficultyFactor()
     {
-        if (isFirstBattle)
-        {
-            isFirstBattle = false;
-            enemyDifficulty = 0.5f;
-            return;
-        }
-
         // Define parameters
         int minTurns = 1;      // Faster battles = higher increase
         int maxTurns = 20;     // Longer battles = lower increase
@@ -145,8 +168,6 @@ public class GameManager : MonoBehaviour
         {
             card.UpgradeCard();
         }
-
-        canUpgrade = false;
     }
 
     public Card CombineCards(Card card1, Card card2)
@@ -164,11 +185,18 @@ public class GameManager : MonoBehaviour
         return card;
     }
 
-    public void CalculateCards()
+    public void GenerateRewards()
     {
-        List<Card> chest = DeckManager.Instance.chest;
-        int interestCards = Mathf.FloorToInt(chest.Count / 3);
+        int deckAmount = DeckManager.Instance.chest.Count;
+        int interestCards = Mathf.FloorToInt(deckAmount / 3);
+        int total = interestCards + 1;
 
-        Debug.Log($"Would generate {interestCards + 1}");
+        var cards = StarterDeckCreator.getRandomCards(total);
+
+        foreach (var card in cards)
+        {
+            DeckManager.Instance.AddCardToChest(card);
+        }
+        rewards.OpenPanel(interestCards, deckAmount, total);
     }
 }

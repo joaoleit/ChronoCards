@@ -24,8 +24,7 @@ public class HealEffect : ICardEffect, IPlayAudioEffect
 
     public void UpgradeEffect() => healAmount += 1;
 
-    public AudioName GetAudioName()
-    {
-        return AudioName.Heal;
-    }
+    public AudioName GetAudioName() => AudioName.Heal;
+
+    public EffectData GetEffectData() => new EffectData { value = healAmount };
 }

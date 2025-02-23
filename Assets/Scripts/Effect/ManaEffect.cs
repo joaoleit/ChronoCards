@@ -24,9 +24,7 @@ public class ManaEffect : ICardEffect, IPlayAudioEffect
 
     public void UpgradeEffect() => manaAmount += 1;
 
-    public AudioName GetAudioName()
-    {
-        return AudioName.Mana;
-    }
+    public AudioName GetAudioName() => AudioName.Mana;
 
+    public EffectData GetEffectData() => new EffectData { value = manaAmount };
 }

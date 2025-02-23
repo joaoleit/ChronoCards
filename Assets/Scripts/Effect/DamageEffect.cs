@@ -25,8 +25,6 @@ public class DamageEffect : ICardEffect, IPlayAudioEffect
     public string GetDescription() => "Deal " + damage + " damage.";
     public void UpgradeEffect() => damage += 1;
 
-    public AudioName GetAudioName()
-    {
-        return AudioName.Damage;
-    }
+    public AudioName GetAudioName() => AudioName.Damage;
+    public EffectData GetEffectData() => new EffectData { value = damage };
 }
