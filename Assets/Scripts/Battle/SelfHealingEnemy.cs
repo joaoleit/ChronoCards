@@ -4,7 +4,13 @@ using System.Collections;
 public class SelfHealingEnemy : Enemy
 {
     public int healAmount = 15;
-    public float healChance = 0.5f; // 50% chance to heal instead of attacking when health is low.
+    public float healChance = 0.33f;
+
+    public override void InitializeAttributes()
+    {
+        base.InitializeAttributes();
+        healAmount = Mathf.RoundToInt(maxHealth * 0.1f);
+    }
 
     public override IEnumerator ExecuteTurn(Player player)
     {
@@ -13,7 +19,6 @@ public class SelfHealingEnemy : Enemy
         for (int i = 0; i < moves; i++)
         {
             yield return new WaitForSeconds(1f);
-            // Heal if health is below 50% and chance criteria is met.
             if (health < maxHealth * 0.5f && Random.value < healChance)
             {
                 HealSelf();
@@ -32,6 +37,5 @@ public class SelfHealingEnemy : Enemy
         if (health > maxHealth)
             health = maxHealth;
         healthBar.SetHealth(health);
-        Debug.Log("SelfHealingEnemy healed self for " + healAmount);
     }
 }

@@ -231,8 +231,8 @@ public class BattleManager : MonoBehaviour
 
     private void SpawnEnemies()
     {
-        float totalDifficulty = GameManager.Instance.enemyDifficulty;
-        int numberOfEnemies = UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
+        float totalDifficulty = 2.6f;//GameManager.Instance.enemyDifficulty;
+        int numberOfEnemies = 3;//UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
 
         GameObject enemyPrefab = GameManager.Instance.enemyThatAttacked;
         Debug.Log($"Number of enemies: {numberOfEnemies}");
@@ -246,7 +246,7 @@ public class BattleManager : MonoBehaviour
             Vector3 spawnPos = CalculateEnemyPosition(i, numberOfEnemies, spacing);
             float part = UnityEngine.Random.Range(0.8f, 1.2f);
             float enemyDifficulty = partialDifficulty * part;
-            SpawnEnemy(spawnPos, enemyDifficulty, enemyPrefab);
+            SpawnEnemy(spawnPos, enemyDifficulty, enemyPrefab, totalDifficulty);
         }
     }
 
@@ -256,7 +256,7 @@ public class BattleManager : MonoBehaviour
         return baseEnemyPosition + new Vector3(xOffset, 0, 0);
     }
 
-    private Enemy SelectEnemyScript(GameObject enemy, float difficultyFactor)
+    public Enemy SelectEnemyScript(GameObject enemy, float difficultyFactor)
     {
         Enemy enemyScript;
         if (difficultyFactor < 1.5f)
@@ -275,7 +275,7 @@ public class BattleManager : MonoBehaviour
         return enemyScript;
     }
 
-    private void SpawnEnemy(Vector3 spawnPosition, float difficulty, GameObject enemyPrefab)
+    private void SpawnEnemy(Vector3 spawnPosition, float difficulty, GameObject enemyPrefab, float totalDifficulty)
     {
         GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         enemyInstance.SetActive(true);
@@ -296,7 +296,7 @@ public class BattleManager : MonoBehaviour
             enemyCanvasTransform.gameObject.SetActive(true);
         }
 
-        Enemy enemyScript = SelectEnemyScript(enemyInstance, difficulty);
+        Enemy enemyScript = SelectEnemyScript(enemyInstance, totalDifficulty);
         if (enemyScript != null)
         {
             enemyScript.enabled = true;
