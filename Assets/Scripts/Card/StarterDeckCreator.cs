@@ -202,16 +202,6 @@ public class StarterDeckCreator : MonoBehaviour
             new BloodRitualEffect(new EffectData { value = 4 }), new Color(0.5f, 0, 0)),
         new CardConfig("Sanguine Sacrifice", 0,
             new BloodRitualEffect(new EffectData { value = 5 }), new Color(0.9f, 0, 0)),
-        new CardConfig("Crimson Bargain", 0,
-            new BloodRitualEffect(new EffectData { value = 1 }), new Color(0.8f, 0.2f, 0.2f)),
-        new CardConfig("Vein Offering", 0,
-            new BloodRitualEffect(new EffectData { value = 2 }), new Color(0.7f, 0.1f, 0.1f)),
-        new CardConfig("Essence Drain", 0,
-            new BloodRitualEffect(new EffectData { value = 3 }), new Color(0.6f, 0.0f, 0.0f)),
-        new CardConfig("Plasma Conversion", 0,
-            new BloodRitualEffect(new EffectData { value = 4 }), new Color(0.5f, 0.0f, 0.0f)),
-        new CardConfig("Fleshforge", 0,
-            new BloodRitualEffect(new EffectData { value = 5 }), new Color(0.4f, 0.0f, 0.0f))
     };
 
     private static readonly List<CardConfig> ChainLightningCards = new List<CardConfig>

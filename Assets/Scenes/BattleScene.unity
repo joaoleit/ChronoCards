@@ -221,6 +221,9 @@ MonoBehaviour:
   OnModifierExpired:
     m_PersistentCalls:
       m_Calls: []
+  OnPlayerDamaged:
+    m_PersistentCalls:
+      m_Calls: []
   OnEnemyDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -608,6 +611,14 @@ MonoBehaviour:
   player: {fileID: 0}
   objectsToDisable: []
   isWorldActive: 1
+  rewards: {fileID: 0}
+  currentSave:
+    deck: []
+    chest: []
+    playerPosition: {x: 0, y: 0, z: 0}
+    playerHealth: 0
+    defeatedEnemies: []
+    enemyDifficulty: 0
 --- !u!4 &493721761
 Transform:
   m_ObjectHideFlags: 0
@@ -1166,8 +1177,6 @@ MonoBehaviour:
   startTurnMana: 0
   startHandSize: 5
   healthBar: {fileID: 2080621243}
-  gainManaSound: {fileID: 8300000, guid: b0e62ed71b1538648b719821f4f63b4c, type: 3}
-  healSound: {fileID: 8300000, guid: cfce0cea076109f478783201b2a9f57f, type: 3}
 --- !u!4 &841468979
 Transform:
   m_ObjectHideFlags: 0
@@ -1369,6 +1378,7 @@ GameObject:
   - component: {fileID: 889925046}
   - component: {fileID: 889925045}
   - component: {fileID: 889925049}
+  - component: {fileID: 889925050}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1483,6 +1493,20 @@ MonoBehaviour:
   waitTime: 1
   fadeDuration: 0.25
   finalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &889925050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 889925044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71f99bf960f4dfb459dc0d29d2dd5860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetButton: {fileID: 1957399093}
+  cooldownTime: 3
 --- !u!1 &939776571
 GameObject:
   m_ObjectHideFlags: 0
@@ -2193,6 +2217,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1957399093 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4080852878387782618, guid: b7c158541d0b9af44be175bf0c087157, type: 3}
+  m_PrefabInstance: {fileID: 775348632}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704492935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2076370901
 GameObject:
   m_ObjectHideFlags: 0

@@ -34,20 +34,20 @@ public class BackgroundMusic : MonoBehaviour
         PlayMusic(backgroundMusic);
     }
 
-    void Update()
-    {
-        // if (GameManager.Instance != null)
-        // {
-        //     if (GameManager.Instance.isWorldActive && audioSource.clip != backgroundMusic)
-        //     {
-        //         StartCoroutine(SwitchMusic(backgroundMusic));
-        //     }
-        //     else if (!GameManager.Instance.isWorldActive && audioSource.clip != battleMusic)
-        //     {
-        //         StartCoroutine(SwitchMusic(battleMusic));
-        //     }
-        // }
-    }
+    // void Update()
+    // {
+    // if (GameManager.Instance != null)
+    // {
+    //     if (GameManager.Instance.isWorldActive && audioSource.clip != backgroundMusic)
+    //     {
+    //         StartCoroutine(SwitchMusic(backgroundMusic));
+    //     }
+    //     else if (!GameManager.Instance.isWorldActive && audioSource.clip != battleMusic)
+    //     {
+    //         StartCoroutine(SwitchMusic(battleMusic));
+    //     }
+    // }
+    // }
 
     private void PlayMusic(AudioClip music)
     {

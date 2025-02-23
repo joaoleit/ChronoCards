@@ -27,7 +27,7 @@ public class AreaDamageEffect : ICardEffect
 
   public bool ShouldTriggerOnEnemy() => false;
 
-  public string GetDescription() => "Deal " + damage + " damage.";
+  public string GetDescription() => "Deal " + damage + " damage to all enemies.";
   public void UpgradeEffect() => damage += 1;
   public EffectData GetEffectData() => new EffectData { value = damage };
 }

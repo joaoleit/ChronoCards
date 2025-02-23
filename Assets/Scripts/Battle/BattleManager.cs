@@ -126,11 +126,11 @@ public class BattleManager : MonoBehaviour
 
             foreach (var effect in card.effects)
             {
-                // if (effect is IPlayAudioEffect)
-                // {
-                //     IPlayAudioEffect audioEffect = effect as IPlayAudioEffect;
-                //     AudioManager.Instance.Play(audioEffect.GetAudioName().ToString());
-                // }
+                if (effect is IPlayAudioEffect)
+                {
+                    IPlayAudioEffect audioEffect = effect as IPlayAudioEffect;
+                    AudioManager.Instance.Play(audioEffect.GetAudioName().ToString());
+                }
             }
             return true;
         }
@@ -168,7 +168,7 @@ public class BattleManager : MonoBehaviour
             // Instantiate the card display
             InstantiateCard(drawnCard);
 
-            // AudioManager.Instance.Play("DrawCard");
+            AudioManager.Instance.Play("DrawCard");
 
             StartCoroutine(AlignCardsNextFrame());
         }
@@ -231,8 +231,8 @@ public class BattleManager : MonoBehaviour
 
     private void SpawnEnemies()
     {
-        float totalDifficulty = 2.6f;//GameManager.Instance.enemyDifficulty;
-        int numberOfEnemies = 3;//UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
+        float totalDifficulty = GameManager.Instance.enemyDifficulty;
+        int numberOfEnemies = UnityEngine.Random.Range(1, 4); // 1, 2, or 3 enemies
 
         GameObject enemyPrefab = GameManager.Instance.enemyThatAttacked;
         Debug.Log($"Number of enemies: {numberOfEnemies}");
