@@ -123,6 +123,15 @@ public class BattleManager : MonoBehaviour
             Destroy(cardLogic.gameObject);
             discardPile.Add(card);
             StartCoroutine(AlignCardsNextFrame());
+            
+            foreach (var effect in card.effects)
+            {
+                if (effect is IPlayAudioEffect)
+                {
+                    IPlayAudioEffect audioEffect = effect as IPlayAudioEffect;
+                    AudioManager.Instance.Play(audioEffect.GetAudioName().ToString());
+                }
+            }
             return true;
         }
         PopUpManager.Instance.InstantiatePopUp("Not enough Mana");
@@ -158,6 +167,8 @@ public class BattleManager : MonoBehaviour
 
             // Instantiate the card display
             InstantiateCard(drawnCard);
+
+            AudioManager.Instance.Play("DrawCard");
 
             StartCoroutine(AlignCardsNextFrame());
         }
