@@ -123,7 +123,7 @@ public class BattleManager : MonoBehaviour
             Destroy(cardLogic.gameObject);
             discardPile.Add(card);
             StartCoroutine(AlignCardsNextFrame());
-            
+
             foreach (var effect in card.effects)
             {
                 if (effect is IPlayAudioEffect)

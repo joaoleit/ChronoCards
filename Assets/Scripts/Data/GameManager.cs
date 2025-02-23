@@ -113,10 +113,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject obj in objectsToDisable)
         {
-            if (obj == null)
-            {
-                continue;
-            }
+            if (obj == null) continue;
             obj.SetActive(active);
         }
         if (enemyThatAttacked == null) return;

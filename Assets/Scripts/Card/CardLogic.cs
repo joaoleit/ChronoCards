@@ -65,6 +65,7 @@ public class CardLogic : MonoBehaviour
 
     private void HandleCardRelease()
     {
+        if (BattleManager.Instance.currentTurn != BattleManager.TurnState.PlayerTurn) return;
         _isDragging = false;
 
         if (_shouldTriggerOnEnemy)
