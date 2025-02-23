@@ -32,4 +32,5 @@ public class BonusDamageModifier : ICardEffect, IModifier, ICardPlayedListener, 
     public string GetDescription() => $"Next card deals +{bonusDamage} damage.";
     public void UpgradeEffect() => bonusDamage += 1;
     public bool IsExpired() => isConsumed;
+    public EffectData GetEffectData() => new EffectData { value = bonusDamage };
 }

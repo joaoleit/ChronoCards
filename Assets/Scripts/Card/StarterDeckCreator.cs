@@ -111,4 +111,25 @@ public class StarterDeckCreator : MonoBehaviour
             DeckManager.Instance.AddCardToDeck(card);
         }
     }
+
+    public static List<Card> getRandomCards(int number)
+    {
+        List<Card> cards = new List<Card>();
+        for (int i = 0; i < number; i++)
+        {
+            int index = Random.Range(0, starterCards.Count);
+            var config = starterCards[index];
+
+            Card card = CardFactory.CreateCard(
+                config.name,
+                config.manaCost,
+                new List<ICardEffect> { config.effect },
+                config.color
+            );
+
+            cards.Add(card);
+        }
+
+        return cards;
+    }
 }

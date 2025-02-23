@@ -23,4 +23,5 @@ public class DrawEffect : ICardEffect
     }
 
     public void UpgradeEffect() => drawAmount += 1;
+    public EffectData GetEffectData() => new EffectData { value = drawAmount };
 }
