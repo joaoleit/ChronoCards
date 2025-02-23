@@ -27,3 +27,13 @@ public interface IHealModifier
 {
     int ModifyHeal(int heal);
 }
+
+public interface IIncomingDamageModifier
+{
+    int ModifyIncomingDamage(int damage);
+}
+
+public interface IPlayerDamagedListener
+{
+    void OnPlayerDamaged(int damageAmount);
+}

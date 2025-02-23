@@ -18,7 +18,7 @@ public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, 
 
     public bool ShouldTriggerOnEnemy() => false;
 
-    public string GetDescription() => $"Heal {healAmount} per card played. Lasts {duration} turn(s).";
+    public string GetDescription() => $"Heal {healAmount} per card played. Lasts {duration} turn{(duration > 1 ? "s" : "")}.";
 
     public void UpgradeEffect()
     {

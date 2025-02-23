@@ -40,9 +40,6 @@ public class EffectManager : MonoBehaviour
     {
         foreach (var modifier in modifiers.ToList())
         {
-            // if (modifier is ITurnListener turnListener)
-            //     turnListener.OnTurnStart();
-
             if (modifier.IsExpired())
                 GameEvents.Instance.OnModifierExpired.Invoke(modifier);
         }
@@ -59,6 +56,10 @@ public class EffectManager : MonoBehaviour
 
         if (modifier is ITurnEndListener)
             GameEvents.Instance.OnTurnEnd.AddListener(((ITurnEndListener)modifier).OnTurnEnd);
+
+        if (modifier is IPlayerDamagedListener)
+            GameEvents.Instance.OnPlayerDamaged.AddListener(((IPlayerDamagedListener)modifier).OnPlayerDamaged);
+
     }
 
     public void RemoveModifier(IModifier modifier)
@@ -73,7 +74,10 @@ public class EffectManager : MonoBehaviour
             GameEvents.Instance.OnCardPlayed.RemoveListener(((ICardPlayedListener)modifier).OnCardPlayed);
 
         if (modifier is ITurnEndListener)
-            GameEvents.Instance.OnTurnEnd.AddListener(((ITurnEndListener)modifier).OnTurnEnd);
+            GameEvents.Instance.OnTurnEnd.RemoveListener(((ITurnEndListener)modifier).OnTurnEnd);
+
+        if (modifier is IPlayerDamagedListener)
+            GameEvents.Instance.OnPlayerDamaged.RemoveListener(((IPlayerDamagedListener)modifier).OnPlayerDamaged);
     }
 
     public IEnumerable<T> GetModifiers<T>() where T : class

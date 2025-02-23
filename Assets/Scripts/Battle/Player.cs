@@ -11,7 +11,6 @@ public class Player : MonoBehaviour
     public int startHandSize = 5;
     public HealthBar healthBar;
 
-
     private void Start()
     {
         if (healthBar != null)
@@ -37,8 +36,14 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        health -= amount;
+        int finalDamage = amount;
+        foreach (var modifier in EffectManager.Instance.GetModifiers<IIncomingDamageModifier>())
+        {
+            finalDamage = modifier.ModifyIncomingDamage(finalDamage);
+        }
+        health -= finalDamage;
         healthBar.SetHealth(health);
+        GameEvents.Instance.OnPlayerDamaged.Invoke(finalDamage);
     }
 
     public void GainMana(int amount)

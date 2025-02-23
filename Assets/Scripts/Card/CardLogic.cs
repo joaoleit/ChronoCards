@@ -20,7 +20,7 @@ public class CardLogic : MonoBehaviour
         // Determine if card needs enemy target
         foreach (var effect in _card.effects)
         {
-            if (effect is DamageEffect)
+            if (effect.ShouldTriggerOnEnemy())
             {
                 _shouldTriggerOnEnemy = true;
                 break;
