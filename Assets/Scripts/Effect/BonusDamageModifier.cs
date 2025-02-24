@@ -27,8 +27,7 @@ public class BonusDamageModifier : ICardEffect, IModifier, ICardPlayedListener, 
     }
 
     public bool ShouldTriggerOnEnemy() => false;
-
-    public string GetDescription() => $"Next {duration} card{(duration > 1 ? "s" : "")} deals +{bonusDamage} damage.";
+    public string GetDescription() => $"Next {duration} damage effect{(duration > 1 ? "s" : "")} deals +{bonusDamage} damage.";
     public void UpgradeEffect()
     {
         bonusDamage += 1;

@@ -17,16 +17,16 @@ public class ChainLightningEffect : MonoBehaviour, ICardEffect
 
     public async void ApplyEffect(Player player, Enemy enemy)
     {
+        int finalDamage = baseDamage;
+        foreach (var modifier in EffectManager.Instance.GetModifiers<IDamageModifier>())
+        {
+            finalDamage = modifier.ModifyDamage(finalDamage);
+        }
+
         Enemy currentTarget = enemy;
         for (int i = 0; i < bounces; i++)
         {
             if (currentTarget == null) break;
-
-            int finalDamage = baseDamage;
-            foreach (var modifier in EffectManager.Instance.GetModifiers<IDamageModifier>())
-            {
-                finalDamage = modifier.ModifyDamage(finalDamage);
-            }
 
             currentTarget.TakeDamage(finalDamage);
             currentTarget = FindNextTarget(currentTarget);

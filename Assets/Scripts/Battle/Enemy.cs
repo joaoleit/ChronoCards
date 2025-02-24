@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     public HealthBar healthBar;
     public GameObject deathParticles;
     public GameObject enemyObject;
+    private GameObject enemyCanvas;
     private Animator anim;
 
     private AudioSource audioSource;
@@ -26,6 +27,7 @@ public class Enemy : MonoBehaviour
         InitializeAttributes();
         anim = enemyObject.GetComponent<Animator>();
         audioSource = enemyObject.GetComponent<AudioSource>();
+        enemyCanvas = transform.Find("EnemyCanvas").gameObject;
     }
 
     // Recalculates maxHealth and damage based on the difficulty factor.
@@ -118,16 +120,21 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(1f);
     }
 
-    // public void Attack(Player player)
-    // {
-    //     player.TakeDamage(damage);
-    //     Debug.Log("Enemy attacked player for " + damage + " damage.");
-    // }
+    private void DeactivateChildren()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject != enemyCanvas)
+            {
+                child.gameObject.SetActive(false);
+            }
+        }
+    }
 
     void Die()
     {
         GameEvents.Instance.OnEnemyDeath.Invoke(this);
-        gameObject.SetActive(false);
+        DeactivateChildren();
         GameObject particles = Instantiate(deathParticles, transform.position, Quaternion.identity);
         ParticleSystem ps = particles.GetComponent<ParticleSystem>();
         ps.Stop();

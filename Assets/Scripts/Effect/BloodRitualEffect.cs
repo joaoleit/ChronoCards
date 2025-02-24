@@ -19,7 +19,6 @@ public class BloodRitualEffect : ICardEffect
     public bool ShouldTriggerOnEnemy() => false;
     public string GetDescription() => $"Pay {healthCost} health for {healthCost * 2} mana";
     public void UpgradeEffect() => healthCost += 1;
-
     public EffectData GetEffectData() => new EffectData { value = healthCost };
     public ICardEffect Clone() => new BloodRitualEffect(GetEffectData());
 }

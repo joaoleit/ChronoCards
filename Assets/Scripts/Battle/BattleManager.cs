@@ -35,7 +35,8 @@ public class BattleManager : MonoBehaviour
 
         GameEvents.Instance.OnEnemyDeath.AddListener((enemy) =>
         {
-            if (enemy.isBoss) {
+            if (enemy.isBoss)
+            {
                 TransitionManager.Instance.Transition(4, transition, 0);
                 return;
             }
@@ -245,7 +246,7 @@ public class BattleManager : MonoBehaviour
         if (enemyPrefab.GetComponent<Enemy>().isBoss)
         {
             numberOfEnemies = 1;
-            totalDifficulty *= 2;
+            totalDifficulty += 1;
         }
 
         float partialDifficulty = totalDifficulty / numberOfEnemies;
