@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour
     }
 
     // Recalculates maxHealth and damage based on the difficulty factor.
-    public void InitializeAttributes()
+    public virtual void InitializeAttributes()
     {
         maxHealth = Mathf.RoundToInt(baseMaxHealth * difficultyFactor);
         damage = Math.Max(1, Mathf.RoundToInt(baseDamage * difficultyFactor));
@@ -85,20 +85,18 @@ public class Enemy : MonoBehaviour
         player.TakeDamage(actualDamage);
         anim.SetTrigger("Attack");
 
-        // Enemy hit sound
         audioSource.Play();
     }
 
     protected virtual int CalculateMoves()
     {
-        int moves = 1; // Every enemy gets at least one move.
-        int extraMoveSlots = 2; // Allow up to 2 extra moves.
+        int moves = 1;
+        int extraMoveSlots = 2;
 
         float probabilityScale = Mathf.Clamp01((difficultyFactor - 0.5f) / 4.5f);
 
         for (int i = 0; i < extraMoveSlots; i++)
         {
-            // Chance to add a move scales dynamically with difficultyFactor.
             if (UnityEngine.Random.value < 0.1f + (0.3f * probabilityScale))
             {
                 moves++;
@@ -108,7 +106,6 @@ public class Enemy : MonoBehaviour
         return moves;
     }
 
-    // ExecuteTurn now may perform multiple moves.
     public virtual IEnumerator ExecuteTurn(Player player)
     {
         int moves = CalculateMoves();

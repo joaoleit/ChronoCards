@@ -99,8 +99,12 @@ public class SaveData
         {
             case "AreaDamageEffect":
                 return new AreaDamageEffect(effectData);
+            case "BloodRitualEffect":
+                return new BloodRitualEffect(effectData);
             case "BonusDamageModifier":
                 return new BonusDamageModifier(effectData);
+            case "ChainLightningEffect":
+                return new ChainLightningEffect(effectData);
             case "DamageEffect":
                 return new DamageEffect(effectData);
             case "DamagePerCardModifier":
@@ -115,6 +119,14 @@ public class SaveData
                 return new HealPerCardModifier(effectData);
             case "ManaEffect":
                 return new ManaEffect(effectData);
+            case "PoisonModifier":
+                return new PoisonModifier(effectData);
+            case "RangeDamage":
+                return new RangeDamage(effectData);
+            case "ShieldEffect":
+                return new ShieldEffect(effectData);
+            case "ThornsModifier":
+                return new ThornsModifier(effectData);
             default:
                 Debug.LogWarning("Unknown effect type: " + cardEffectData.effectType);
                 return null;

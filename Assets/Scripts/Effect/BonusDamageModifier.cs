@@ -2,18 +2,20 @@ public class BonusDamageModifier : ICardEffect, IModifier, ICardPlayedListener, 
 {
     private int bonusDamage;
     private bool isConsumed;
+    private int duration;
     private BonusDamageModifier modifier;
 
     public BonusDamageModifier(EffectData data)
     {
         bonusDamage = data.value;
+        duration = data.duration;
     }
 
     public int ModifyDamage(int damage)
     {
         if (!isConsumed)
         {
-            isConsumed = true;
+            isConsumed = --duration == 0;
             return damage + bonusDamage;
         }
         return damage;
@@ -29,7 +31,7 @@ public class BonusDamageModifier : ICardEffect, IModifier, ICardPlayedListener, 
 
     public bool ShouldTriggerOnEnemy() => false;
 
-    public string GetDescription() => $"Next card deals +{bonusDamage} damage.";
+    public string GetDescription() => $"Next {duration} card{(duration > 1 ? "s" : "")} deals +{bonusDamage} damage.";
     public void UpgradeEffect() => bonusDamage += 1;
     public bool IsExpired() => isConsumed;
     public EffectData GetEffectData() => new EffectData { value = bonusDamage };

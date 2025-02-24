@@ -20,7 +20,7 @@ public class CardLogic : MonoBehaviour
         // Determine if card needs enemy target
         foreach (var effect in _card.effects)
         {
-            if (effect is DamageEffect)
+            if (effect.ShouldTriggerOnEnemy())
             {
                 _shouldTriggerOnEnemy = true;
                 break;
@@ -86,7 +86,7 @@ public class CardLogic : MonoBehaviour
         foreach (var hit in Physics.RaycastAll(ray))
         {
             if (!hit.collider.CompareTag("Enemy")) continue;
-            Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
+            Enemy enemy = GetActiveScript(hit.collider.gameObject);
             if (enemy == null) continue;
 
             return BattleManager.Instance.PlayCard(this, enemy);
@@ -108,5 +108,24 @@ public class CardLogic : MonoBehaviour
         transform.localPosition = cardHover != null ?
             cardHover.GetOriginalPosition() :
             Vector3.zero;
+    }
+
+    private Enemy GetActiveScript(GameObject enemy)
+    {
+        Enemy enemyScript;
+        if (enemy.GetComponent<Enemy>().isActiveAndEnabled)
+        {
+            enemyScript = enemy.GetComponent<Enemy>();
+        }
+        else if (enemy.GetComponent<SelfHealingEnemy>().isActiveAndEnabled)
+        {
+            enemyScript = enemy.GetComponent<SelfHealingEnemy>();
+        }
+        else
+        {
+            enemyScript = enemy.GetComponent<AggressiveEnemy>();
+        }
+
+        return enemyScript;
     }
 }

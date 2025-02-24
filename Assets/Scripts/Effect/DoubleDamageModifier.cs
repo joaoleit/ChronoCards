@@ -17,7 +17,7 @@ public class DoubleDamageModifier : ICardEffect, IModifier, ITurnEndListener, ID
 
     public bool ShouldTriggerOnEnemy() => false;
 
-    public string GetDescription() => "Deal double damage for " + duration + " turn(s).";
+    public string GetDescription() => $"Deal double damage for {duration} turn{(duration > 1 ? "s" : "")} (starts next turn).";
 
     public void UpgradeEffect() => duration += 1;
 

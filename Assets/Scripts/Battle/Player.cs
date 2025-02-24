@@ -35,7 +35,15 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        GameManager.Instance.playerHealth -= amount;
+
+        int finalDamage = amount;
+        foreach (var modifier in EffectManager.Instance.GetModifiers<IIncomingDamageModifier>())
+        {
+            finalDamage = modifier.ModifyIncomingDamage(finalDamage);
+        }
+        GameEvents.Instance.OnPlayerDamaged.Invoke(finalDamage);
+        GameManager.Instance.playerHealth -= finalDamage;
+
         healthBar.SetHealth(GameManager.Instance.playerHealth);
 
         if (GameManager.Instance.playerHealth <= 0)

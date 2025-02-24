@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 move;
     private Animator animator;
     private bool isFrozen = false;
+    private CapsuleCollider capsuleCollider;
 
 
     void Awake()
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.currentSave.playerPosition = transform.position;
         }
         GameManager.Instance.player = this;
+        capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -73,6 +75,7 @@ public class PlayerController : MonoBehaviour
 
     public void FreezePlayer(bool freeze)
     {
+        SetCollider(!freeze);
         isFrozen = freeze;
         if (freeze)
         {
@@ -83,6 +86,12 @@ public class PlayerController : MonoBehaviour
 
     public void UnfreezePlayer()
     {
+        SetCollider(true);
         isFrozen = false;
+    }
+
+    public void SetCollider(bool active)
+    {
+        capsuleCollider.enabled = active;
     }
 }

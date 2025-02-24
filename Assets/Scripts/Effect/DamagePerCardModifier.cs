@@ -18,7 +18,7 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
 
     public bool ShouldTriggerOnEnemy() => false;
 
-    public string GetDescription() => $"Deal {damagePerCard} damage per card, lasts {duration} turn(s).";
+    public string GetDescription() => $"Deal {damagePerCard} damage per card, lasts {duration} turn{(duration > 1 ? "s" : "")}.";
 
     public void UpgradeEffect()
     {
@@ -38,7 +38,8 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
 
         foreach (var enemy in BattleManager.Instance.enemies)
         {
-            enemy.TakeDamage(finalDamage);
+            if (enemy != null && enemy.health > 0)
+                enemy.TakeDamage(finalDamage);
         }
     }
 

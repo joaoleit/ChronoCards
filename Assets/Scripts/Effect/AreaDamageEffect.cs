@@ -7,7 +7,6 @@ public class AreaDamageEffect : ICardEffect
   {
     damage = data.value;
   }
-
   public void ApplyEffect(Player player, Enemy enemy)
   {
     List<Enemy> enemies = BattleManager.Instance.enemies;
@@ -21,13 +20,14 @@ public class AreaDamageEffect : ICardEffect
 
     foreach (var _enemy in enemies)
     {
-      _enemy.TakeDamage(finalDamage);
+      if (_enemy != null && _enemy.health > 0)
+        _enemy.TakeDamage(finalDamage);
     }
   }
 
-  public bool ShouldTriggerOnEnemy() => true;
+  public bool ShouldTriggerOnEnemy() => false;
 
-  public string GetDescription() => "Deal " + damage + " damage.";
+  public string GetDescription() => "Deal " + damage + " damage to all enemies.";
   public void UpgradeEffect() => damage += 1;
   public EffectData GetEffectData() => new EffectData { value = damage };
 }

@@ -34,7 +34,6 @@ public class BackgroundMusic : MonoBehaviour
         PlayMusic(backgroundMusic);
     }
 
-
     private void PlayMusic(AudioClip music)
     {
         audioSource.clip = music;

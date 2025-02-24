@@ -19,7 +19,7 @@ public class DrawEffect : ICardEffect
 
     public string GetDescription()
     {
-        return "Draw " + drawAmount + " card(s).";
+        return $"Draw {drawAmount} card{(drawAmount > 1 ? "s" : "")}.";
     }
 
     public void UpgradeEffect() => drawAmount += 1;
