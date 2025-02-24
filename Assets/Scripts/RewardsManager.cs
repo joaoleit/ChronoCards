@@ -22,7 +22,7 @@ public class RewardsManager : MonoBehaviour
     public void OpenPanel(int interestValue, int deckAmount, int totalValue)
     {
         interestText.text = $"+{interestValue} card(s)";
-        interestDescription.text = $"({deckAmount}) cards in chest";
+        interestDescription.text = $"For every 3 cards in your chest ({deckAmount}). Gain +1 card.";
         totalText.text = $"+{totalValue} card(s)";
         panel.SetActive(true);
         player.FreezePlayer(true);

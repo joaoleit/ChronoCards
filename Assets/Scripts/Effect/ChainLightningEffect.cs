@@ -62,4 +62,5 @@ public class ChainLightningEffect : MonoBehaviour, ICardEffect
     }
 
     public EffectData GetEffectData() => new EffectData { duration = bounces, value = baseDamage };
+    public ICardEffect Clone() => new ChainLightningEffect(GetEffectData());
 }

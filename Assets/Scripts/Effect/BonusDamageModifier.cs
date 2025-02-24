@@ -35,4 +35,5 @@ public class BonusDamageModifier : ICardEffect, IModifier, ICardPlayedListener, 
     public void UpgradeEffect() => bonusDamage += 1;
     public bool IsExpired() => isConsumed;
     public EffectData GetEffectData() => new EffectData { value = bonusDamage };
+    public ICardEffect Clone() => new BonusDamageModifier(GetEffectData());
 }

@@ -27,12 +27,19 @@ public class PoisonModifier : ICardEffect, IModifier, ITurnListener
 
     public void OnTurnStart()
     {
+        int finalDamage = damagePerStack;
+
+        foreach (var modifier in EffectManager.Instance.GetModifiers<IDamageModifier>())
+        {
+            finalDamage = modifier.ModifyDamage(finalDamage);
+        }
+
         target.TakeDamage(damagePerStack);
         stacks--;
     }
 
     public bool ShouldTriggerOnEnemy() => true;
-    public string GetDescription() => $"Apply {stacks} stacks. They deal {damagePerStack} damage per turn.";
+    public string GetDescription() => $"Apply {stacks} stacks. They deal {damagePerStack} damage each turn.";
     public void UpgradeEffect()
     {
         stacks += 1;
@@ -41,4 +48,5 @@ public class PoisonModifier : ICardEffect, IModifier, ITurnListener
     public bool IsExpired() => stacks <= 0;
 
     public EffectData GetEffectData() => new EffectData { value = stacks, duration = damagePerStack };
+    public ICardEffect Clone() => new PoisonModifier(GetEffectData());
 }

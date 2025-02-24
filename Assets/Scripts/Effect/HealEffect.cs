@@ -27,4 +27,5 @@ public class HealEffect : ICardEffect, IPlayAudioEffect
     public AudioName GetAudioName() => AudioName.Heal;
 
     public EffectData GetEffectData() => new EffectData { value = healAmount };
+    public ICardEffect Clone() => new HealEffect(GetEffectData());
 }

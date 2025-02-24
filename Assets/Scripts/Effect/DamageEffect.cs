@@ -27,4 +27,5 @@ public class DamageEffect : ICardEffect, IPlayAudioEffect
 
     public AudioName GetAudioName() => AudioName.Damage;
     public EffectData GetEffectData() => new EffectData { value = damage };
+    public ICardEffect Clone() => new DamageEffect(GetEffectData());
 }

@@ -5,6 +5,7 @@ public interface ICardEffect
     string GetDescription();
     void UpgradeEffect();
     EffectData GetEffectData();
+    ICardEffect Clone();
 }
 
 public class EffectData

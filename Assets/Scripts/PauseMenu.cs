@@ -50,12 +50,5 @@ public class PauseMenu : MonoBehaviour
     {
         isMuted = !isMuted;
         AudioListener.volume = isMuted ? 0 : 1;
-        UpdateMuteButtonText();
-    }
-
-    private void UpdateMuteButtonText()
-    {
-        // Text buttonText = muteButton.GetComponentInChildren<Text>();
-        // buttonText.text = isMuted ? "Unmute" : "Mute";
     }
 }

@@ -21,4 +21,5 @@ public class BloodRitualEffect : ICardEffect
     public void UpgradeEffect() => healthCost += 1;
 
     public EffectData GetEffectData() => new EffectData { value = healthCost };
+    public ICardEffect Clone() => new BloodRitualEffect(GetEffectData());
 }

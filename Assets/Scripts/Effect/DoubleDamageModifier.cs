@@ -38,4 +38,5 @@ public class DoubleDamageModifier : ICardEffect, IModifier, ITurnEndListener, ID
         return duration <= 0;
     }
     public EffectData GetEffectData() => new EffectData { duration = duration };
+    public ICardEffect Clone() => new DoubleDamageModifier(GetEffectData());
 }

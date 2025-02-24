@@ -13,9 +13,15 @@ public class RangeDamage : ICardEffect
     {
         int minDamage = baseValue - 1;
         int maxDamage = baseValue + 2;
-        int randomDamage = Random.Range(minDamage, maxDamage + 1); // Inclusive
+        int finalDamage = Random.Range(minDamage, maxDamage + 1); // Inclusive
 
-        enemy.TakeDamage(randomDamage);
+        // Apply damage modifiers before dealing damage
+        foreach (var modifier in EffectManager.Instance.GetModifiers<IDamageModifier>())
+        {
+            finalDamage = modifier.ModifyDamage(finalDamage);
+        }
+
+        enemy.TakeDamage(finalDamage);
     }
 
     public bool ShouldTriggerOnEnemy() => true;
@@ -29,4 +35,5 @@ public class RangeDamage : ICardEffect
     }
 
     public EffectData GetEffectData() => new EffectData { value = baseValue };
+    public ICardEffect Clone() => new RangeDamage(GetEffectData());
 }

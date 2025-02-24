@@ -341,7 +341,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7397561070497932635}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 137.56, y: -7.1, z: -159.87}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -368,7 +368,17 @@ MonoBehaviour:
   pressEBox: {fileID: 2929407862976577285}
   dialogueText: {fileID: 0}
   trigger: {fileID: 930003168606988169}
-  dialog: []
+  dialog:
+  - 'WANDERER: There you are! I''ve been waiting. This island is dangerous - full
+    monsters. See that mountain? The boss up there is why you''re stuck. Kill it,
+    and you can go home.'
+  - 'WANDERER: Take these. Every enemy you beat will drop new cards. Collect them.
+    Stronger cards mean better chances up the island.'
+  - '** YOU RECEIVED A DECK OF CARDS **'
+  - 'WANDERER: Bring cards back to me. I''ll help upgrade them, swap weak ones out,
+    or even boost your skills. But don''t wait too long - the boss gets stronger
+    every day. '
+  - 'WANDERER: Go on. And don''t die. I''m rooting for you!'
   inputCooldown: 0.2
 --- !u!114 &930003168606988169
 MonoBehaviour:

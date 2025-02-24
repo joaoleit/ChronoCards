@@ -83,15 +83,15 @@ public class GameManager : MonoBehaviour
         Vector3 playerPosition = player.transform.position;
 
         SaveSystem.SaveGame(
-            deck, 
-            chest, 
-            playerPosition, 
-            playerHealth, 
-            currentSave.defeatedEnemies, 
-            enemyDifficulty, 
-            playerMaxHealth, 
-            playerStartTurnMana, 
-            playerMaxMana, 
+            deck,
+            chest,
+            playerPosition,
+            playerHealth,
+            currentSave.defeatedEnemies,
+            enemyDifficulty,
+            playerMaxHealth,
+            playerStartTurnMana,
+            playerMaxMana,
             playerCardPerTurn
         );
     }
@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
     {
         // Define parameters
         int minTurns = 1;      // Faster battles = higher increase
-        int maxTurns = 20;     // Longer battles = lower increase
+        int maxTurns = 15;     // Longer battles = lower increase
         float maxIncrease = 0.5f; // Maximum increase for very fast wins
         float minIncrease = 0.01f; // Minimum increase for slow battles
         float maxDifficulty = 5.0f; // Upper limit for difficulty
@@ -180,6 +180,7 @@ public class GameManager : MonoBehaviour
 
         // Increase difficulty instead of setting it
         enemyDifficulty = Mathf.Clamp(enemyDifficulty + difficultyIncrease, 0, maxDifficulty);
+        Debug.Log(enemyDifficulty);
     }
 
 
@@ -257,7 +258,7 @@ public class GameManager : MonoBehaviour
     {
         int deckAmount = DeckManager.Instance.chest.Count;
         int interestCards = Mathf.FloorToInt(deckAmount / 3);
-        int total = interestCards + 1;
+        int total = interestCards + 3;
 
         var cards = StarterDeckCreator.getRandomCards(total);
 

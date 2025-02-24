@@ -27,4 +27,5 @@ public class ManaEffect : ICardEffect, IPlayAudioEffect
     public AudioName GetAudioName() => AudioName.Mana;
 
     public EffectData GetEffectData() => new EffectData { value = manaAmount };
+    public ICardEffect Clone() => new ManaEffect(GetEffectData());
 }

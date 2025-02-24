@@ -35,4 +35,5 @@ public class ShieldEffect : ICardEffect, IModifier, IIncomingDamageModifier
     public bool IsExpired() => shieldAmount <= 0;
 
     public EffectData GetEffectData() => new EffectData { value = shieldAmount };
+    public ICardEffect Clone() => new ShieldEffect(GetEffectData());
 }

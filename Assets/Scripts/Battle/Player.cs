@@ -50,7 +50,6 @@ public class Player : MonoBehaviour
         {
             TransitionManager.Instance.Transition(5, transition, 0);
         }
-        ;
     }
 
     public void GainMana(int amount)

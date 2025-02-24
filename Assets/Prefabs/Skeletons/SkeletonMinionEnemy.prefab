@@ -3193,7 +3193,6 @@ MonoBehaviour:
   deathParticles: {fileID: 100000, guid: 5b6c2f68addb63847b151f0d41a9d3b1, type: 3}
   enemyObject: {fileID: 9026917960839129659}
   isBoss: 0
-  transition: {fileID: 11400000, guid: 057babd6f13132c449650d99e3c4e99c, type: 2}
 --- !u!114 &4537537873078873168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3217,7 +3216,6 @@ MonoBehaviour:
   deathParticles: {fileID: 100000, guid: 5b6c2f68addb63847b151f0d41a9d3b1, type: 3}
   enemyObject: {fileID: 9026917960839129659}
   isBoss: 0
-  transition: {fileID: 11400000, guid: 057babd6f13132c449650d99e3c4e99c, type: 2}
   healAmount: 15
   healChance: 0.5
 --- !u!114 &2381368334028944240
@@ -3243,7 +3241,6 @@ MonoBehaviour:
   deathParticles: {fileID: 100000, guid: 5b6c2f68addb63847b151f0d41a9d3b1, type: 3}
   enemyObject: {fileID: 9026917960839129659}
   isBoss: 0
-  transition: {fileID: 11400000, guid: 057babd6f13132c449650d99e3c4e99c, type: 2}
   allyHealAmount: 10
   allyHealChance: 0.3
 --- !u!1 &9183357332607415244

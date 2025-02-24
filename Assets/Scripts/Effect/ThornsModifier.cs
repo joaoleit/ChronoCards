@@ -55,4 +55,5 @@ public class ThornsModifier : ICardEffect, IModifier, IPlayerDamagedListener, IT
     public bool IsExpired() => duration <= 0;
 
     public EffectData GetEffectData() => new EffectData { value = (int)(reflectPercentage * 100f), duration = duration };
+    public ICardEffect Clone() => new ThornsModifier(GetEffectData());
 }

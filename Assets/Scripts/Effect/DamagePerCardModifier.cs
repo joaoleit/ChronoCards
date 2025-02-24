@@ -50,4 +50,5 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
 
     public bool IsExpired() => duration <= 0;
     public EffectData GetEffectData() => new EffectData { value = damagePerCard, duration = duration };
+    public ICardEffect Clone() => new DamagePerCardModifier(GetEffectData());
 }
