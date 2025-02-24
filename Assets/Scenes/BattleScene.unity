@@ -608,6 +608,16 @@ MonoBehaviour:
   player: {fileID: 0}
   objectsToDisable: []
   isWorldActive: 1
+  rewards: {fileID: 0}
+  currentSave:
+    deck: []
+    chest: []
+    playerPosition: {x: 0, y: 0, z: 0}
+    playerHealth: 0
+    defeatedEnemies: []
+    enemyDifficulty: 0
+  playerMaxHealth: 100
+  playerHealth: 0
 --- !u!4 &493721761
 Transform:
   m_ObjectHideFlags: 0
@@ -1159,15 +1169,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b09ddd17629cfd94c95fae30b910aaf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  health: 100
   maxMana: 10
   mana: 10
   startTurnMana: 0
   startHandSize: 5
   healthBar: {fileID: 2080621243}
-  gainManaSound: {fileID: 8300000, guid: b0e62ed71b1538648b719821f4f63b4c, type: 3}
-  healSound: {fileID: 8300000, guid: cfce0cea076109f478783201b2a9f57f, type: 3}
+  transition: {fileID: 11400000, guid: 057babd6f13132c449650d99e3c4e99c, type: 2}
 --- !u!4 &841468979
 Transform:
   m_ObjectHideFlags: 0

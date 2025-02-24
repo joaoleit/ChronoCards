@@ -6,20 +6,8 @@ using EasyTransition;
 public class TriggerBattleScene : MonoBehaviour
 {
     public string battleSceneName = "BattleScene";
-    public Camera mainCamera;
-
-    public EnemyType enemyType;
-
     public TransitionSettings transition;
     public float startDelay;
-
-    void Start()
-    {
-        if (mainCamera == null)
-        {
-            mainCamera = Camera.main;
-        }
-    }
 
     public void StartBattleScene()
     {

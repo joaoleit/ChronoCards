@@ -6,9 +6,22 @@ public class SaveSystem : MonoBehaviour
 {
     private static string savePath => $"{Application.persistentDataPath}/save.json";
 
-    public static void SaveGame(List<Card> deck, List<Card> chest, Vector3 playerPosition, float playerHealth, List<string> defeatedEnemies, float difficultyFactor)
+    public static void SaveGame(
+        List<Card> deck, 
+        List<Card> chest, 
+        Vector3 playerPosition, 
+        int playerHealth, 
+        List<string> defeatedEnemies, 
+        float difficultyFactor,
+        int healthMax, 
+        int startTurnMana, 
+        int maxMana, 
+        int cardPerTurn
+    )
     {
-        SaveData saveData = new SaveData(deck, chest, playerPosition, playerHealth, defeatedEnemies, difficultyFactor);
+        SaveData saveData = new SaveData(
+            deck, chest, playerPosition, playerHealth, defeatedEnemies, difficultyFactor, healthMax, startTurnMana, maxMana, cardPerTurn
+        );
         string json = JsonUtility.ToJson(saveData, true);
         File.WriteAllText(savePath, json);
         Debug.Log("Game saved to " + savePath);

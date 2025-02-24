@@ -13,7 +13,7 @@ public class GameEvents : MonoBehaviour
     public UnityEvent<Card> OnCardPlayed = new UnityEvent<Card>();
     public UnityEvent<IModifier> OnModifierAdded = new UnityEvent<IModifier>();
     public UnityEvent<IModifier> OnModifierExpired = new UnityEvent<IModifier>();
-    public UnityEvent OnEnemyDeath = new UnityEvent();
+    public UnityEvent<Enemy> OnEnemyDeath = new UnityEvent<Enemy>();
 
     private void Awake()
     {

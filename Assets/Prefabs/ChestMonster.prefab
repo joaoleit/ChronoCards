@@ -475,7 +475,7 @@ GameObject:
   - component: {fileID: 8641740551662484560}
   m_Layer: 0
   m_Name: ChestMonster
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -533,6 +533,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  ID: 
 --- !u!195 &2735722950374644238
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -568,9 +569,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleSceneName: BattleScene
-  playerController: {fileID: 0}
-  mainCamera: {fileID: 0}
-  enemyType: 0
   transition: {fileID: 0}
   startDelay: 0
 --- !u!114 &3852505829249012649
@@ -699,6 +697,8 @@ MonoBehaviour:
   healthBar: {fileID: 1260415371536415799}
   deathParticles: {fileID: 100000, guid: 5b6c2f68addb63847b151f0d41a9d3b1, type: 3}
   enemyObject: {fileID: 4825689574101310678}
+  isBoss: 0
+  transition: {fileID: 11400000, guid: 057babd6f13132c449650d99e3c4e99c, type: 2}
 --- !u!114 &4737437444638977497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -721,6 +721,8 @@ MonoBehaviour:
   healthBar: {fileID: 1260415371536415799}
   deathParticles: {fileID: 100000, guid: 5b6c2f68addb63847b151f0d41a9d3b1, type: 3}
   enemyObject: {fileID: 4825689574101310678}
+  isBoss: 0
+  transition: {fileID: 0}
   healAmount: 15
   healChance: 0.5
 --- !u!114 &5138604539817914837
@@ -745,6 +747,8 @@ MonoBehaviour:
   healthBar: {fileID: 1260415371536415799}
   deathParticles: {fileID: 100000, guid: 5b6c2f68addb63847b151f0d41a9d3b1, type: 3}
   enemyObject: {fileID: 4825689574101310678}
+  isBoss: 0
+  transition: {fileID: 0}
   allyHealAmount: 10
   allyHealChance: 0.3
 --- !u!82 &8641740551662484560
