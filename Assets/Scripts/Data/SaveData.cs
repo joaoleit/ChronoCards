@@ -10,13 +10,28 @@ public class SaveData
 
     // Player state
     public Vector3 playerPosition;
-    public float playerHealth;
+    public int playerHealth;
+    public int playerMaxHealth;
+    public int playerStartTurnMana;
+    public int playerMaxMana;
+    public int playerCardPerTurn;
 
     // Game progress
     public List<string> defeatedEnemies = new List<string>();
     public float enemyDifficulty;
 
-    public SaveData(List<Card> deckCards, List<Card> chestCards, Vector3 position, float health, List<string> enemies, float difficultyFactor)
+    public SaveData(
+        List<Card> deckCards, 
+        List<Card> chestCards, 
+        Vector3 position, 
+        int health, 
+        List<string> enemies, 
+        float difficultyFactor, 
+        int healthMax, 
+        int startTurnMana, 
+        int maxMana, 
+        int cardPerTurn
+    )
     {
         foreach (var card in deckCards)
         {
@@ -31,6 +46,10 @@ public class SaveData
         playerHealth = health;
         defeatedEnemies = enemies;
         enemyDifficulty = difficultyFactor;
+        playerMaxHealth = healthMax;
+        playerStartTurnMana = startTurnMana;
+        playerMaxMana = maxMana;
+        playerCardPerTurn = cardPerTurn;
     }
 
     public List<Card> GetDeckCards()

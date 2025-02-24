@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using EasyTransition;
 
 public class Enemy : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class Enemy : MonoBehaviour
     private Animator anim;
 
     private AudioSource audioSource;
+
+    public bool isBoss = false;
 
     void Start()
     {
@@ -123,7 +126,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        GameEvents.Instance.OnEnemyDeath.Invoke();
+        GameEvents.Instance.OnEnemyDeath.Invoke(this);
         gameObject.SetActive(false);
         GameObject particles = Instantiate(deathParticles, transform.position, Quaternion.identity);
         ParticleSystem ps = particles.GetComponent<ParticleSystem>();

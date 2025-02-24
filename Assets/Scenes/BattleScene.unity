@@ -619,6 +619,8 @@ MonoBehaviour:
     playerHealth: 0
     defeatedEnemies: []
     enemyDifficulty: 0
+  playerMaxHealth: 100
+  playerHealth: 0
 --- !u!4 &493721761
 Transform:
   m_ObjectHideFlags: 0
@@ -1170,13 +1172,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b09ddd17629cfd94c95fae30b910aaf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  health: 100
   maxMana: 10
   mana: 10
   startTurnMana: 0
   startHandSize: 5
   healthBar: {fileID: 2080621243}
+  transition: {fileID: 11400000, guid: 057babd6f13132c449650d99e3c4e99c, type: 2}
 --- !u!4 &841468979
 Transform:
   m_ObjectHideFlags: 0
