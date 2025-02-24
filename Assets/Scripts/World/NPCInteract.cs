@@ -121,7 +121,8 @@ public class NPCInteract : MonoBehaviour
 
     void ShowUpgradeMenu()
     {
-        trigger.StartInventoryScene();
+        if (GameManager.Instance.isWorldActive)
+            trigger.StartInventoryScene();
     }
 
     void OnDrawGizmosSelected()

@@ -27,8 +27,8 @@ public class ShopManager : MonoBehaviour
         }
 
         CreateUpgradeButton("Forge cards", () => HandleUpgrade(UpgradeType.Forge));
-        CreateUpgradeButton("Boost cards +1", () => HandleUpgrade(UpgradeType.Boost));
-        CreateUpgradeButton("Cards cost -1", () => HandleUpgrade(UpgradeType.ManaCost));
+        CreateUpgradeButton("Boost all cards +1", () => HandleUpgrade(UpgradeType.Boost));
+        CreateUpgradeButton("All cards cost -1 mana", () => HandleUpgrade(UpgradeType.ManaCost));
         CreateUpgradeButton("Heal all damage taken", () => HandleUpgrade(UpgradeType.Heal));
         CreateUpgradeButton("Maximum health +10%", () => HandleUpgrade(UpgradeType.IncreaseHealth));
         CreateUpgradeButton("Maximum mana +1", () => HandleUpgrade(UpgradeType.IncreaseMaxMana));

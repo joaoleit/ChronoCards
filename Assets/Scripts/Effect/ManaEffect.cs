@@ -19,7 +19,7 @@ public class ManaEffect : ICardEffect, IPlayAudioEffect
 
     public string GetDescription()
     {
-        return "Gain " + manaAmount + " mana.";
+        return "Gain " + manaAmount + " mana this turn.";
     }
 
     public void UpgradeEffect() => manaAmount += 1;

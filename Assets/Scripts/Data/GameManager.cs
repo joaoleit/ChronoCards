@@ -268,4 +268,9 @@ public class GameManager : MonoBehaviour
         }
         rewards.OpenPanel(interestCards, deckAmount, total);
     }
+
+    void OnApplicationQuit()
+    {
+        SaveCurrentGame();
+    }
 }
