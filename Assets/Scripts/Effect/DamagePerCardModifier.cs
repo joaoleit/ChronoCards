@@ -12,7 +12,7 @@ public class DamagePerCardModifier : ICardEffect, IModifier, ICardPlayedListener
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        modifier = new DamagePerCardModifier(new EffectData { duration = duration, value = damagePerCard });
+        modifier = new DamagePerCardModifier(GetEffectData());
         GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 

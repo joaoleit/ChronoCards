@@ -21,7 +21,7 @@ public class PoisonModifier : ICardEffect, IModifier, ITurnListener
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        modifier = new PoisonModifier(new EffectData { value = damagePerStack, duration = stacks }, enemy);
+        modifier = new PoisonModifier(GetEffectData(), enemy);
         GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 
@@ -47,6 +47,6 @@ public class PoisonModifier : ICardEffect, IModifier, ITurnListener
     }
     public bool IsExpired() => stacks <= 0;
 
-    public EffectData GetEffectData() => new EffectData { value = stacks, duration = damagePerStack };
+    public EffectData GetEffectData() => new EffectData { value = damagePerStack, duration = stacks };
     public ICardEffect Clone() => new PoisonModifier(GetEffectData());
 }

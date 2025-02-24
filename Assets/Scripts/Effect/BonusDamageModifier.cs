@@ -1,7 +1,8 @@
+using UnityEngine;
+
 public class BonusDamageModifier : ICardEffect, IModifier, ICardPlayedListener, IDamageModifier
 {
     private int bonusDamage;
-    private bool isConsumed;
     private int duration;
     private BonusDamageModifier modifier;
 
@@ -13,27 +14,27 @@ public class BonusDamageModifier : ICardEffect, IModifier, ICardPlayedListener, 
 
     public int ModifyDamage(int damage)
     {
-        if (!isConsumed)
-        {
-            isConsumed = --duration == 0;
-            return damage + bonusDamage;
-        }
-        return damage;
+        duration -= 1;
+        return damage + bonusDamage;
     }
 
     public void OnCardPlayed(Card card) { }
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        modifier = new BonusDamageModifier(new EffectData { value = bonusDamage });
+        modifier = new BonusDamageModifier(GetEffectData());
         GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 
     public bool ShouldTriggerOnEnemy() => false;
 
     public string GetDescription() => $"Next {duration} card{(duration > 1 ? "s" : "")} deals +{bonusDamage} damage.";
-    public void UpgradeEffect() => bonusDamage += 1;
-    public bool IsExpired() => isConsumed;
-    public EffectData GetEffectData() => new EffectData { value = bonusDamage };
+    public void UpgradeEffect()
+    {
+        bonusDamage += 1;
+        duration += 1;
+    }
+    public bool IsExpired() => duration <= 0;
+    public EffectData GetEffectData() => new EffectData { value = bonusDamage, duration = duration };
     public ICardEffect Clone() => new BonusDamageModifier(GetEffectData());
 }

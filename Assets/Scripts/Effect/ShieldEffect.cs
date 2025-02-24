@@ -12,7 +12,7 @@ public class ShieldEffect : ICardEffect, IModifier, IIncomingDamageModifier
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        modifier = new ShieldEffect(new EffectData { value = shieldAmount });
+        modifier = new ShieldEffect(GetEffectData());
         GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 

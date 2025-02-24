@@ -18,7 +18,7 @@ public class ThornsModifier : ICardEffect, IModifier, IPlayerDamagedListener, IT
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        modifier = new ThornsModifier(new EffectData { value = (int)(reflectPercentage * 100f), duration = duration });
+        modifier = new ThornsModifier(GetEffectData());
         GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 
@@ -28,7 +28,7 @@ public class ThornsModifier : ICardEffect, IModifier, IPlayerDamagedListener, IT
 
     public void UpgradeEffect()
     {
-        reflectPercentage += 0.01f;
+        reflectPercentage += 0.02f;
         duration += 1;
     }
 

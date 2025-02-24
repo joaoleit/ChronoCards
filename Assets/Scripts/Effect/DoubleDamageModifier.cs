@@ -11,7 +11,7 @@ public class DoubleDamageModifier : ICardEffect, IModifier, ITurnEndListener, ID
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        modifier = new DoubleDamageModifier(new EffectData { duration = duration });
+        modifier = new DoubleDamageModifier(GetEffectData());
         GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 

@@ -375,10 +375,12 @@ public class StarterDeckCreator : MonoBehaviour
         List<CardConfig> starterCards = new List<CardConfig>();
         Dictionary<List<CardConfig>, int> starterCreator = new Dictionary<List<CardConfig>, int>()
         {
-            { AllDamageCards, 10 },
-            { AllHelperCards, 5 },
-            { AllExtraCards, 5 },
-            { AllCards, 5 }
+            // { AllDamageCards, 10 },
+            // { AllHelperCards, 5 },
+            // { AllExtraCards, 5 },
+            // { AllCards, 5 }
+            { BonusDamageCards, 5 },
+            { DamageCards, 5 }
         };
         foreach (var item in starterCreator)
         {

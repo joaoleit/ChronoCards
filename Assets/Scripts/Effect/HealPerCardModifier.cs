@@ -12,7 +12,7 @@ public class HealPerCardModifier : ICardEffect, IModifier, ICardPlayedListener, 
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        modifier = new HealPerCardModifier(new EffectData { duration = duration, value = healAmount });
+        modifier = new HealPerCardModifier(GetEffectData());
         GameEvents.Instance.OnModifierAdded.Invoke(modifier);
     }
 
