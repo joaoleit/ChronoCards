@@ -8,5 +8,6 @@ public class TransitionToMenu : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
        TransitionManager.Instance.Transition(0, transition, 0);
+       BackgroundMusic.Instance.SwitchToWorldMusic();
     }
 }

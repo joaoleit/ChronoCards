@@ -17,6 +17,11 @@ public class GameManager : MonoBehaviour
     private int previousBattleTurns = 0;
     public RewardsManager rewards;
     public SaveData currentSave;
+    public int playerMaxHealth = 100;
+    public int playerHealth;
+    public int playerStartTurnMana = 0;
+    public int playerMaxMana = 10;
+    public int playerCardPerTurn = 1;
 
     void Awake()
     {
@@ -44,12 +49,28 @@ public class GameManager : MonoBehaviour
             DeckManager.Instance.deck = currentSave.GetDeckCards();
             DeckManager.Instance.chest = currentSave.GetChestCards();
             enemyDifficulty = currentSave.enemyDifficulty;
+            playerMaxHealth = currentSave.playerMaxHealth;
+            playerStartTurnMana = currentSave.playerStartTurnMana;
+            playerMaxMana = currentSave.playerMaxMana;
+            playerCardPerTurn = currentSave.playerCardPerTurn;
+            playerHealth = currentSave.playerHealth;
         }
     }
 
     public void InitializeNewGame()
     {
-        currentSave = new SaveData(new List<Card>(), new List<Card>(), Vector3.zero, 100f, new List<string>(), enemyDifficulty);
+        currentSave = new SaveData(
+            new List<Card>(),
+            new List<Card>(),
+            Vector3.zero,
+            100,
+            new List<string>(),
+            enemyDifficulty,
+            playerMaxHealth,
+            playerStartTurnMana,
+            playerMaxMana,
+            playerCardPerTurn
+        );
         DeckManager.Instance.deck = new List<Card>();
         DeckManager.Instance.chest = new List<Card>();
         enemyDifficulty = 0.5f;
@@ -60,9 +81,19 @@ public class GameManager : MonoBehaviour
         List<Card> deck = DeckManager.Instance.deck;
         List<Card> chest = DeckManager.Instance.chest;
         Vector3 playerPosition = player.transform.position;
-        float playerHealth = 100;
 
-        SaveSystem.SaveGame(deck, chest, playerPosition, playerHealth, currentSave.defeatedEnemies, enemyDifficulty);
+        SaveSystem.SaveGame(
+            deck, 
+            chest, 
+            playerPosition, 
+            playerHealth, 
+            currentSave.defeatedEnemies, 
+            enemyDifficulty, 
+            playerMaxHealth, 
+            playerStartTurnMana, 
+            playerMaxMana, 
+            playerCardPerTurn
+        );
     }
 
     public void StartBattle(GameObject enemy)
@@ -168,6 +199,43 @@ public class GameManager : MonoBehaviour
         {
             card.UpgradeCard();
         }
+    }
+
+    public void UpgradeManaCost()
+    {
+        foreach (Card card in DeckManager.Instance.deck)
+        {
+            card.manaCost = Math.Max(card.manaCost - 1, 0);
+        }
+
+        foreach (Card card in DeckManager.Instance.chest)
+        {
+            card.manaCost = Math.Max(card.manaCost - 1, 0);
+        }
+    }
+
+    public void UpgradeHeal()
+    {
+        playerHealth = playerMaxHealth;
+    }
+
+    public void UpgradeIncreaseHealth()
+    {
+        playerMaxHealth += (int)(playerMaxHealth * 0.1f);
+    }
+
+    public void UpgradeIncreaseMaxMana()
+    {
+        playerMaxMana += 1;
+    }
+    public void UpgradeIncreaseStartMana()
+    {
+        playerStartTurnMana += 1;
+    }
+
+    public void UpgradeIncreaseDraw()
+    {
+        playerCardPerTurn += 1;
     }
 
     public Card CombineCards(Card card1, Card card2)

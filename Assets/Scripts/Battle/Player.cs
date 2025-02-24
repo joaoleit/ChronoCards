@@ -4,52 +4,54 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int maxHealth = 100;
-    public int health;
-    public int maxMana = 10;
     public int mana = 0;
-    public int startTurnMana = 0;
     public int startHandSize = 5;
     public HealthBar healthBar;
 
     public TransitionSettings transition;
 
-    private void Start()
+    public int startTurnMana = 0;
+
+    private void Awake()
     {
         if (healthBar != null)
         {
-            healthBar.SetMaxHealth(maxHealth);
+            healthBar.SetMaxHealth(GameManager.Instance.playerMaxHealth);
         }
-        if (health == 0)
+        if (GameManager.Instance.playerHealth == 0)
         {
-            health = maxHealth;
+            GameManager.Instance.playerHealth = GameManager.Instance.playerMaxHealth;
         }
-    }
 
-    public void IncrementStartTurnMana()
-    {
-        startTurnMana = Math.Min(maxMana, startTurnMana + 1);
+        healthBar.SetHealth(GameManager.Instance.playerHealth);
+        startTurnMana = GameManager.Instance.playerStartTurnMana;
     }
 
     public void Heal(int amount)
     {
-        health = Math.Min(maxHealth, health + amount);
-        healthBar.SetHealth(health);
+        GameManager.Instance.playerHealth = Math.Min(GameManager.Instance.playerMaxHealth, GameManager.Instance.playerHealth + amount);
+        healthBar.SetHealth(GameManager.Instance.playerHealth);
     }
 
     public void TakeDamage(int amount)
     {
-        health -= amount;
-        healthBar.SetHealth(health);
+        GameManager.Instance.playerHealth -= amount;
+        healthBar.SetHealth(GameManager.Instance.playerHealth);
 
-        if (health <= 0)
+        if (GameManager.Instance.playerHealth <= 0)
         {
             TransitionManager.Instance.Transition(5, transition, 0);
-        };
+        }
+        ;
     }
 
     public void GainMana(int amount)
     {
         mana += amount;
+    }
+
+    public void IncrementStartTurnMana()
+    {
+        startTurnMana = Math.Min(GameManager.Instance.playerMaxMana, startTurnMana + 1);
     }
 }

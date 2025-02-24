@@ -87,7 +87,7 @@ public class BattleManager : MonoBehaviour
         turnCount++;
         currentTurn = TurnState.PlayerTurn;
         player.IncrementStartTurnMana();
-        player.mana = Math.Min(player.maxMana, player.startTurnMana);
+        player.mana = Math.Min(GameManager.Instance.playerMaxMana, player.startTurnMana);
     }
 
     public void StartEnemyTurn()
@@ -112,7 +112,7 @@ public class BattleManager : MonoBehaviour
     {
         if (currentTurn == TurnState.PlayerTurn)
         {
-            DrawCard();
+            DrawCards(GameManager.Instance.playerCardPerTurn);
             GameEvents.Instance.OnTurnEnd.Invoke();
         }
     }
@@ -162,7 +162,7 @@ public class BattleManager : MonoBehaviour
     {
         if (handObject.transform.childCount >= MaxHandSize)
         {
-            Debug.Log("Hand is full!");
+            PopUpManager.Instance.InstantiatePopUp("Hand is full!");
             return;
         }
         if (deck.Count > 0)

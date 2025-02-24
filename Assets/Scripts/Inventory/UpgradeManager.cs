@@ -26,6 +26,27 @@ public class UpgradeManager : MonoBehaviour
             case UpgradeType.Boost:
                 GameManager.Instance.UpgradeCards();
                 break;
+            case UpgradeType.ManaCost:
+                GameManager.Instance.UpgradeManaCost();
+                break;
+            case UpgradeType.Heal:
+                GameManager.Instance.UpgradeHeal();
+                break;
+            case UpgradeType.IncreaseHealth:
+                GameManager.Instance.UpgradeIncreaseHealth();
+                break;
+            case UpgradeType.IncreaseMaxMana:
+                GameManager.Instance.UpgradeIncreaseMaxMana();
+                break;
+            case UpgradeType.IncreaseStartMana:
+                GameManager.Instance.UpgradeIncreaseStartMana();
+                break;
+            case UpgradeType.IncreaseDraw:
+                GameManager.Instance.UpgradeIncreaseDraw();
+                break;
+            default:
+                Debug.LogWarning("Unknown upgrade type");
+                break;
         }
 
         RemoveOldCardsFromSystem(offerCard);
