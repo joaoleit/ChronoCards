@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
 
         if (GameManager.Instance.playerHealth <= 0)
         {
+            SaveSystem.DeleteSave();
             TransitionManager.Instance.Transition(5, transition, 0);
         }
     }
