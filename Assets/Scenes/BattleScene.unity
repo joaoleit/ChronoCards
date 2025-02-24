@@ -576,66 +576,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 378804074}
   m_CullTransparentMesh: 1
---- !u!1 &493721759
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 493721761}
-  - component: {fileID: 493721760}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &493721760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 493721759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b333a5ed615138d46840dea96d5d9210, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyThatAttacked: {fileID: 9026917960839129659, guid: 7d5ba017c9be39f41aec9fd516e870f6, type: 3}
-  savedPlayerPosition: {x: 0, y: 0, z: 0}
-  triggerEnemyType: 0
-  player: {fileID: 0}
-  objectsToDisable: []
-  isWorldActive: 1
-  rewards: {fileID: 0}
-  currentSave:
-    deck: []
-    chest: []
-    playerPosition: {x: 0, y: 0, z: 0}
-    playerHealth: 0
-    defeatedEnemies: []
-    enemyDifficulty: 0
-  playerMaxHealth: 100
-  playerHealth: 0
---- !u!4 &493721761
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 493721759}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.41401413, y: 1.1284254, z: 4.2420893}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &703994166
 GameObject:
   m_ObjectHideFlags: 0
@@ -1172,12 +1112,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b09ddd17629cfd94c95fae30b910aaf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
+  health: 0
   maxMana: 10
   mana: 10
   startTurnMana: 0
   startHandSize: 5
   healthBar: {fileID: 2080621243}
-  transition: {fileID: 11400000, guid: 057babd6f13132c449650d99e3c4e99c, type: 2}
 --- !u!4 &841468979
 Transform:
   m_ObjectHideFlags: 0
@@ -1913,65 +1854,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa9ca6a857a59ef41ae20d89ee09bc46, type: 3}
---- !u!1 &1309942656
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1309942658}
-  - component: {fileID: 1309942657}
-  - component: {fileID: 1309942659}
-  m_Layer: 0
-  m_Name: DataManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1309942657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309942656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04a4ac9a5b492374cb758f18ed3de7c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chest: []
-  deck: []
---- !u!4 &1309942658
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309942656}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 334.0082, y: 14.21508, z: 15.88057}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1309942659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309942656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13aace857fbd0f849af06e3f27e65472, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1311969494
 GameObject:
   m_ObjectHideFlags: 0
@@ -2474,7 +2356,6 @@ SceneRoots:
   - {fileID: 1895583092}
   - {fileID: 1187801406}
   - {fileID: 148073497}
-  - {fileID: 493721761}
   - {fileID: 841468979}
   - {fileID: 889925048}
   - {fileID: 1311969497}
@@ -2483,4 +2364,3 @@ SceneRoots:
   - {fileID: 1267657867}
   - {fileID: 841179894}
   - {fileID: 1112184398}
-  - {fileID: 1309942658}

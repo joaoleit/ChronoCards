@@ -9,7 +9,7 @@ public class BloodRitualEffect : ICardEffect
 
     public void ApplyEffect(Player player, Enemy enemy)
     {
-        if (player.health > healthCost)
+        if (GameManager.Instance.playerHealth > healthCost)
         {
             player.TakeDamage(healthCost);
             player.GainMana(healthCost * 2);
