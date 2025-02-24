@@ -51,18 +51,4 @@ public class DeckManager : MonoBehaviour
             chest.Remove(card);
         }
     }
-
-
-    void OnApplicationQuit()
-    {
-        SaveDeck();
-    }
-
-    public void SaveDeck()
-    {
-        Debug.Log("Saving deck");
-        string deckJson = JsonUtility.ToJson(deck);
-        PlayerPrefs.SetString("PlayerDeck", deckJson);
-        PlayerPrefs.Save();
-    }
 }

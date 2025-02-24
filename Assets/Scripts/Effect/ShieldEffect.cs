@@ -27,7 +27,6 @@ public class ShieldEffect : ICardEffect, IModifier, IIncomingDamageModifier
 
     public int ModifyIncomingDamage(int damage)
     {
-        Debug.Log(damage);
         int absorbed = Mathf.Min(shieldAmount, damage);
         shieldAmount -= absorbed;
         return damage - absorbed;

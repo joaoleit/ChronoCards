@@ -380,7 +380,6 @@ public class StarterDeckCreator : MonoBehaviour
             { AllExtraCards, 5 },
             { AllCards, 5 }
         };
-        Debug.Log(AllCards.Count);
         foreach (var item in starterCreator)
         {
             for (int i = 0; i < item.Value; i++)
