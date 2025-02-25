@@ -263,7 +263,7 @@ public class GameManager : MonoBehaviour
     {
         int deckAmount = DeckManager.Instance.chest.Count;
         int interestCards = Mathf.FloorToInt(deckAmount / 3);
-        int total = interestCards + 3;
+        int total = interestCards + 5;
 
         var cards = StarterDeckCreator.getRandomCards(total);
 
