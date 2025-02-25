@@ -7,8 +7,8 @@ public class Enemy : MonoBehaviour
 {
     public float criticalChance = 0.1f;
     public float difficultyFactor = 1.0f;
-    public int baseMaxHealth = 100;
-    public int baseDamage = 10;
+    public int baseMaxHealth = 70;
+    public int baseDamage = 8;
     public int maxHealth;
     public int damage;
     public int health;

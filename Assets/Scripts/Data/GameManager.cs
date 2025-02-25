@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public int playerMaxMana = 10;
     public int playerCardPerTurn = 1;
 
+    public bool playerHasMetNPC = false;
+
     void Awake()
     {
         if (Instance == null)
@@ -54,6 +56,7 @@ public class GameManager : MonoBehaviour
             playerMaxMana = currentSave.playerMaxMana;
             playerCardPerTurn = currentSave.playerCardPerTurn;
             playerHealth = currentSave.playerHealth;
+            playerHasMetNPC = currentSave.playerHasMetNPC;
         }
     }
 
@@ -69,7 +72,8 @@ public class GameManager : MonoBehaviour
             playerMaxHealth,
             playerStartTurnMana,
             playerMaxMana,
-            playerCardPerTurn
+            playerCardPerTurn,
+            playerHasMetNPC
         );
         DeckManager.Instance.deck = new List<Card>();
         DeckManager.Instance.chest = new List<Card>();
@@ -92,7 +96,8 @@ public class GameManager : MonoBehaviour
             playerMaxHealth,
             playerStartTurnMana,
             playerMaxMana,
-            playerCardPerTurn
+            playerCardPerTurn,
+            playerHasMetNPC
         );
     }
 
@@ -164,7 +169,7 @@ public class GameManager : MonoBehaviour
     {
         // Define parameters
         int minTurns = 1;      // Faster battles = higher increase
-        int maxTurns = 15;     // Longer battles = lower increase
+        int maxTurns = 10;     // Longer battles = lower increase
         float maxIncrease = 0.5f; // Maximum increase for very fast wins
         float minIncrease = 0.01f; // Minimum increase for slow battles
         float maxDifficulty = 5.0f; // Upper limit for difficulty

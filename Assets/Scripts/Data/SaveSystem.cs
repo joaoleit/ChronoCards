@@ -16,11 +16,12 @@ public class SaveSystem : MonoBehaviour
         int healthMax, 
         int startTurnMana, 
         int maxMana, 
-        int cardPerTurn
+        int cardPerTurn,
+        bool hasMetNPC
     )
     {
         SaveData saveData = new SaveData(
-            deck, chest, playerPosition, playerHealth, defeatedEnemies, difficultyFactor, healthMax, startTurnMana, maxMana, cardPerTurn
+            deck, chest, playerPosition, playerHealth, defeatedEnemies, difficultyFactor, healthMax, startTurnMana, maxMana, cardPerTurn, hasMetNPC
         );
         string json = JsonUtility.ToJson(saveData, true);
         File.WriteAllText(savePath, json);

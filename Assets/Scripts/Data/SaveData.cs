@@ -19,6 +19,7 @@ public class SaveData
     // Game progress
     public List<string> defeatedEnemies = new List<string>();
     public float enemyDifficulty;
+    public bool playerHasMetNPC;
 
     public SaveData(
         List<Card> deckCards, 
@@ -30,7 +31,8 @@ public class SaveData
         int healthMax, 
         int startTurnMana, 
         int maxMana, 
-        int cardPerTurn
+        int cardPerTurn,
+        bool hasMetNPC
     )
     {
         foreach (var card in deckCards)
@@ -50,6 +52,7 @@ public class SaveData
         playerStartTurnMana = startTurnMana;
         playerMaxMana = maxMana;
         playerCardPerTurn = cardPerTurn;
+        playerHasMetNPC = hasMetNPC;
     }
 
     public List<Card> GetDeckCards()
