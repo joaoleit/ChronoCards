@@ -26,6 +26,7 @@ public class BattleManager : MonoBehaviour
     public TurnState currentTurn;
     private int turnCount = 0;
     private Vector3 baseEnemyPosition = new Vector3(319.23f, 0, 28f);
+    private Vector3 bossEnemyPosition = new Vector3(319.209991f,0,26.5400009f);
     public TransitionSettings transition;
 
     private void OnEnable()
@@ -265,6 +266,10 @@ public class BattleManager : MonoBehaviour
     private Vector3 CalculateEnemyPosition(int index, int totalEnemies, float spacing)
     {
         float xOffset = (index - (totalEnemies - 1) / 2f) * spacing;
+        if (GameManager.Instance.enemyThatAttacked.GetComponent<Enemy>().isBoss)
+        {
+            return bossEnemyPosition;
+        }
         return baseEnemyPosition + new Vector3(xOffset, 0, 0);
     }
 
